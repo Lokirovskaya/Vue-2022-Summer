@@ -5,10 +5,18 @@
       <router-link to="/teammanagement">团队管理</router-link> |
       <router-link to="/login">登录</router-link>
     </nav>
-    <router-view />
+    <PageMenu>
+      <router-view />
+    </PageMenu>
+    
   </div>
 </template>
-
+<script>
+  import PageMenu from '@/components/PageMenu.vue';
+  export default{
+    components: { PageMenu }
+  }
+</script>
 <style>
   body,
   html {
