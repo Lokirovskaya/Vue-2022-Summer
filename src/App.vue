@@ -1,35 +1,42 @@
 <template>
   <div id="app">
     <nav>
-      <!-- <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> -->
+      <router-link to="/">主页</router-link> |
       <router-link to="/teammanagement">团队管理</router-link> |
-      <!-- <router-link to="/documenteditor">编辑器</router-link> -->
       <router-link to="/login">登录</router-link>
     </nav>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+  body,
+  html {
+    /* 别动 */
+    height: 100%;
+    margin: 0px;
+    padding: 0px;
+  }
 
-nav {
-  padding: 30px;
-}
+  #app {
+    font-family: Avenir, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+    color: #2c3e50;
+    height: 100%;
+  }
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+  nav {
+    padding: 30px;
+  }
 
-nav a.router-link-exact-active {
-  color: #42b983;
-}
+  nav a {
+    font-weight: bold;
+    color: #2c3e50;
+  }
+
+  nav a.router-link-exact-active {
+    color: #42b983;
+  }
 </style>
