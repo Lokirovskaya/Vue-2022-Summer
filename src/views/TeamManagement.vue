@@ -1,14 +1,14 @@
 <template>
   <div>
     <el-table :data="testdata" stripe border>
-      <el-table-column prop="userid" lable="ID"></el-table-column>
-      <el-table-column prop="username" lable="昵称"></el-table-column>
-      <el-table-column prop="truename" lable="真实姓名"></el-table-column>
-      <el-table-column prop="email" lable="邮箱"></el-table-column>
-      <el-table-column>
+      <el-table-column prop="userid" label="ID" min-width="15%"></el-table-column>
+      <el-table-column prop="username" label="昵称" min-width="20%"></el-table-column>
+      <el-table-column prop="truename" label="真实姓名" min-width="20%"></el-table-column>
+      <el-table-column prop="email" label="邮箱" min-width="30%"></el-table-column>
+      <el-table-column min-width="30%">
         <template>
-          <el-button type="info" size="small">设为管理</el-button>
-          <el-button type="warning" size="small">移出团队</el-button>
+          <el-button type="primary" size="small">设为管理</el-button>
+          <el-button type="danger" size="small">移出团队</el-button>
         </template>
       </el-table-column>
     </el-table>
