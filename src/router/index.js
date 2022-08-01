@@ -21,14 +21,19 @@ const routes = [
   {
     path: '/teammanagement',
     name: 'teammanagement',
-    component: () => import('../views/TeamManagement.vue'),
+    component: () => import('../views/TeamManagement.vue')
   },
-  // {
-  //   path: '/documenteditor',
-  //   name: 'documenteditor',
-  //   component: () => import('../views/DocumentEditor.vue'),
-  // },
-];
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import("../views/LoginView.vue")
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import("../views/RegisterView.vue")
+  },
+]
 
 const router = new VueRouter({
   mode: 'history',
