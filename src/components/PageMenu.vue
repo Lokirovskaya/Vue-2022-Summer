@@ -73,5 +73,5 @@
     background-color: #eee;
   }
 
-  /* #right { } */
+  #right { wed }
 </style>
