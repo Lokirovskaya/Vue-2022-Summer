@@ -45,7 +45,7 @@
 <style scoped>
   #main {
     display: table;
-    /* flex-direction: row; */
+    width: 100%;
     height: 100%;
   }
 
@@ -59,7 +59,6 @@
 
   #right {
     display: table-cell;
-    /* width: 100%; */
     text-align: center;
   }
 </style>
