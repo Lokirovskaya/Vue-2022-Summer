@@ -44,10 +44,10 @@
           <div v-else>
             <el-dropdown @command="User_Command">
               <div>
-                <img :src="'http://43.138.55.69' + this.$store.state.user_photo"
+                <img src="../assets/user_photo.jpg"
                   style="height: 35px;width: 35px;position: relative;bottom: -14px; border-radius: 3px;">
                 <!--<el-avatar style="position: relative;bottom: -13.5px" shape="square" :size="35" v-bind:src="User.pho"></el-avatar>-->
-                <span style="position: relative;bottom: -3px">&nbsp;用户名&nbsp;&nbsp;</span>
+                <span style="position: relative;bottom: -3px">&nbsp;{{this.$store.state.username}}&nbsp;&nbsp;</span>
               </div>
               <el-dropdown-menu slot="dropdown">
                 <router-link :to="{ path: '/personcenter', query: { user: this.$store.state.username } }">
@@ -76,10 +76,10 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        //this.$store.commit('set_userstate_to_unlogged'); //切换到游客状态
-        //this.$store.commit('set_userid', 0);
-        //this.$store.commit('set_username', '');
-        //this.$store.commit('set_token', '');
+        this.$store.commit('set_userstate_to_unlogged'); //切换到游客状态
+        this.$store.commit('set_userid', 0);
+        this.$store.commit('set_username', '');
+        this.$store.commit('set_token', '');
         this.$router.push({ path: '/' });
       }).catch(() => {
 
