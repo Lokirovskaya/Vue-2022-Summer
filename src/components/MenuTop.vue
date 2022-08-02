@@ -76,7 +76,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        //this.$store.commit('set_userstate_to_unlogged'); //切换到游客状态
+        this.$store.commit('set_userstate_to_unlogged'); //切换到游客状态
         this.$store.commit('set_userid', 0);
         this.$store.commit('set_username', '');
         this.$store.commit('set_token', '');

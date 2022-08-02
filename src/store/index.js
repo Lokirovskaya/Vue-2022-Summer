@@ -15,6 +15,7 @@ export default new Vuex.Store({
   getters: {
   },
   mutations: {
+    set_userstate_to_unlogged(state) { state.login_state = 0; },
     set_userstate_to_normal(state) { state.login_state = 1; },
     set_userid(state, userid) { state.userid = userid; },
     set_username(state, username) { state.username = username; },
