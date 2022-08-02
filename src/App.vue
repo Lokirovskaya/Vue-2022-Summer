@@ -5,17 +5,22 @@
       <router-link to="/teammanagement">团队管理</router-link> |
       <router-link to="/login">登录</router-link>
     </nav>
-    <PageMenu>
+
+    <MenuTop />
+
+    <MenuLeft v-if="this.$store.state.login_state !== 0">
       <router-view />
-    </PageMenu>
-    
+    </MenuLeft>
+    <router-view v-else />
   </div>
 </template>
+
 <script>
-  import PageMenu from '@/components/PageMenu.vue';
-  export default{
-    components: { PageMenu }
-  }
+  import MenuTop from '@/components/MenuTop.vue';
+  import MenuLeft from '@/components/MenuLeft.vue';
+  export default {
+    components: { MenuTop, MenuLeft },
+  };
 </script>
 <style>
   body,
@@ -33,6 +38,8 @@
     text-align: center;
     color: #2c3e50;
     height: 100%;
+    margin: 0px;
+    padding: 0px;
   }
 
   nav {
