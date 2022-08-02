@@ -1,14 +1,13 @@
 <template>
-  <PageMenu>
-
-  </PageMenu>
+  <div class="home">
+    hello world
+  </div>
 </template>
 
 <script>
-  import PageMenu from '@/components/PageMenu.vue';
   export default {
     name: 'HomeView',
-    components: { PageMenu },
+    components: {  },
 
     methods: {},
   };

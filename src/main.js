@@ -11,7 +11,7 @@ Vue.use(ElementUI);
 Vue.config.productionTip = false;
 
 Vue.prototype.$axios = axios;
-axios.defaults.baseURL = 'http://43.138.55.69/api';
+axios.defaults.baseURL = 'http://stcmp.shlprn.cn/api/';
 
 new Vue({
   router,

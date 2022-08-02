@@ -1,11 +1,12 @@
 <template>
   <div class="login">
-    <div>{{this.$route.query.userid}}</div>
+    <!-- <div>{{this.$route.query.userid}}</div> -->
+    <div v-if="this.$store.state.login_state == 0">
     <h1>请登录</h1>
 
-    <el-input placeholder="输入账号" v-model="input_id" clearable style="width:300px"></el-input>
+    <el-input placeholder="输入uid" v-model="userid" clearable style="width:300px"></el-input>
     <p>
-      <el-input placeholder="输入密码" v-model="input_password" clearable style="width:300px" show-password></el-input>
+      <el-input placeholder="输入密码" v-model="password" clearable style="width:300px" show-password></el-input>
     <p>
 
     <div>
@@ -15,19 +16,51 @@
       </router-link>
     </div>
     </div>
+    <div v-else>
+      {{this.$store.state.username}}已登录
+    </div>
+    </div>
 
 </template>
 
 <script>
+import qs from "qs";
   export default {
     data() {
       return {
-        input_id: "",
-        input_password: "",
+        userid: "",
+        password: "",
       }
     },
     methods: {
-        
+      login() {
+        if (this.userid === '') {
+          this.$message.error('uid不能为空');
+        }
+        else if (this.password === '') {
+          this.$message.error('密码不能为空');
+        }
+        else{
+          this.$axios.post('/team/login', qs.stringify(this.$data))
+          .then(res => {
+            if (res.data.errno === 0) {
+              this.$message.success(res.data.data.username + ' 登录成功！');
+              this.$store.commit('set_userstate_to_normal'); //更新全局变量
+              this.$store.commit('set_token', res.data.data.token); 
+              this.$store.commit('set_username', res.data.data.username); 
+              this.$store.commit('set_userid', res.data.data.userid); 
+              this.$store.commit('set_userphoto', res.data.data.photo.url); 
+            }
+            else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch(err => {
+            this.$message.error(err);
+          });
+        }
+
+      }
     },
   }
 </script>
