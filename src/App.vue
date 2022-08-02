@@ -3,7 +3,8 @@
     <nav>
       <router-link to="/">主页</router-link> |
       <router-link to="/teammanagement">团队管理</router-link> |
-      <router-link to="/login">登录</router-link>
+      <router-link to="/login">登录</router-link> |
+      <router-link to="/project">项目</router-link>
     </nav>
 
     <MenuTop />
