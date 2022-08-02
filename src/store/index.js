@@ -10,6 +10,8 @@ export default new Vuex.Store({
     userid: 0,
     username: '',
     user_photo: '',
+    user_email:'',
+    user_truename:'',
     token: '',
   },
   getters: {
