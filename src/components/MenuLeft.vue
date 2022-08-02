@@ -44,20 +44,22 @@
 
 <style scoped>
   #main {
-    display: flex;
-    flex-direction: row;
+    display: table;
+    /* flex-direction: row; */
     height: 100%;
   }
 
   #left {
+    display: table-cell;
     width: 250px;
-    height: 100%;
+    min-height: 100%;
     text-align: left;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
 
   #right {
-    width: 100%;
+    display: table-cell;
+    /* width: 100%; */
     text-align: center;
   }
 </style>
