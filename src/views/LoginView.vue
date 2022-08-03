@@ -4,7 +4,7 @@
     <div v-if="this.$store.state.login_state == 0">
     <h1>请登录</h1>
 
-    <el-input placeholder="输入uid" v-model="userid" clearable style="width:300px"></el-input>
+    <el-input placeholder="输入uid或邮箱" v-model="userid" clearable style="width:300px"></el-input>
     <p>
       <el-input placeholder="输入密码" v-model="password" clearable style="width:300px" show-password></el-input>
     <p>
@@ -50,6 +50,9 @@ import qs from "qs";
               this.$store.commit('set_username', res.data.data.username); 
               this.$store.commit('set_userid', res.data.data.userid); 
               this.$store.commit('set_userphoto', res.data.data.photo.url); 
+              this.$store.commit('set_email', res.data.data.email); 
+              this.$store.commit('set_truename', res.data.data.truename); 
+              alert('username:'+res.data.data.username+'\nemail:'+res.data.data.email+'\ntruename:'+res.data.data.truename+'\ntoken:'+res.data.data.token);
             }
             else {
               this.$message.error(res.data.msg);
