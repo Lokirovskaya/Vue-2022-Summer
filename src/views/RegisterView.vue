@@ -1,5 +1,5 @@
 <template>
-  <div class="register">
+  <div v-if="is_success===0" class="register">
     <h1>欢迎注册</h1>
     <el-input placeholder="输入用户名" v-model="username" clearable style="width:300px"></el-input>
     <p>
@@ -17,6 +17,12 @@
       </router-link>
     </div>
   </div>
+  <div v-else>
+    注册成功，您的uid为{{uid}}<br>
+    <router-link to="/login" style="margin: 5px;">
+        <el-button round>去登录</el-button>
+      </router-link>
+  </div>
 </template>
 
 <script>
@@ -29,6 +35,8 @@ import qs from "qs";
         password_1: "",
         password_2: "",
         email: "",
+        uid_toshow:undefined,
+        is_success:0,
       }
     },
     methods: {
@@ -52,7 +60,10 @@ import qs from "qs";
           this.$axios.post('/team/register', qs.stringify(this.$data))  
             .then(res => {
               if (res.data.errno === 0) {
-                this.$message.success('注册成功！您的uid为'+res.data.userid);
+                this.$message.success('注册成功');
+                alert(res.data);
+                this.uid_toshow = res.data.userid;
+                this.is_success = 1;
               }
               else {
                 this.$message.error(res.data.msg);
