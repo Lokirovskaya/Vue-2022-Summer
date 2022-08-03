@@ -29,9 +29,13 @@
           </div>
           <el-divider>我的团队</el-divider>
         <div id="teams">
-      <div v-for=" team in team_ifo" :key="team.id" class="one-team">
+      <!-- <div v-for=" team in team_ifo" :key="team.id" class="one-team"> -->
+        
+        <div v-for="(team, i) in team_ifo" :key="i" :index="'1-' + i" class="one-team">
+        <router-link :to="{ path: '/team', query: { id: team.teamid } }">
         <el-button id="team_pic"><img src="../assets/team.jpg" id="team_pic" @click="goto_team"></el-button>
-        <div id="team_name">{{team.teamname}}</div>
+        </router-link>
+        <div id="team_name">{{ team.teamname }}</div>
       </div>
 
     </div>
@@ -89,6 +93,7 @@
 
 <script>
 import qs from "qs";
+// import { compile } from 'vue/types/umd';
   export default {
     name: 'PersonCenter',
     data() {
@@ -114,7 +119,10 @@ import qs from "qs";
           this.$router.push({ path: '/'});
       },
       modify_username(){
-          this.$axios.post('/team/modify_username', qs.stringify(this.input_username), {
+        let username_ifo = {
+          username:this.input_username,
+        }
+          this.$axios.post('/team/modify_username', qs.stringify(username_ifo), {
           headers: {
             userid: this.$store.state.userid,
             token: this.$store.state.token,
@@ -214,24 +222,22 @@ import qs from "qs";
       },
 
       init_teamifo(){
-          this.$axios.post('/team/userspace', {
+        console.log('uid:'+this.$store.state.userid+'\ntoken:'+this.$store.state.token)
+          this.$axios.post('/team/userspace', qs.stringify({}),{
           headers: {
             userid: this.$store.state.userid,
             token: this.$store.state.token,
           }
         })
             .then(res => {
-              if (res.data.errno === 0) {
-                this.$message.success(res.data.msg);
-                this.team_ifo = res.data;
-              }
-              else {
-                this.$message.error(res.data.msg);
-              }
+                // this.$message.success(123);
+                console.log(res.data.data);
+                this.team_ifo = res.data.data;
             })
             .catch(err => {
               this.$message.error(err);
             });
+
       }
 
     },
