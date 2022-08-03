@@ -20,6 +20,11 @@ const routes = [
     component: () => import('../views/TeamView.vue'),
   },
   {
+    path: '/trashbin',
+    name: 'trashbin',
+    component: () => import('../views/ProjectTrashBin.vue'),
+  },
+  {
     path: '/login',
     name: 'login',
     component: () => import('../views/LoginView.vue'),
@@ -37,7 +42,7 @@ const routes = [
   {
     path: '/personcenter',
     name: 'personcenter',
-    component: () => import('../views/PersonCenter.vue')
+    component: () => import('../views/PersonCenter.vue'),
   },
 ];
 

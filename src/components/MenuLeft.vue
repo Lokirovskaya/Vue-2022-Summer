@@ -15,7 +15,7 @@
 
         <el-menu-item index="2">
           <template slot="title">
-            <div @click="create_team()">
+            <div @click="create_team_prompt()">
               <i class="el-icon-plus"></i>
               <span>新建团队</span>
             </div>
@@ -51,7 +51,7 @@
     },
 
     methods: {
-      create_team() {
+      create_team_prompt() {
         let teamname;
 
         this.$prompt('请输入团队名', '新建团队', {
@@ -61,22 +61,25 @@
           inputErrorMessage: '团队名不能为空',
         })
           .then(({ value }) => {
+            if (value === '') return;
             teamname = value;
+            this.create_team(teamname);
           })
           .catch(() => {
             return;
           });
+      },
 
-        if (teamname === '') return;
-
+      create_team(teamname) {
         this.$axios
           .post('/team/create_team', qs.stringify({ teamname: teamname }), {
             headers: {
-              username: this.$store.state.userid,
+              userid: this.$store.state.userid,
               token: this.$store.state.token,
             },
           })
           .then((res) => {
+            console.log(res);
             if (res.data.errno === 0) {
               this.$message.success('团队创建成功！');
             } else {
@@ -87,6 +90,27 @@
             this.$message.error(err);
           });
       },
+    },
+
+    created() {
+      this.$axios
+        .post('/team/userspace', qs.stringify({}), {
+          headers: {
+            userid: this.$store.state.userid,
+            token: this.$store.state.token,
+          },
+        })
+        .then((res) => {
+          if (res.data.errno === 0) {
+            // this.$message.success('...');
+            console.log(res)
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch((err) => {
+          this.$message.error(err);
+        });
     },
   };
 </script>
