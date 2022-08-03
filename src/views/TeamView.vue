@@ -178,14 +178,20 @@
         // let post_data = this.edit_proj_dialog_data;
       },
 
-      delete_proj(proj_id) {
+      delete_proj_prompt(proj_id) {
         this.$confirm('是否删除项目？', '删除项目', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning',
         }).then(() => {
-          this.$message.success('成功删除项目' + proj_id);
+          // this.$message.success('成功删除项目' + proj_id);
+          this.delete_proj(proj_id);
         });
+      },
+
+      // eslint-disable-next-line no-unused-vars
+      delete_proj(proj_id) {
+        // todo~
       },
 
       get_team_info() {
