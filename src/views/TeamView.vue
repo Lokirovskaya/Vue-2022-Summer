@@ -191,8 +191,47 @@
 
       // eslint-disable-next-line no-unused-vars
       delete_proj(proj_id) {
-        // todo~
+        // todo~ 
+        let delete_proj_ifo = {
+          proj_id:this.$route.query.id,
+          time:this.get_now_time(),
+        }
+        this.$axios.post('/project/deleteProj', qs.stringify({delete_proj_ifo}), {
+        headers: {
+        userid: this.$store.state.userid,
+        token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      this.$message.success(res.data.msg);
+    } else {
+      this.$message.error(res.data.msg);
+    }
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+        // alert(this.get_now_time());
       },
+
+      get_now_time(){
+          var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    month = month < 10 ? ('0' + month) : month;
+    day = day < 10 ? ('0' + day) : day;
+    hour = hour < 10 ? ('0' + hour) : hour;
+    minute = minute < 10 ? ('0' + minute) : minute;
+    second = second < 10 ? ('0' + second) : second;
+    var time = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+    return time;
+      },
+      
 
       get_team_info() {
         this.team_id = this.$route.query.id;
