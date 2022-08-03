@@ -1,5 +1,5 @@
 <template>
-    <div class="Project">
+    <div id="project">
         <div v-if="this.proj_modify === 0">
             <!--项目内容描述-->
             <el-divider><i class="el-icon-info"></i>&nbsp;项目基本信息</el-divider>
@@ -193,7 +193,7 @@ export default {
             this.$router.push({ path: '/' });
         },
         toFE() {//File edit
-            this.$router.push({ path: '/' });
+            this.$router.push({ path: '/file' });
         },
         toPC() {//Personal Center
             this.$router.push({ path: '/personcenter' });

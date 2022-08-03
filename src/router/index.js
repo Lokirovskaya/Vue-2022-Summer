@@ -44,6 +44,11 @@ const routes = [
     name: 'personcenter',
     component: () => import('../views/PersonCenter.vue'),
   },
+  {
+    path: '/file',
+    name: 'file',
+    component: () => import('../views/FileView.vue'),
+  },
 ];
 
 const router = new VueRouter({
