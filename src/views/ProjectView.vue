@@ -3,10 +3,14 @@
         <div v-if="this.proj_modify === 0">
             <!--项目内容描述-->
             <el-divider><i class="el-icon-info"></i>&nbsp;项目基本信息</el-divider>
-            <el-button style="position:relative;left:575px;bottom: 12px;" @click="
+            <div style="margin-left: 90%;">
+            <el-button style="position:relative;bottom: 10px;" @click="
                 proj_modify = 1;
             input_proj_name = proj_name;
-            input_proj_info = proj_info;">修改信息</el-button>
+            input_proj_info = proj_info;
+            input_proj_start = proj_start;
+            input_proj_end = proj_end;">修改信息</el-button>
+            </div>
             <el-descriptions class="margin-top" :column="2" border>
                 <el-descriptions-item>
                     <template slot="label">
@@ -66,35 +70,45 @@
         <!--项目信息修改界面-->
         <div v-else>
             <el-divider><i class="el-icon-edit"></i>&nbsp;修改项目信息</el-divider>
-            <el-button style="position:relative;left:590px;bottom: 12px;" @click="
+            <div style="margin-left: 90%;">
+            <el-button style="position:relative;bottom: 10px;" @click="
                 proj_modify = 0;
             input_proj_name = '';
             input_proj_info = '';
             input_proj_end = undefined;
             input_proj_start = undefined;">返回</el-button>
-            <div>
-                项目名
-                <el-input placeholder="请输入内容" prefix-icon="el-icon-collection" v-model="input_proj_name">
+            </div>
+            <div style="margin-left:30%;margin-right:30%;">
+            <span>
+                <b>项目名</b><br>
+                <el-input placeholder="请输入内容" prefix-icon="el-icon-collection" v-model="input_proj_name" style="position:relative; bottom:-5px">
                 </el-input>
-                开始时间
-                <el-date-picker v-model="input_proj_start" type="date" placeholder="选择日期">
+            </span><br>
+            <span style="position:relative;top:10px;">
+                <b>开始时间</b><br>
+                <el-date-picker v-model="input_proj_start" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="position:relative; bottom:-5px">
                 </el-date-picker>
-                结束时间
-                <el-date-picker v-model="input_proj_end" type="date" placeholder="选择日期">
+                </span><br>
+                <span style="position:relative;top:20px;">
+                <b>结束时间</b><br>
+                <el-date-picker v-model="input_proj_end" type="date" placeholder="选择日期" value-format="yyyy-MM-dd" style="position:relative; bottom:-5px">
                 </el-date-picker>
-                项目简介
-                <el-input type="textarea" placeholder="请输入内容" v-model="input_proj_info" maxlength="150" show-word-limit>
+                </span><br>
+                <span  style="position:relative;top:30px;">
+                <b>项目简介</b>
+                <el-input type="textarea" placeholder="请输入内容" v-model="input_proj_info" maxlength="150" show-word-limit  style="position:relative; bottom:-5px">
                 </el-input>
                 <el-button style="position: relative; top: 10px;" @click="EditProjInfo">修改</el-button>
+                </span><br>
             </div>
         </div>
         <!--分割线-->
-        <br>
+        <br><br>
         <el-divider><i class="fa-solid fa-gear"></i>&nbsp;功能区</el-divider>
         <br>
 
         <!--项目功能模块跳转-->
-        <div style=" margin-left: 15%;margin-right: 15%;">
+        <div style=" margin-left: 15%;margin-right: 15%">
             <el-col :span="6">
                 <el-card :body-style="{ padding: '5px' }" shadow="hover">
                     <div @click="toPD">
@@ -139,8 +153,8 @@ export default {
         return {
             proj_name: '', //项目名称
             proj_creator: '', //项目创建者昵称
-            proj_start: undefined, //项目开始时间
-            proj_end: undefined, //项目结束时间
+            proj_start: '', //项目开始时间
+            proj_end: '', //项目结束时间
             proj_team: '', //所属团队名称
             proj_info: '', //项目简介
             proj_modify: 0, // 项目信息修改
@@ -185,8 +199,92 @@ export default {
             this.$router.push({ path: '/personcenter' });
         },
         EditProjInfo() {
-
-        }
+            //修改了项目名
+            if (this.proj_name !== this.input_proj_name) {
+                this.$axios.post('/project/rename', qs.stringify({ proj_id: this.$route.query.id, new_name: this.input_proj_name }), {
+                    headers: {
+                        userid: this.$store.state.userid,
+                        token: this.$store.state.token,
+                    }
+                })
+                    .then(res => {
+                        if (res.data.errno === 0) {
+                            console.log(res.data);//测试一下
+                            this.proj_name = this.input_proj_name;
+                        } else {
+                            this.$message.error(res.data.msg);
+                        }
+                    })
+                    .catch(err => {
+                        this.$message.error(err);
+                    });
+            }
+            //console.log(this.input_proj_end >= this.input_proj_start);
+            if (this.this.input_proj_end >= this.input_proj_start) {
+                this.$message.error('项目结束日期不得早于等于开始日期');
+            } else {
+                //修改了项目开始日期
+                if (this.proj_start !== this.input_proj_start) {
+                    this.$axios.post('/project/modifyProjInfo', qs.stringify({ proj_id: this.$route.query.id, judge: 2, start: this.input_proj_start }), {
+                        headers: {
+                            userid: this.$store.state.userid,
+                            token: this.$store.state.token,
+                        }
+                    })
+                        .then(res => {
+                            if (res.data.errno === 0) {
+                                console.log(res.data);//测试一下
+                                this.proj_start = this.input_proj_start;
+                            } else {
+                                this.$message.error(res.data.msg);
+                            }
+                        })
+                        .catch(err => {
+                            this.$message.error(err);
+                        });
+                }
+                //修改了项目结束日期
+                if (this.proj_end !== this.input_proj_end) {
+                    this.$axios.post('/project/modifyProjInfo', qs.stringify({ proj_id: this.$route.query.id, judge: 3, end: this.input_proj_end }), {
+                        headers: {
+                            userid: this.$store.state.userid,
+                            token: this.$store.state.token,
+                        }
+                    })
+                        .then(res => {
+                            if (res.data.errno === 0) {
+                                console.log(res.data);//测试一下
+                                this.proj_end = this.input_proj_end;
+                            } else {
+                                this.$message.error(res.data.msg);
+                            }
+                        })
+                        .catch(err => {
+                            this.$message.error(err);
+                        });
+                }
+            }
+            //修改了项目简介
+            if (this.proj_info !== this.input_proj_info) {
+                this.$axios.post('/project/modifyProjInfo', qs.stringify({ proj_id: this.$route.query.id, judge: 1, info: this.input_proj_info }), {
+                    headers: {
+                        userid: this.$store.state.userid,
+                        token: this.$store.state.token,
+                    }
+                })
+                    .then(res => {
+                        if (res.data.errno === 0) {
+                            console.log(res.data);//测试一下
+                            this.proj_info = this.input_proj_info;
+                        } else {
+                            this.$message.error(res.data.msg);
+                        }
+                    })
+                    .catch(err => {
+                        this.$message.error(err);
+                    });
+            }
+        },
     },
     mounted() {//获取项目相关信息
         this.$axios.post('/project/detail', qs.stringify({ proj_id: this.$route.query.id }), {
@@ -197,6 +295,7 @@ export default {
         })
             .then(res => {
                 if (res.data.errno === 0) {
+                    console.log(res.data);//打印一下
                     this.proj_name = res.data.proj_name;
                     this.proj_creator = res.data.proj_creator;
                     this.proj_start = res.data.proj_start;

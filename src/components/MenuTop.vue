@@ -2,7 +2,7 @@
   <div id="top">
     <el-col :span="12">
       <div class="grid-content">
-        <el-menu :default-active="active_index" class="el-menu-demo" mode="horizontal" @select="SelectIndex">
+        <el-menu  class="el-menu-demo" mode="horizontal" @select="SelectIndex">
 
           <el-menu-item index="1">
             导航1
