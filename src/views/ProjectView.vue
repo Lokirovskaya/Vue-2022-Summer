@@ -98,7 +98,7 @@
             <el-col :span="6">
                 <el-card :body-style="{ padding: '5px' }" shadow="hover">
                     <div @click="toPD">
-                        <img src="https://s2.loli.net/2022/05/06/f2Jx6BkcSLEnRtU.jpg" class="image">
+                        <img src="https://s2.loli.net/2022/08/03/bNg8tkfHR7YG3vu.png" class="image">
                         <div style="padding: 14px;">
                             <span>原型设计</span>
                         </div>
@@ -109,7 +109,7 @@
             <el-col :span="6" :offset="3">
                 <el-card :body-style="{ padding: '5px' }" shadow="hover">
                     <div @click="toPE">
-                        <img src="https://s2.loli.net/2022/05/06/f2Jx6BkcSLEnRtU.jpg" class="image">
+                        <img src="https://s2.loli.net/2022/08/03/Fwx156ctoqUKWX7.png" class="image">
                         <div style="padding: 14px;">
                             <span>绘制图</span>
                         </div>
@@ -120,7 +120,7 @@
             <el-col :span="6" :offset="3">
                 <el-card :body-style="{ padding: '5px' }" shadow="hover">
                     <div @click="toFE">
-                        <img src="https://s2.loli.net/2022/05/06/f2Jx6BkcSLEnRtU.jpg" class="image">
+                        <img src="https://s2.loli.net/2022/08/03/Rs2HO48IXf5PFlu.png" class="image">
                         <div style="padding: 14px;">
                             <span>编辑文档</span>
                         </div>
