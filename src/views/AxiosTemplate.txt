@@ -28,7 +28,7 @@ this.$axios
   })
   .then((res) => {
     this.$message.success('...');
-    console.log(res);
+    console.log(res.data.data);
   })
   .catch((err) => {
     this.$message.error(err);
