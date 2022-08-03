@@ -23,15 +23,39 @@
       </el-card>
 
       <el-card class="new-proj box-card" shadow="hover">
-        <div @click="create_proj()">
+        <div @click="new_proj_dialog_visible = true">
           <i class="el-icon-plus" style="font-size: 50px"></i>
           <div style="font-size: 18px; color: gray">新建项目</div>
         </div>
       </el-card>
+
+      <!-- new proj prompt dialog -->
+      <el-dialog title="新建项目" :visible.sync="new_proj_dialog_visible" width="40%">
+        <el-form :model="new_proj_dialog_data">
+          <el-form-item label="项目名称" :label-width="new_proj_dialog_label_width" required>
+            <el-input v-model="new_proj_dialog_data.proj_name"></el-input>
+          </el-form-item>
+          <el-form-item label="项目简介" :label-width="new_proj_dialog_label_width">
+            <el-input v-model="new_proj_dialog_data.proj_info"></el-input>
+          </el-form-item>
+          <el-form-item label="项目开始时间" :label-width="new_proj_dialog_label_width">
+            <el-input v-model="new_proj_dialog_data.start_time"></el-input>
+          </el-form-item>
+          <el-form-item label="项目结束时间" :label-width="new_proj_dialog_label_width">
+            <el-input v-model="new_proj_dialog_data.end_time"></el-input>
+          </el-form-item>
+        </el-form>
+        <div slot="footer">
+          <el-button @click="new_proj_dialog_visible = false">取消</el-button>
+          <el-button type="primary" @click="create_proj()">确定</el-button>
+        </div>
+      </el-dialog>
     </div>
 
     <div class="button">
-    <el-button icon="el-icon-delete">回收站</el-button>
+      <router-link to="/trashbin">
+        <el-button icon="el-icon-delete">回收站</el-button>
+      </router-link>
     </div>
 
     <el-divider>团队成员</el-divider>
@@ -60,16 +84,50 @@
 </template>
 
 <script>
+  import qs from 'qs';
   export default {
     name: 'TeamView',
 
     data() {
-      return {};
+      return {
+        new_proj_dialog_visible: false,
+        new_proj_dialog_label_width: '120px',
+        new_proj_dialog_data: {
+          proj_name: '',
+          team_id: 0,
+          proj_info: '',
+          start_time: '',
+          end_time: '',
+        },
+      };
     },
 
     methods: {
       create_proj() {
-        this.$message.success('create proj pressed');
+        this.new_proj_dialog_visible = false;
+
+        let post_data = this.new_proj_dialog_data;
+        post_data.team_id = 0;
+
+        console.log(post_data);
+
+        this.$axios
+          .post('/project/createProj ', qs.stringify(post_data), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$message.success('新建项目成功');
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
       },
 
       //   edit_proj(proj_id) {},
@@ -82,12 +140,6 @@
         }).then(() => {
           this.$message.success('成功删除项目' + proj_id);
         });
-        //   .catch(() => {
-        //     this.$message({
-        //       type: 'info',
-        //       message: '已取消删除',
-        //     });
-        //   });
       },
     },
   };
