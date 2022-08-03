@@ -3,10 +3,10 @@
     <div id="title">回收站</div>
     <el-divider></el-divider>
 
-    <el-table stripe border>
-      <el-table-column prop="" label="项目名称" min-width="20%"></el-table-column>
-      <el-table-column prop="" label="项目简介" min-width="30%"></el-table-column>
-      <el-table-column prop="" label="删除时间" min-width="20%"></el-table-column>
+    <el-table :data="trash_bin_projs" stripe border>
+      <el-table-column prop="proj_name" label="项目名称" min-width="20%"></el-table-column>
+      <el-table-column prop="proj_info" label="项目简介" min-width="30%"></el-table-column>
+      <el-table-column prop="delete_time" label="删除时间" min-width="20%"></el-table-column>
       <el-table-column min-width="30%">
         <template scope="scope">
           <el-button type="success" size="small" @click="recover_proj(scope.row.proj_id)"
@@ -18,7 +18,6 @@
         </template>
       </el-table-column>
     </el-table>
-
   </div>
 </template>
 
@@ -27,16 +26,17 @@
   export default {
     name: 'ProjectTrashBin',
     data() {
-      return {};
+      return { trash_bin_projs: [
+        {proj_id: 1, proj_name: '测试1', proj_info: 'aaa', delete_time: '111'},
+        {proj_id: 2, proj_name: '测试2', proj_info: 'bbb', delete_time: '222'},
+      ] };
     },
     methods: {
-        // recover_proj(projid) {
+      // recover_proj(proj_id) {
+      // },
 
-        // },
-
-        // clear_proj(projid) {
-
-        // }
+      // clear_proj(proj_id) {
+      // }
     },
   };
 </script>
