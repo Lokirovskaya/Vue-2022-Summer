@@ -3,25 +3,29 @@
         <div id="title">文档标题标题标题</div>
 
         <div id="files">
-            <el-card class="one-file box-card" shadow="hover">
+            <el-card class="one-file box-card" shadow="hover" v-for="item in file_list" :key="item.file_id">
                 <div style="text-align: right">
                     <el-dropdown>
                         <i class="el-icon-more" style="font-size: 18px"></i>
                         <el-dropdown-menu slot="dropdown">
                             <el-dropdown-item>
-                                <div @click="edit_file(0)">编辑文档</div>
+                                <div @click="edit_file(item.file_id)">编辑文档</div>
                             </el-dropdown-item>
                             <el-dropdown-item>
-                                <div @click="file_rename_dialog_visible = true; file_rename_id = 1;">重命名</div>
+                                <div @click="file_rename_dialog_visible = true; file_rename_id = item.file_id;">重命名</div>
                             </el-dropdown-item>
                             <el-dropdown-item style="color: red">
-                                <div @click="delete_file(0)">删除文档</div>
+                                <div @click="delete_file(item.file_id)">删除文档</div>
                             </el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
                 </div>
 
-                <div>一个文档，还可以放文档缩略图</div>
+                <div>文档名:{{item.file_name}}<br>
+                    文档ID:{{item.file_id}}<br>
+                    文档创建者:{{item.file_creator}}<br>
+                    文档创建时间:{{item.create_time}}<br>
+                </div>
             </el-card>
 
             <el-card class="new-file box-card" shadow="hover">
@@ -93,7 +97,8 @@ export default {
                     .then(res => {
                         if (res.data.errno === 0) {
                             console.log(res.data);//测试一下
-                            this.$message.success('重命名成功' + this.file_rename_id);
+                            this.$message.success('重命名成功');
+                            this.file_rename_dialog_visible = false;
                             this.file_rename = ''; //争取把源数据(文档名)也修改了
                         } else {
                             this.$message.error(res.data.msg);
@@ -145,7 +150,8 @@ export default {
                     .then(res => {
                         if (res.data.errno === 0) {
                             console.log(res.data);//测试一下
-                            //this.$message.success('重命名成功' + this.file_rename_id);
+                            this.$message.success('新建文档成功');
+                            this.new_file_dialog_visible = false;
                             this.new_file_name = ''; //争取把源数据(文档名)也修改了
                         } else {
                             this.$message.error(res.data.msg);
