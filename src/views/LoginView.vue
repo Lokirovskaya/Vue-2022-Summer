@@ -46,7 +46,7 @@ import qs from "qs";
             if (res.data.errno === 0) {
               this.$message.success(res.data.data.username + ' 登录成功！');
               this.$store.commit('set_userstate_to_normal'); //更新全局变量
-              this.$store.commit('set_token', res.data.data.token);
+              this.$store.commit('set_token', res.data.data.authorization);
               this.$store.commit('set_username', res.data.data.username); 
               this.$store.commit('set_userid', res.data.data.userid); 
               this.$store.commit('set_userphoto', res.data.data.photo.url); 

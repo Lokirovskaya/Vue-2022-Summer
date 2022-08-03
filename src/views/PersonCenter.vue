@@ -17,9 +17,7 @@
               </el-button>
             </div>
 
-
-            <img src="../assets/user_photo.jpg" class="avatar">
-
+            <img :src="'http://43.138.55.69'+url_now" class="avatar">
             <div style="font-size: 25px; margin: 5px;">{{username}}</div>
 
             <el-descriptions border style="margin: 15px;">
@@ -248,7 +246,7 @@ import qs from "qs";
     .avatar {
     width: 180px;
     height: 180px;
-    border-radius: 90px;
+    border-radius: 0px;
     border-style: solid;
     border-width: 1px;
     border-color:rgb(230,230,250);
