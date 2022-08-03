@@ -1,3 +1,4 @@
+// 需要处理 errno
 this.$axios
   .post('...', qs.stringify({}), {
     headers: {
@@ -15,4 +16,22 @@ this.$axios
   .catch((err) => {
     this.$message.error(err);
   });
+
+
+// 不需要处理 errno
+this.$axios
+  .post('...', qs.stringify({}), {
+    headers: {
+      userid: this.$store.state.userid,
+      token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    this.$message.success('...');
+    console.log(res);
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+
 
