@@ -6,7 +6,8 @@
       <router-link to="/login">登录</router-link> |
       <router-link to="/project">项目</router-link> |
       <router-link to="/team">团队主页</router-link> |
-      <router-link to="/personcenter">个人中心</router-link>
+      <router-link to="/personcenter">个人中心</router-link> |
+      <router-link to="/prototype">原型设计</router-link>
     </nav>
 
     <MenuTop />

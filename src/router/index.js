@@ -44,6 +44,11 @@ const routes = [
     name: 'personcenter',
     component: () => import('../views/PersonCenter.vue'),
   },
+  {
+    path: '/prototype',
+    name: 'prototype',
+    component: () => import('../views/PrototypeView.vue'),
+  },
 ];
 
 const router = new VueRouter({
