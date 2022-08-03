@@ -18,7 +18,10 @@
     </div>
   </div>
   <div v-else>
-    注册成功，您的uid为{{uid}}<br>
+    <!-- <el-divider></el-divider> -->
+    <br>
+    <h3 style="color:rgb(100,100,100)">注册成功，您的uid为{{uid_toshow}}</h3>
+    <!-- <el-divider></el-divider> -->
     <router-link to="/login" style="margin: 5px;">
         <el-button round>去登录</el-button>
       </router-link>
@@ -61,7 +64,7 @@ import qs from "qs";
             .then(res => {
               if (res.data.errno === 0) {
                 this.$message.success('注册成功');
-                alert(res.data);
+                // alert(res.data.userid);
                 this.uid_toshow = res.data.userid;
                 this.is_success = 1;
               }

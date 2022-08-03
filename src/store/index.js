@@ -8,7 +8,7 @@ export default new Vuex.Store({
   state: {
     // 0:游客 1:普通用户
     login_state: 0,
-    userid: 0,
+    userid: undefined,
     username: '',
     user_photo: '',
     user_email: '',

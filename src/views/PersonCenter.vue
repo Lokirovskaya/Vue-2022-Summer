@@ -7,7 +7,7 @@
           <div style="display: flex; justify-items: center; align-items: center; flex-direction: column;">
 
             <div v-if="is_visit_self === 0" style="margin-left: auto;">
-              <el-button style="position:relative;left:-10px;" @click="                
+              <el-button style="position:relative;left:-10px;" @click="
                 modify_state = 1;
                 input_username = username;
                 input_password = '';
@@ -31,15 +31,11 @@
           </div>
           <el-divider>我的团队</el-divider>
         <div id="teams">
-      <div class="one-team">
+      <div v-for=" team in team_ifo" :key="team.id" class="one-team">
         <el-button id="team_pic"><img src="../assets/team.jpg" id="team_pic" @click="goto_team"></el-button>
-        <div id="team_name">团队名</div>
+        <div id="team_name">{{team.teamname}}</div>
       </div>
 
-      <div class="one-team">
-        <el-button id="team_pic"><img src="../assets/team.jpg" id="team_pic" @click="goto_team"></el-button>
-        <div id="team_name">团队名</div>
-      </div>
     </div>
         </div>
         <div v-else>
@@ -60,6 +56,7 @@
               :before-upload="beforeAvatarUpload" :limit="1" :auto-upload="true">
               <img v-if="url_upload" :src="url_upload" class="avatar">
               <img v_else src="../assets/user_photo.jpg" class="avatar">
+              <!-- <img src="url_upload" class="avatar"> -->
             </el-upload>
             <div>点击上方修改头像</div>
 
@@ -93,6 +90,7 @@
 </template>
 
 <script>
+import qs from "qs";
   export default {
     name: 'PersonCenter',
     data() {
@@ -108,13 +106,8 @@
         is_visit_self: 0, //0：访问自己主页
         url_upload: undefined,
         url_now: this.$store.state.user_photo,
-        team_ifo:[
-    {
-        teamname: 'team.teamname',
-        teamid : 'team.teamid',
-        // proj: [{'proj_id': proj.projID, 'proj_name':proj.projName}]
-    },
-        ]
+        // team_ifo:[{teamname:'a',teamid:1},{teamname:'b',teamid:2}],
+        team_ifo:[],
       }
     },
     methods:
@@ -123,11 +116,130 @@
           this.$router.push({ path: '/'});
       },
       modify_username(){
-
+          this.$axios.post('/team/modify_username', qs.stringify(this.input_username), {
+          headers: {
+            userid: this.$store.state.userid,
+            token: this.$store.state.token,
+          }
+        })
+          .then(res => {
+            if (res.data.errno === 0) {
+              this.$message.success(res.data.msg);
+              this.$store.commit('set_username', res.data.username); 
+              // this.modify_state = 0;
+            }
+            else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch(err => {
+            this.$message.error(err);
+          });
       },
       modify_pwd(){
+          let password_ifo = {
+          password_1: this.input_password,
+          password_2: this.input_password2
+        }
+        if (this.input_password === '') {
+          this.$message.error('密码不能为空');
+        }
+        else if (this.input_password2 === '') {
+          this.$message.error('请再次输入密码');
+        }
+        else {
+          this.$axios.post('/team/modify_password', qs.stringify(password_ifo),
+            {
+              headers: {
+                userid: this.$store.state.userid,
+                token: this.$store.state.token,
+              }
+            })
+            .then(res => {
+              if (res.data.errno === 0) {
+                this.$message.success(res.data.msg);
+              }
+              else {
+                this.$message.error(res.data.msg);
+              }
+            })
+            .catch(err => {
+              this.$message.error(err);
+            });
+        }
+      },
+      
+      upload_file(e) {
+        let formData = new FormData();
+        formData.append('in_file', e.file);
+        let my_axios = this.$axios.create({
+          withCredentials: true,
+          headers: {
+            userid: this.$store.state.userid,
+                token: this.$store.state.token,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        my_axios.post('/team/modify_photo', { photo: e.file })
+          .then(res => {
+            if (res.data.errno === 0) {
+              this.$message.success('头像修改成功！');
+              this.url_now = res.data.photo;
+              this.url_upload = res.data.photo;
+              this.$store.state.user_photo = res.data.photo;
+            }
+            else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch(err => {
+            this.$message.error(err);
+          });
+      },
+      handleAvatarSuccess(res, file) {
+        console.log('success');
+        console.log('imageurl:' + this.imageUrl);
+        this.imageUrl = URL.createObjectURL(file.raw);
+        this.url_upload = this.imageUrl;
+      },
+      beforeAvatarUpload(file) {
+        console.log('before');
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
 
+      init_teamifo(){
+          this.$axios.post('/team/userspace', {
+          headers: {
+            userid: this.$store.state.userid,
+            token: this.$store.state.token,
+          }
+        })
+            .then(res => {
+              if (res.data.errno === 0) {
+                this.$message.success(res.data.msg);
+                this.team_ifo = res.data;
+              }
+              else {
+                this.$message.error(res.data.msg);
+              }
+            })
+            .catch(err => {
+              this.$message.error(err);
+            });
       }
+
+    },
+    mounted: function () {
+      // alert('页面一加载，就会弹出此窗口')
+      this.init_teamifo();
     },
   };
 </script>
@@ -173,4 +285,6 @@
     color: grey;
     margin-top: 10px;
   }
+
+
 </style>
