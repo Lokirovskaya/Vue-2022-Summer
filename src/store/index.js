@@ -32,6 +32,12 @@ export default new Vuex.Store({
     set_userphoto(state, userphoto) {
       state.user_photo = userphoto;
     },
+    set_email(state, useremail) {
+      state.user_email = useremail;
+    },
+    set_truename(state, usertruename) {
+      state.user_truename = usertruename;
+    },
     set_token(state, token) {
       state.token = token;
     },

@@ -99,8 +99,8 @@
       return {
         username: this.$store.state.username,
         uid:this.$store.state.userid,
-        truename:'马冬梅',
-        email:'madongmei@buaa.edu.cn',
+        truename:this.$store.state.user_truename,
+        email:this.$store.state.user_email,
         modify_state: 0,
         input_username: undefined,
         input_password: undefined,
@@ -108,7 +108,13 @@
         is_visit_self: 0, //0：访问自己主页
         url_upload: undefined,
         url_now: this.$store.state.user_photo,
-
+        team_ifo:[
+    {
+        teamname: 'team.teamname',
+        teamid : 'team.teamid',
+        // proj: [{'proj_id': proj.projID, 'proj_name':proj.projName}]
+    },
+        ]
       }
     },
     methods:

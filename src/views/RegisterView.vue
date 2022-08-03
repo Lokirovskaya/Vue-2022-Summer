@@ -52,7 +52,7 @@ import qs from "qs";
           this.$axios.post('/team/register', qs.stringify(this.$data))  
             .then(res => {
               if (res.data.errno === 0) {
-                this.$message.success('注册成功！');
+                this.$message.success('注册成功！您的uid为'+res.data.userid);
               }
               else {
                 this.$message.error(res.data.msg);
