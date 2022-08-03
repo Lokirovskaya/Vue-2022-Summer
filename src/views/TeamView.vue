@@ -31,7 +31,7 @@
     </div>
 
     <div class="button">
-      <router-link to="/trashbin">
+      <router-link :to="{path: '/trashbin', query: {id: this.team_id}}">
         <el-button icon="el-icon-delete">回收站</el-button>
       </router-link>
     </div>
