@@ -2,14 +2,18 @@
   <div id="main">
     <div id="left">
       <el-menu>
-        <el-submenu v-for="(team, i) in testdata" :key="team" :index="'1-' + i">
+        <el-submenu v-for="(team, i) in teamdata" :key="i" :index="'1-' + i">
           <template slot="title">
-            <i class="el-icon-location"></i>
-            <span>{{ team.teamname }}</span>
+            <router-link :to="{ path: '/team', query: { id: team.teamid } }">
+              <i class="el-icon-location"></i>
+              <span>{{ team.teamname }}</span>
+            </router-link>
           </template>
 
-          <el-menu-item v-for="(proj, j) in team.projs" :key="proj" :index="'1-' + i + '-' + j">
-            {{ proj.projname }}
+          <el-menu-item v-for="(proj, j) in team.proj" :key="j" :index="'1-' + i + '-' + j">
+            <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
+              {{ proj.proj_name }}
+            </router-link>
           </el-menu-item>
         </el-submenu>
 
@@ -37,16 +41,8 @@
 
     data() {
       return {
-        testdata: [
-          {
-            teamname: '团队1',
-            projs: [{ projname: '项目1' }, { projname: '项目2' }, { projname: '项目3' }],
-          },
-          {
-            teamname: '团队2',
-            projs: [{ projname: '项目11' }, { projname: '项目22' }],
-          },
-        ],
+        // 结构见文档 /team/userspace
+        teamdata: [],
       };
     },
 
@@ -90,6 +86,7 @@
             this.$message.error(err);
           });
       },
+
     },
 
     created() {
@@ -101,12 +98,7 @@
           },
         })
         .then((res) => {
-          if (res.data.errno === 0) {
-            // this.$message.success('...');
-            console.log(res)
-          } else {
-            this.$message.error(res.data.msg);
-          }
+          this.teamdata = res.data.data;
         })
         .catch((err) => {
           this.$message.error(err);
@@ -133,5 +125,10 @@
   #right {
     display: table-cell;
     text-align: center;
+  }
+
+  a,
+  .router-link-active {
+    text-decoration: none;
   }
 </style>
