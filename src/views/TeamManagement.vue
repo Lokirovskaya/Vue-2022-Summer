@@ -12,13 +12,35 @@
       <el-table-column prop="member_email" label="邮箱" min-width="30%"></el-table-column>
       <el-table-column label="权限" min-width="20%">
         <template scope="scope">
-          {{ ['游客', '普通用户', '管理员'][scope.row.member_permission] }}
+          {{ ['成员', '管理员', '创建者'][scope.row.member_permission] }}
         </template>
       </el-table-column>
-      <el-table-column min-width="30%">
+      <el-table-column label="操作" min-width="30%">
         <template scope="scope">
-          <el-button type="primary" size="small" @click="set_admin(scope.row.member_id)">设为管理</el-button>
-          <el-button type="danger" size="small" @click="remove_user(scope.row.member_id)">移出团队</el-button>
+          <el-button
+            type="primary"
+            size="small"
+            @click="set_admin(scope.row.member_id)"
+            v-if="my_permission >= 1 && scope.row.member_permission === 0"
+            >设为管理</el-button
+          >
+          <el-button
+            type="warning"
+            size="small"
+            @click="remove_admin(scope.row.member_id)"
+            v-else-if="my_permission === 2 && scope.row.member_permission === 1"
+            >取消管理</el-button
+          >
+          <el-button type="info" size="small" disabled v-else>设为管理</el-button>
+
+          <el-button
+            type="danger"
+            size="small"
+            @click="remove_user(scope.row.member_id)"
+            v-if="my_permission > scope.row.member_permission"
+            >移出团队</el-button
+          >
+          <el-button type="info" size="small" disabled v-else>移出团队</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -39,11 +61,60 @@
 
     methods: {
       set_admin(userid) {
-        this.$message.success('成功设置' + userid + '为管理员');
+        let post_data = {
+          teamid: this.$route.query.id,
+          userid: userid,
+        };
+
+        this.$axios
+          .post('/team/authorize_admin', qs.stringify(post_data), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$message.success('设置管理员成功');
+              this.$router.go(0);
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
+
+      // eslint-disable-next-line no-unused-vars
+      remove_admin(userid) {
+        this.$message.warning('还没实现的功能');
       },
 
       remove_user(userid) {
-        this.$message.success('成功移出' + userid);
+        let post_data = {
+          teamid: this.$route.query.id,
+          userid: userid,
+        };
+
+        this.$axios
+          .post('/team/delete_member', qs.stringify(post_data), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$message.success('移除成员成功');
+              this.$router.go(0);
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
       },
 
       get_member_data() {
@@ -66,6 +137,15 @@
 
     created() {
       this.get_member_data();
+    },
+
+    watch: {
+      $route(to, from) {
+        if (to.query.id !== from.query.id) {
+          this.id = to.query.id;
+          this.get_member_data();
+        }
+      },
     },
   };
 </script>
