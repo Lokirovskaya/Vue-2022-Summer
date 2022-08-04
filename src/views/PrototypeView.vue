@@ -32,12 +32,10 @@
           @dragging="set_position($event, i)"
           @resizing="set_size($event, i)"
         >
-          <div style="height: 100%; display: flex; justify-content: center">
+          <div style="height: 100%; display: flex; align-items: center">
             <div
               v-if="element.inner_text === false"
-              :style="
-                'white-space: nowrap; height: 100%; margin-right: 5px; font-size:' + element.font_size + 'px;'
-              "
+              :style="'white-space: nowrap; margin-right: 5px; font-size:' + element.font_size + 'px;'"
             >
               {{ element.text }}
             </div>
@@ -260,7 +258,7 @@
           })
           .then((res) => {
             if (res.data.errno === 0) {
-              this.drag_elements = JSON.parse(res.data.proto_content)
+              this.drag_elements = JSON.parse(res.data.proto_content);
             } else {
               this.$message.error(res.data.msg);
             }
