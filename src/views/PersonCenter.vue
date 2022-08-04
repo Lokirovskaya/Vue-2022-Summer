@@ -31,15 +31,15 @@
         <div id="teams">
       <!-- <div v-for=" team in team_ifo" :key="team.id" class="one-team"> -->
         
-        <div v-if="JSON.stringify(this.team_ifo) == '{}'">
+        <!-- <div v-if="JSON.stringify(this.team_ifo) != '{}'"> -->
         <div v-for="(team, i) in team_ifo" :key="i" :index="'1-' + i" class="one-team">
         <router-link :to="{ path: '/team', query: { id: team.teamid } }">
         <el-button id="team_button"><img src="../assets/team.png" id="team_pic" @click="goto_team"></el-button>
         </router-link>
         <div id="team_name">{{ team.teamname }}</div>
       </div>
-        </div>
-        <div v-else> <h4 style="color:rgb(100,100,100)">暂无团队</h4></div>
+        <!-- </div> -->
+        <!-- <div v-else> <h4 style="color:rgb(100,100,100)">暂无团队</h4></div> -->
 
     </div>
         </div>
@@ -277,8 +277,8 @@ import qs from "qs";
     margin: 10px;
   }
   #team_button{
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 40px;
     border-style: solid;
     border-width: 1px;
@@ -288,8 +288,8 @@ import qs from "qs";
     justify-content: center;
   }
   #team_pic {
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     border-radius: 15px;
     /* border-style: solid;
     border-width: 1px;
@@ -298,7 +298,7 @@ import qs from "qs";
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.5;
+    opacity: 0.6;
   }
   #team_pic:hover{
       /* background-color:rgb(255,240,245); */
@@ -307,7 +307,7 @@ import qs from "qs";
   }
 
   #team_name {
-    color: grey;
+    /* color: grey; */
     margin-top: 10px;
   }
 

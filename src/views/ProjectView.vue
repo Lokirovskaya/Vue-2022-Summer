@@ -40,7 +40,8 @@
                     </template>
                     <span v-for="item in members" :key="item.userid" @click="toPC(item.userid)">
                         <el-tooltip class="item" effect="light" :content="item.truename" placement="bottom">
-                            <el-avatar size="15" :src="item.photo"></el-avatar>
+                            <!-- <el-avatar size="15" :src="item.photo"></el-avatar> -->
+                            <img class="avatar" :src="'http://stcmp.shlprn.cn' + item.photo" />
                         </el-tooltip>
                     </span>
                 </el-descriptions-item>
@@ -334,4 +335,13 @@ export default {
     width: 100%;
     display: block;
 }
+
+.avatar {
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 1px;
+    border-color:rgb(230,230,250);
+  }
 </style>
