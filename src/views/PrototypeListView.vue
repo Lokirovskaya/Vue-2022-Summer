@@ -30,15 +30,15 @@
             <el-card class="new-prototype box-card" shadow="hover">
                 <div @click="new_prototype_dialog_visible = true">
                     <i class="el-icon-plus" style="font-size: 50px"></i>
-                    <div style="font-size: 18px; color: gray">新建文档</div>
+                    <div style="font-size: 18px; color: gray">新建原型</div>
                 </div>
             </el-card>
 
             <!-- new proj prompt dialog -->
-            <el-dialog title="新建文档" :visible.sync="new_prototype_dialog_visible" width="40%">
+            <el-dialog title="新建原型" :visible.sync="new_prototype_dialog_visible" width="40%">
                 <div style="margin-left:10%;margin-right:10%;">
 
-                    <el-input placeholder="请输入新建文档名" prefix-icon="el-icon-notebook-2" v-model="new_prototype_name">
+                    <el-input placeholder="请输入新建原型名" prefix-icon="el-icon-notebook-2" v-model="new_prototype_name">
                     </el-input>
                 </div>
                 <div slot="footer">
@@ -48,7 +48,7 @@
             </el-dialog>
 
             <!--rename prototype prompt dialog -->
-            <el-dialog title="重命名文档" :visible.sync="prototype_rename_dialog_visible" width="40%">
+            <el-dialog title="重命名原型" :visible.sync="prototype_rename_dialog_visible" width="40%">
                 <div style="margin-left:10%;margin-right:10%;">
 
                     <el-input placeholder="请输入新名字" prefix-icon="el-icon-notebook-2" v-model="prototype_rename">
@@ -115,7 +115,7 @@ export default {
             }
         },
         delete_prototype(prototype_id) {
-            this.$confirm('是否删除文档？', '删除文档', {
+            this.$confirm('是否删除原型？', '删除原型', {
                 confirmButtonText: '确定',
                 cancelButtonText: '取消',
                 type: 'warning',
@@ -151,7 +151,7 @@ export default {
         },
         create_prototype() {
             if (this.new_prototype_name === '') {
-                this.$message.error('文档名不能为空');
+                this.$message.error('原型名不能为空');
             } else {
                 this.$axios.post('/project/create_proto', qs.stringify({ proj_id: this.$route.query.id, proto_name: this.new_prototype_name }), {
                     headers: {
@@ -173,7 +173,7 @@ export default {
                             };
                             this.prototype_list.push(item);
                             this.new_prototype_dialog_visible = false;
-                            this.new_prototype_name = ''; //争取把源数据(文档名)也修改了
+                            this.new_prototype_name = ''; //争取把源数据(原型名)也修改了
                         } else {
                             this.$message.error(res.data.msg);
                         }
@@ -185,7 +185,7 @@ export default {
         },
     },
     mounted() {
-        this.$axios.post('/project/proj_proto', qs.stringify({  proj_id: this.$route.query.id }), {
+        this.$axios.post('/project/proj_proto', qs.stringify({ proj_id: this.$route.query.id }), {
             headers: {
                 userid: this.$store.state.userid,
                 token: this.$store.state.token,
