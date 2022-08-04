@@ -14,32 +14,39 @@
 
     <div style="width: 500px">
       <div id="drag-area">
-        <VueDragResize
-          v-for="(element, i) in drag_elements"
-          :parentLimitation="true"
-          :key="i"
-          :x="element.x"
-          :y="element.y"
-          :w="element.width"
-          :h="element.height"
-          :minw="20"
-          :minh="20"
-          :snapToGrid="true"
-          :gridX="10"
-          :gridY="10"
-          @activated="show_activated_info(i)"
-        >
-          <component v-bind:is="element.tag" class="drag-element">
-            {{ element.inner_html }}
-          </component>
-        </VueDragResize>
+        <div v-for="(element, i) in drag_elements" :key="i" style="width: 100%; height: 100%">
+          <VueDragResize
+            v-if="!element.deleted"
+            :parentLimitation="true"
+            :x="element.x"
+            :y="element.y"
+            :w="element.width"
+            :h="element.height"
+            :isActive="element.active"
+            :minw="20"
+            :minh="20"
+            :snapToGrid="false"
+            :gridX="10"
+            :gridY="10"
+            @activated="set_active(i)"
+            @dragging="set_position($event, i)"
+            @resizing="set_size($event, i)"
+          >
+            <component :is="element.tag" class="drag-element">
+              {{ element.inner_html }}
+            </component>
+          </VueDragResize>
+        </div>
       </div>
     </div>
 
     <div id="info-area" v-if="activated_index >= 0">
       <div class="title">详细信息</div>
+      {{ activated_index }} <br />
+      {{ drag_elements[activated_index] }}
       <div style="text-align: left">
         <el-input v-model="activated_inner_html" @change="change_activated_inner_html()"></el-input>
+
         <el-button type="danger" @click="delete_activated()">删除</el-button>
       </div>
     </div>
@@ -48,10 +55,9 @@
 
 <script>
   import VueDragResize from 'vue-drag-resize';
-  //   import Vue from 'vue/dist/vue.esm.js'
   export default {
     name: 'PrototypeView',
-    components: { VueDragResize },
+    components: { VueDragResize, normal_button: { template: `<h1>ddd</h1>` } },
 
     data() {
       return {
@@ -64,7 +70,7 @@
         ],
 
         drag_elements: [
-          /* { tag, x, y, width, height, inner_html } */
+          /* { tag, x, y, width, height, active, inner_html, deleted } */
         ],
       };
     },
@@ -77,26 +83,52 @@
           y: 10,
           width: item.width,
           height: item.height,
+          active: false,
           inner_html: item.inner_html,
+          deleted: false,
         };
         this.drag_elements.push(element);
       },
 
-      show_activated_info(i) {
-        this.activated_index = i;
-        this.activated_inner_html = this.drag_elements[i].inner_html;
+      set_active(index) {
+        if (this.activated_index >= 0) {
+          this.drag_elements[this.activated_index].active = false;
+        }
+
+        this.drag_elements[index].active = true;
+
+        this.activated_index = index;
+        this.activated_inner_html = this.drag_elements[index].inner_html;
+      },
+
+      //   unset_active(index) {
+      //     if (document.activeElement.id === document.getElementById('info-area')) return;
+      //     this.drag_elements[index].active = false;
+      //     this.activated_index = -1;
+      //   },
+
+      set_position(new_element, index) {
+        this.drag_elements[index].x = new_element.left;
+        this.drag_elements[index].y = new_element.top;
+      },
+
+      set_size(new_element, index) {
+        this.drag_elements[index].width = new_element.width;
+        this.drag_elements[index].height = new_element.height;
       },
 
       change_activated_inner_html() {
         this.drag_elements[this.activated_index].inner_html = this.activated_inner_html;
       },
 
-      //   hide_activated_info(i)
-
       delete_activated() {
-        this.drag_elements.splice(this.activated_index, 1);
+        this.drag_elements[this.activated_index].deleted = true;
         this.activated_index = -1;
-      }
+        // if (this.activated_index >= 0) {
+        //   this.drag_elements.splice(this.activated_index, 1);
+        // }
+        // this.activated_index = -1;
+      },
     },
   };
 </script>
