@@ -13,47 +13,83 @@
     </div>
 
     <div style="width: 500px">
-      <div id="drag-area">
-        <div v-for="(element, i) in drag_elements" :key="i" style="width: 100%; height: 100%">
-          <VueDragResize
-            v-if="!element.deleted"
-            :parentLimitation="true"
-            :x="element.x"
-            :y="element.y"
-            :w="element.width"
-            :h="element.height"
-            :isActive="element.active"
-            :minw="20"
-            :minh="20"
-            :snapToGrid="false"
-            :gridX="10"
-            :gridY="10"
-            @activated="set_active(i)"
-            @dragging="set_position($event, i)"
-            @resizing="set_size($event, i)"
-          >
-            <component :is="element.tag" class="drag-element">
-              {{ element.inner_html }}
+      <div id="drag-area" @mousedown="unset_active()">
+        <VueDragResize
+          v-for="(element, i) in drag_elements"
+          :key="element.id"
+          :parentLimitation="true"
+          :x="element.x"
+          :y="element.y"
+          :w="element.width"
+          :h="element.height"
+          :isActive="element.active"
+          :minw="20"
+          :minh="20"
+          :snapToGrid="true"
+          :gridX="10"
+          :gridY="10"
+          @activated="set_active(i)"
+          @dragging="set_position($event, i)"
+          @resizing="set_size($event, i)"
+        >
+          <div style="height: 100%; display: flex; justify-content: center">
+            <div
+              v-if="element.inner_text === false"
+              :style="
+                'white-space: nowrap; height: 100%; margin-right: 5px; font-size:' + element.font_size + 'px;'
+              "
+            >
+              {{ element.text }}
+            </div>
+            <component
+              :is="element.tag"
+              class="drag-element"
+              :style="'height: 100%; font-size:' + element.font_size + 'px;'"
+            >
+              {{ element.text }}
             </component>
-          </VueDragResize>
-        </div>
+          </div>
+        </VueDragResize>
       </div>
     </div>
 
-    <div id="info-area" v-if="activated_index >= 0">
-      <div class="title">详细信息</div>
-      {{ activated_index }} <br />
-      {{ drag_elements[activated_index] }}
-      <div style="text-align: left">
-        <el-input v-model="activated_inner_html" @change="change_activated_inner_html()"></el-input>
+    <div id="right-area">
+      <div id="button-area" style="text-align: left">
+        <el-button type="success" @click="save_prototype()">保存原型</el-button>
+      </div>
 
-        <el-button type="danger" @click="delete_activated()">删除</el-button>
+      <div id="info-area" v-if="activated_index >= 0">
+        <div class="title">详细信息</div>
+        <div style="text-align: left">
+          <div>
+            {{ drag_elements[activated_index].name }}
+            ({{ drag_elements[activated_index].x }}, {{ drag_elements[activated_index].y }})
+          </div>
+          <div>
+            width: {{ drag_elements[activated_index].width }} height:
+            {{ drag_elements[activated_index].height }}
+          </div>
+          <div>
+            显示文字：
+            <el-input v-model="drag_elements[activated_index].text"></el-input>
+          </div>
+          <div>
+            字体大小：
+            <el-input-number
+              v-model="drag_elements[activated_index].font_size"
+              :min="12"
+              :max="64"
+            ></el-input-number>
+          </div>
+          <el-button type="danger" icon="el-icon-delete" @click="delete_activated()" circle></el-button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+  import qs from 'qs';
   import VueDragResize from 'vue-drag-resize';
   export default {
     name: 'PrototypeView',
@@ -61,33 +97,43 @@
 
     data() {
       return {
+        id: 0, // 只是为了 v-for 的 key，没有实际意义
+
         activated_index: -1,
-        activated_inner_html: '',
 
         toolbar_items: [
-          { name: '按钮', tag: 'el-button', width: 90, height: 40, inner_html: '按钮', resizable: true },
-          { name: '文本', tag: 'div', width: 70, height: 20, inner_html: '文本', resizable: false },
+          { name: '按钮', tag: 'el-button', width: 90, height: 40, text: '按钮', inner_text: true },
+          { name: '文本', tag: 'div', width: 70, height: 20, text: '文本', inner_text: true },
+          { name: '输入框', tag: 'el-input', width: 150, height: 40, text: '', inner_text: false },
+          { name: '单选框', tag: 'el-radio', width: 70, height: 20, text: '单选框', inner_text: true },
+          { name: '多选框', tag: 'el-checkbox', width: 70, height: 20, text: '多选框', inner_text: true },
+          { name: '开关', tag: 'el-switch', width: 50, height: 30, text: '', inner_text: false },
+          { name: '滑块', tag: 'el-slider', width: 150, height: 40, text: '', inner_text: false },
+          { name: '评分', tag: 'el-rate', width: 140, height: 20, text: '', inner_text: false },
+          { name: '卡片', tag: 'el-card', width: 200, height: 200, text: '卡片', inner_text: true },
         ],
 
-        drag_elements: [
-          /* { tag, x, y, width, height, active, inner_html, deleted } */
-        ],
+        drag_elements: [], // 参考 add_element
       };
     },
 
     methods: {
       add_element(item) {
         let element = {
+          id: this.id,
+          name: item.name,
           tag: item.tag,
+          active: false,
           x: 10,
           y: 10,
           width: item.width,
           height: item.height,
-          active: false,
-          inner_html: item.inner_html,
-          deleted: false,
+          font_size: 15,
+          text: item.text,
+          inner_text: item.inner_text,
         };
         this.drag_elements.push(element);
+        this.id++;
       },
 
       set_active(index) {
@@ -98,14 +144,14 @@
         this.drag_elements[index].active = true;
 
         this.activated_index = index;
-        this.activated_inner_html = this.drag_elements[index].inner_html;
       },
 
-      //   unset_active(index) {
-      //     if (document.activeElement.id === document.getElementById('info-area')) return;
-      //     this.drag_elements[index].active = false;
-      //     this.activated_index = -1;
-      //   },
+      unset_active() {
+        if (this.activated_index >= 0) {
+          this.drag_elements[this.activated_index].active = false;
+        }
+        this.activated_index = -1;
+      },
 
       set_position(new_element, index) {
         this.drag_elements[index].x = new_element.left;
@@ -117,17 +163,37 @@
         this.drag_elements[index].height = new_element.height;
       },
 
-      change_activated_inner_html() {
-        this.drag_elements[this.activated_index].inner_html = this.activated_inner_html;
+      delete_activated() {
+        if (this.activated_index >= 0) {
+          this.drag_elements.splice(this.activated_index, 1);
+        }
+        this.activated_index = -1;
       },
 
-      delete_activated() {
-        this.drag_elements[this.activated_index].deleted = true;
-        this.activated_index = -1;
-        // if (this.activated_index >= 0) {
-        //   this.drag_elements.splice(this.activated_index, 1);
-        // }
-        // this.activated_index = -1;
+      save_prototype() {
+        let post_data = {
+          proto_id: 1, // todo
+          proto_content: JSON.stringify(this.drag_elements),
+        };
+
+        this.$axios
+          .post('project/upload_proto', qs.stringify(post_data), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$message.success('...');
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+        console.log(JSON.stringify(this.drag_elements));
       },
     },
   };
@@ -166,7 +232,7 @@
     position: absolute;
     width: 500px;
     height: 100%;
-    background-color: #eee;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
 
   .drag-element {
@@ -174,9 +240,25 @@
     height: 100%;
   }
 
-  #info-area {
-    width: 200px;
+  #right-area {
+    display: flex;
+    flex-direction: column;
+    width: 300px;
     margin-left: 20px;
+    margin-top: 30px;
+  }
+
+  #button-area {
+    width: 100%;
+    height: 60px;
+  }
+
+  #info-area {
+    width: 100%;
     line-height: 60px;
+  }
+
+  #info-area > div > div > .el-input {
+    width: 60%;
   }
 </style>
