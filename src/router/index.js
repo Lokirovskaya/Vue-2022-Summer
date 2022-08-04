@@ -58,7 +58,7 @@ const routes = [
     path: '/fileedit',
     name: 'fileedit',
     component: () => import('../views/FileEditView.vue'),
-  }
+  },
 ];
 
 const router = new VueRouter({
