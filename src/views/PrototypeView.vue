@@ -55,8 +55,8 @@
 
     <div id="right-area">
       <div id="button-area" style="text-align: left">
-        <el-button type="success" @click="save_prototype()">提交原型</el-button>
-        <el-button type="primary" @click="get_screenshot_prompt()">保存原型为图片</el-button>
+        <el-button type="success" @click="save_prototype()">保存原型</el-button>
+        <el-button type="primary" @click="get_screenshot_prompt()">下载原型为图片</el-button>
       </div>
 
       <div id="info-area" v-if="activated_index >= 0">
@@ -88,18 +88,18 @@
     </div>
 
     <!-- save-image-dialog -->
-    <el-dialog title="保存图片" :visible.sync="save_image_dialog_visible" width="40%">
+    <el-dialog title="下载原型为图片" :visible.sync="save_image_dialog_visible" width="40%">
       <div>
         <el-radio v-model="save_image_ext" label="png">png</el-radio>
         <el-radio v-model="save_image_ext" label="jpg">jpg</el-radio>
       </div>
-      <br/>
+      <br />
       <div>
         <el-input v-model="save_image_filename_noext" placeholder="请输入文件名">
-          <template slot="append">.{{save_image_ext}}</template>
+          <template slot="append">.{{ save_image_ext }}</template>
         </el-input>
       </div>
-      
+
       <div slot="footer">
         <el-button @click="save_image_dialog_visible = false">取消</el-button>
         <el-button type="primary" @click="get_screenshot()">确定</el-button>
@@ -198,7 +198,7 @@
 
       save_prototype() {
         let post_data = {
-          proto_id: this.$route.query.id, // todo
+          proto_id: this.$route.query.id,
           proto_content: JSON.stringify(this.drag_elements),
         };
 
@@ -227,13 +227,18 @@
       },
 
       get_screenshot() {
+        if (this.save_image_filename_noext.trim() === '') {
+          this.$message.error('请输入文件名');
+          return;
+        }
+
         return html2canvas(this.$refs.screenshotArea, {
           dpi: 192,
           scale: 2,
           useCORS: true,
         }).then((canvas) => {
           var link = document.createElement('a');
-          link.download = this.save_image_filename_noext + '.' + this.save_image_ext;
+          link.download = this.save_image_filename_noext.trim() + '.' + this.save_image_ext;
 
           if (this.save_image_ext === 'png') {
             link.href = Canvas2Image.convertToPNG(canvas, canvas.width, canvas.height).src;
@@ -244,6 +249,30 @@
           link.click();
         });
       },
+
+      get_prototype() {
+        this.$axios
+          .post('/project/get_proto', qs.stringify({ proto_id: this.$route.query.id }), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.drag_elements = JSON.parse(res.data.proto_content)
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
+    },
+
+    created() {
+      this.get_prototype();
     },
   };
 </script>
