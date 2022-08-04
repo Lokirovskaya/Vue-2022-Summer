@@ -47,11 +47,12 @@
     } else {
       this.$message.error(res.data.msg);
     }
+    this.$router.go(0);
   })
   .catch((err) => {
     this.$message.error(err);
   });
-  this.$router.go(0);
+  
       },
 
       clear_proj(proj_id) {
@@ -67,11 +68,12 @@
     } else {
       this.$message.error(res.data.msg);
     }
+    this.$router.go(0)
   })
   .catch((err) => {
     this.$message.error(err);
   });
-  this.$router.go(0) 
+  
       },
 
       init_trashbin(){

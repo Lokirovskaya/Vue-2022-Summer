@@ -17,7 +17,7 @@
               </el-button>
             </div>
 
-            <img :src="'http://stcmp.shlprn.cn/api'+url_now" class="avatar">
+            <img :src="'http://stcmp.shlprn.cn'+this.$store.state.user_photo" class="avatar">
             <div style="font-size: 25px; margin: 5px;">{{username}}</div>
 
             <el-descriptions border style="margin: 15px;">
@@ -31,12 +31,15 @@
         <div id="teams">
       <!-- <div v-for=" team in team_ifo" :key="team.id" class="one-team"> -->
         
+        <!-- <div v-if="JSON.stringify(this.team_ifo) != '{}'"> -->
         <div v-for="(team, i) in team_ifo" :key="i" :index="'1-' + i" class="one-team">
         <router-link :to="{ path: '/team', query: { id: team.teamid } }">
-        <el-button id="team_pic"><img src="../assets/team.jpg" id="team_pic" @click="goto_team"></el-button>
+        <el-button id="team_button"><img src="../assets/team.png" id="team_pic" @click="goto_team"></el-button>
         </router-link>
         <div id="team_name">{{ team.teamname }}</div>
       </div>
+        <!-- </div> -->
+        <!-- <div v-else> <h4 style="color:rgb(100,100,100)">暂无团队</h4></div> -->
 
     </div>
         </div>
@@ -55,9 +58,10 @@
             </div>
 
             <el-upload class="avatar-uploader" action="" :http-request="upload_file" :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload" :limit="1" :auto-upload="true">
-              <img v-if="url_upload" :src="'http://stcmp.shlprn.cn/api'+url_upload" class="avatar">
-              <img v_else :src="'http://stcmp.shlprn.cn/api'+url_now" class="avatar">
+              :before-upload="beforeAvatarUpload"  :auto-upload="true" :showFileList="false">
+              <!-- <img v-if="url_upload" :src="'http://stcmp.shlprn.cn/api'+url_upload" class="avatar">
+              <img v_else :src="'http://stcmp.shlprn.cn/api'+url_now" class="avatar"> -->
+              <img :src="'http://stcmp.shlprn.cn'+this.$store.state.user_photo" class="avatar">
             </el-upload>
             <div>点击上方修改头像</div>
 
@@ -203,7 +207,7 @@ import qs from "qs";
       },
       handleAvatarSuccess(res, file) {
         console.log('success');
-        console.log('imageurl:' + this.imageUrl);
+        // alert('imageurl:' + this.imageUrl);
         this.imageUrl = URL.createObjectURL(file.raw);
         this.url_upload = this.imageUrl;
       },
@@ -229,7 +233,6 @@ import qs from "qs";
           }
         })
             .then(res => {
-                // this.$message.success(123);
                 console.log(res.data.data);
                 this.team_ifo = res.data.data;
             })
@@ -249,12 +252,19 @@ import qs from "qs";
 
 <style>
     .avatar {
+      display: flex;
     width: 180px;
     height: 180px;
-    border-radius: 0px;
+    border-radius: 20px;
     border-style: solid;
-    border-width: 1px;
+    border-width: 2px;
     border-color:rgb(230,230,250);
+  }
+  .avatar :hover{
+    display: flex;
+    background-color:rgb(255,240,245);
+        filter:alpha(opacity=100); 
+        opacity: 0.8;
   }
     #teams {
     display: flex;
@@ -266,26 +276,38 @@ import qs from "qs";
   .one-team {
     margin: 10px;
   }
-  #team_pic {
-    width: 90px;
-    height: 90px;
-    border-radius: 45px;
+  #team_button{
+    width: 70px;
+    height: 70px;
+    border-radius: 40px;
     border-style: solid;
     border-width: 1px;
     border-color:rgb(230,230,250);
-    background-color: rgb(255,240,245);
     display: flex;
     align-items: center;
     justify-content: center;
   }
+  #team_pic {
+    width: 70px;
+    height: 70px;
+    border-radius: 15px;
+    /* border-style: solid;
+    border-width: 1px;
+    border-color:rgb(230,230,250); */
+    /* background-color: rgb(255,240,245); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.6;
+  }
   #team_pic:hover{
-      background-color:rgb(255,240,245);
+      /* background-color:rgb(255,240,245); */
         filter:alpha(opacity=100); 
         opacity: 0.8;
   }
 
   #team_name {
-    color: grey;
+    /* color: grey; */
     margin-top: 10px;
   }
 
