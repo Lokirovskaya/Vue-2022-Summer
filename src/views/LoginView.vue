@@ -49,7 +49,7 @@ import qs from "qs";
               this.$store.commit('set_token', res.data.data.authorization);
               this.$store.commit('set_username', res.data.data.username); 
               this.$store.commit('set_userid', res.data.data.userid); 
-              this.$store.commit('set_userphoto', res.data.data.photo.url); 
+              this.$store.commit('set_userphoto', res.data.data.photo); 
               this.$store.commit('set_email', res.data.data.email); 
               this.$store.commit('set_truename', res.data.data.truename); 
               // alert('username:'+res.data.data.username+'\nemail:'+res.data.data.email+'\ntruename:'+res.data.data.truename+'\ntoken:'+res.data.data.authorization);

@@ -17,7 +17,7 @@
               </el-button>
             </div>
 
-            <img :src="'http://stcmp.shlprn.cn/api'+url_now" class="avatar">
+            <img :src="'http://stcmp.shlprn.cn'+this.$store.state.user_photo" class="avatar">
             <div style="font-size: 25px; margin: 5px;">{{username}}</div>
 
             <el-descriptions border style="margin: 15px;">
@@ -55,9 +55,10 @@
             </div>
 
             <el-upload class="avatar-uploader" action="" :http-request="upload_file" :on-success="handleAvatarSuccess"
-              :before-upload="beforeAvatarUpload" :limit="1" :auto-upload="true">
-              <img v-if="url_upload" :src="'http://stcmp.shlprn.cn/api'+url_upload" class="avatar">
-              <img v_else :src="'http://stcmp.shlprn.cn/api'+url_now" class="avatar">
+              :before-upload="beforeAvatarUpload"  :auto-upload="true" :showFileList="false">
+              <!-- <img v-if="url_upload" :src="'http://stcmp.shlprn.cn/api'+url_upload" class="avatar">
+              <img v_else :src="'http://stcmp.shlprn.cn/api'+url_now" class="avatar"> -->
+              <img :src="'http://stcmp.shlprn.cn'+this.$store.state.user_photo" class="avatar">
             </el-upload>
             <div>点击上方修改头像</div>
 
@@ -203,7 +204,7 @@ import qs from "qs";
       },
       handleAvatarSuccess(res, file) {
         console.log('success');
-        console.log('imageurl:' + this.imageUrl);
+        // alert('imageurl:' + this.imageUrl);
         this.imageUrl = URL.createObjectURL(file.raw);
         this.url_upload = this.imageUrl;
       },
@@ -229,7 +230,6 @@ import qs from "qs";
           }
         })
             .then(res => {
-                // this.$message.success(123);
                 console.log(res.data.data);
                 this.team_ifo = res.data.data;
             })
@@ -249,12 +249,19 @@ import qs from "qs";
 
 <style>
     .avatar {
+      display: flex;
     width: 180px;
     height: 180px;
     border-radius: 0px;
     border-style: solid;
-    border-width: 1px;
+    border-width: 2px;
     border-color:rgb(230,230,250);
+  }
+  .avatar :hover{
+    display: flex;
+    background-color:rgb(255,240,245);
+        filter:alpha(opacity=100); 
+        opacity: 0.8;
   }
     #teams {
     display: flex;
