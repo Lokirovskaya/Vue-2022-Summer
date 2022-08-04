@@ -153,8 +153,6 @@ export default {
             if (this.new_prototype_name === '') {
                 this.$message.error('文档名不能为空');
             } else {
-                let date = new Date();
-                let time = date.toLocaleString();
                 this.$axios.post('/project/create_proto', qs.stringify({ proj_id: this.$route.query.id, proto_name: this.new_prototype_name }), {
                     headers: {
                         userid: this.$store.state.userid,

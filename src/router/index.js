@@ -47,7 +47,7 @@ const routes = [
   {
     path: '/prototypelist',
     name: 'prototypelist',
-    component: () => import('../views/PrototypelistView.vue'),
+    component: () => import('../views/PrototypeListView.vue'),
   },
   {
     path: '/prototype',
