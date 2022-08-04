@@ -1,6 +1,8 @@
 <template>
   <div id="main">
     <div id="toolbar">
+      <!-- <el-button icon="el-icon-arrow-left">返回</el-button> -->
+      <!-- <el-divider></el-divider> -->
       <div class="title">工具栏</div>
       <el-button
         v-for="item in toolbar_items"
@@ -20,6 +22,7 @@
           :parentLimitation="true"
           :x="element.x"
           :y="element.y"
+          :z="element.z"
           :w="element.width"
           :h="element.height"
           :isActive="element.active"
@@ -54,7 +57,7 @@
     <div id="right-area">
       <div id="button-area" style="text-align: left">
         <el-button type="success" @click="save_prototype()">保存原型</el-button>
-        <el-button type="primary" @click="get_screenshot_prompt()">下载原型为图片</el-button>
+        <el-button type="primary" @click="download_screenshot_prompt()">下载原型为图片</el-button>
       </div>
 
       <div id="info-area" v-if="activated_index >= 0">
@@ -81,6 +84,8 @@
             ></el-input-number>
           </div>
           <el-button type="danger" icon="el-icon-delete" @click="delete_activated()" circle></el-button>
+          <el-button type="primary" icon="el-icon-top" @click="drag_elements[activated_index].z++;" circle></el-button>
+          <el-button type="primary" icon="el-icon-bottom" @click="drag_elements[activated_index].z++;" circle></el-button>
         </div>
       </div>
     </div>
@@ -100,7 +105,7 @@
 
       <div slot="footer">
         <el-button @click="save_image_dialog_visible = false">取消</el-button>
-        <el-button type="primary" @click="get_screenshot()">确定</el-button>
+        <el-button type="primary" @click="download_screenshot()">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -150,6 +155,7 @@
           active: false,
           x: 10,
           y: 10,
+          z: 0,
           width: item.width,
           height: item.height,
           font_size: 15,
@@ -200,6 +206,8 @@
           proto_content: JSON.stringify(this.drag_elements),
         };
 
+        console.log(post_data);
+
         this.$axios
           .post('project/upload_proto', qs.stringify(post_data), {
             headers: {
@@ -217,14 +225,47 @@
           .catch((err) => {
             this.$message.error(err);
           });
-        console.log(JSON.stringify(this.drag_elements));
+
+        this.upload_screenshot();
       },
 
-      get_screenshot_prompt() {
+      async upload_screenshot() {
+        const canvas = await html2canvas(this.$refs.screenshotArea, {
+          // dpi: 192,
+          useCORS: true,
+        });
+
+        let b64 = canvas.toDataURL('image/png');
+
+        let post_dat = {
+          proto_id: this.$route.query.id,
+          base64_photo: b64,
+        };
+
+        this.$axios
+          .post('/project/upload_proto_photo', qs.stringify(post_dat), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$message.success('原型图片上传成功');
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
+
+      download_screenshot_prompt() {
         this.save_image_dialog_visible = true;
       },
 
-      get_screenshot() {
+      download_screenshot() {
         if (this.save_image_filename_noext.trim() === '') {
           this.$message.error('请输入文件名');
           return;
@@ -258,6 +299,7 @@
           })
           .then((res) => {
             if (res.data.errno === 0) {
+              // res.data.proto_content 在后端具有默认值 '[]'
               this.drag_elements = JSON.parse(res.data.proto_content);
             } else {
               this.$message.error(res.data.msg);

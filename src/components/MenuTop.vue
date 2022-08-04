@@ -3,7 +3,7 @@
     <el-col :span="12">
       <div class="grid-content">
         <el-menu  class="el-menu-demo" mode="horizontal" @select="SelectIndex">
-
+<!-- 
           <el-menu-item index="1">
             导航1
           </el-menu-item>
@@ -25,12 +25,8 @@
             <router-link :to="{ path: 'sector', query: { name: 'resource' } }">
               <el-menu-item index="2-5"><i class="el-icon-download"></i>导航25</el-menu-item>
             </router-link>
-          </el-submenu>
-          <!--
-            <el-menu-item index="3" v-show="this.$store.getters.is_admin">
-              管理员界面
-            </el-menu-item>
-            -->
+          </el-submenu> -->
+
         </el-menu>
       </div>
     </el-col>

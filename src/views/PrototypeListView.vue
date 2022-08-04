@@ -25,6 +25,8 @@
                     原型图ID:{{item.proto_id}}<br>
                     创建者:{{item.creator_name}}<br>
                 </div>
+                <img :src="item.proto_photo" style="width: 160px;" />
+                
             </el-card>
 
             <el-card class="new-prototype box-card" shadow="hover">

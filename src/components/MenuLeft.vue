@@ -5,14 +5,15 @@
         <el-submenu v-for="(team, i) in teamdata" :key="i" :index="'1-' + i">
           <template slot="title">
             <router-link :to="{ path: '/team', query: { id: team.teamid } }">
-              <i class="el-icon-location"></i>
-              <span>{{ team.teamname }}</span>
+              <i class="el-icon-s-custom"></i>
+              <el-link>{{ team.teamname }}</el-link>
             </router-link>
           </template>
 
           <el-menu-item v-for="(proj, j) in team.proj" :key="j" :index="'1-' + i + '-' + j">
             <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
-              {{ proj.proj_name }}
+              <i class="el-icon-tickets"></i>
+              <el-link>{{ proj.proj_name }}</el-link>
             </router-link>
           </el-menu-item>
         </el-submenu>
@@ -86,7 +87,6 @@
             this.$message.error(err);
           });
       },
-
     },
 
     created() {
