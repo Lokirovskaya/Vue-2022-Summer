@@ -31,12 +31,15 @@
         <div id="teams">
       <!-- <div v-for=" team in team_ifo" :key="team.id" class="one-team"> -->
         
+        <div v-if="JSON.stringify(this.team_ifo) == '{}'">
         <div v-for="(team, i) in team_ifo" :key="i" :index="'1-' + i" class="one-team">
         <router-link :to="{ path: '/team', query: { id: team.teamid } }">
-        <el-button id="team_pic"><img src="../assets/team.jpg" id="team_pic" @click="goto_team"></el-button>
+        <el-button id="team_button"><img src="../assets/team.png" id="team_pic" @click="goto_team"></el-button>
         </router-link>
         <div id="team_name">{{ team.teamname }}</div>
       </div>
+        </div>
+        <div v-else> <h4 style="color:rgb(100,100,100)">暂无团队</h4></div>
 
     </div>
         </div>
@@ -252,7 +255,7 @@ import qs from "qs";
       display: flex;
     width: 180px;
     height: 180px;
-    border-radius: 0px;
+    border-radius: 20px;
     border-style: solid;
     border-width: 2px;
     border-color:rgb(230,230,250);
@@ -273,20 +276,32 @@ import qs from "qs";
   .one-team {
     margin: 10px;
   }
-  #team_pic {
-    width: 90px;
-    height: 90px;
-    border-radius: 45px;
+  #team_button{
+    width: 80px;
+    height: 80px;
+    border-radius: 40px;
     border-style: solid;
     border-width: 1px;
     border-color:rgb(230,230,250);
-    background-color: rgb(255,240,245);
     display: flex;
     align-items: center;
     justify-content: center;
   }
+  #team_pic {
+    width: 50px;
+    height: 50px;
+    border-radius: 15px;
+    /* border-style: solid;
+    border-width: 1px;
+    border-color:rgb(230,230,250); */
+    /* background-color: rgb(255,240,245); */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
+  }
   #team_pic:hover{
-      background-color:rgb(255,240,245);
+      /* background-color:rgb(255,240,245); */
         filter:alpha(opacity=100); 
         opacity: 0.8;
   }
