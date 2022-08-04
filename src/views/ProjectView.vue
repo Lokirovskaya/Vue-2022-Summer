@@ -38,7 +38,7 @@
                         <i class="el-icon-s-custom"></i>
                         参与成员
                     </template>
-                    <span v-for="item in members" :key="item.userid" @click="toPC(item.userid)">
+                    <span v-for="item in members" :key="item.userid">
                         <el-tooltip class="item" effect="light" :content="item.truename" placement="bottom">
                             <!-- <el-avatar size="15" :src="item.photo"></el-avatar> -->
                             <img class="avatar" :src="'http://stcmp.shlprn.cn' + item.photo" />
@@ -88,13 +88,15 @@
                 </span><br>
                 <span style="position:relative;top:10px;">
                     <b>开始时间</b><br>
-                    <el-date-picker v-model="input_proj_start" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm"
+                    <el-date-picker v-model="input_proj_start" type="datetime" placeholder="选择日期时间"
+                        value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm"
                         style="position:relative; bottom:-5px">
                     </el-date-picker>
                 </span><br>
                 <span style="position:relative;top:20px;">
                     <b>结束时间</b><br>
-                    <el-date-picker v-model="input_proj_end" type="datetime" placeholder="选择日期时间" value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm"
+                    <el-date-picker v-model="input_proj_end" type="datetime" placeholder="选择日期时间"
+                        value-format="yyyy-MM-dd HH:mm" format="yyyy-MM-dd HH:mm"
                         style="position:relative; bottom:-5px">
                     </el-date-picker>
                 </span><br>
@@ -200,9 +202,6 @@ export default {
         toFE() {//File edit
             this.$router.push({ path: '/file', query: { id: this.$route.query.id } });
         },
-        toPC(userid) {//Personal Center
-            this.$router.push({ path: '/personcenter', query: { id: userid } });
-        },
         EditProjInfo() {
             //改版函数
             if (this.proj_name !== this.input_proj_name || this.proj_start !== this.input_proj_start || this.proj_end !== this.input_proj_end || this.proj_info !== this.input_proj_info) {
@@ -233,33 +232,43 @@ export default {
                 }
             }
         },
-    },
-    mounted() {//获取项目相关信息
-        this.$axios.post('/project/detail', qs.stringify({ proj_id: this.$route.query.id }), {
-            headers: {
-                userid: this.$store.state.userid,
-                token: this.$store.state.token,
-            }
-        })
-            .then(res => {
-                if (res.data.errno === 0) {
-                    console.log(res.data);//打印一下
-                    this.proj_name = res.data.proj_name;
-                    this.proj_creator = res.data.proj_creator;
-                    this.proj_start = res.data.proj_start;
-                    this.proj_end = res.data.proj_end;
-                    this.proj_team = res.data.proj_team;
-                    this.proj_info = res.data.proj_info;
-                    this.members = res.data.members;
-                    this.proj_photo = res.data.proj_photo;
-                }
-                else {
-                    this.$message.error(res.data.msg);
+        GetProjDetail() {
+            this.$axios.post('/project/detail', qs.stringify({ proj_id: this.$route.query.id }), {
+                headers: {
+                    userid: this.$store.state.userid,
+                    token: this.$store.state.token,
                 }
             })
-            .catch(err => {
-                this.$message.error(err);
-            });
+                .then(res => {
+                    if (res.data.errno === 0) {
+                        console.log(res.data);//打印一下
+                        this.proj_name = res.data.proj_name;
+                        this.proj_creator = res.data.proj_creator;
+                        this.proj_start = res.data.proj_start;
+                        this.proj_end = res.data.proj_end;
+                        this.proj_team = res.data.proj_team;
+                        this.proj_info = res.data.proj_info;
+                        this.members = res.data.members;
+                        this.proj_photo = res.data.proj_photo;
+                    }
+                    else {
+                        this.$message.error(res.data.msg);
+                    }
+                })
+                .catch(err => {
+                    this.$message.error(err);
+                });
+        }
+    },
+    mounted() {//获取项目相关信息
+        this.GetProjDetail();
+    },
+    watch: {
+        $route(to,from){
+            if(to.query.id !== from.query.id) {
+                this.GetProjDetail();
+            }
+        }
     },
 }
 </script>
@@ -285,6 +294,6 @@ export default {
     border-radius: 20px;
     border-style: solid;
     border-width: 1px;
-    border-color:rgb(230,230,250);
-  }
+    border-color: rgb(230, 230, 250);
+}
 </style>
