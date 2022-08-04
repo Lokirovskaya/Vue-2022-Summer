@@ -1,7 +1,7 @@
 <template>
     <div id="project">
+        <!--项目内容描述-->
         <div v-if="this.proj_modify === 0">
-            <!--项目内容描述-->
             <el-divider><i class="el-icon-info"></i>&nbsp;项目基本信息</el-divider>
             <div style="margin-left: 90%;">
             <el-button style="position:relative;bottom: 10px;" @click="

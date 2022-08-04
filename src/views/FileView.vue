@@ -81,7 +81,7 @@ export default {
     methods: {
         edit_file(file_id) {
             console.log(file_id);
-            this.$router.push({ path: '/' }); //跳转到该文档的编辑界面
+            this.$router.push({ path: '/' , query: {id: file_id} }); //跳转到该文档的编辑界面
         },
         rename_file() {
             console.log(this.file_rename_id);
