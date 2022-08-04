@@ -45,6 +45,11 @@ const routes = [
     component: () => import('../views/PersonCenter.vue'),
   },
   {
+    path: '/prototypelist',
+    name: 'prototypelist',
+    component: () => import('../views/PrototypelistView.vue'),
+  },
+  {
     path: '/prototype',
     name: 'prototype',
     component: () => import('../views/PrototypeView.vue'),
