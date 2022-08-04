@@ -177,11 +177,12 @@
             } else {
               this.$message.error(res.data.msg);
             }
+            this.$router.go(0);
           })
           .catch((err) => {
             this.$message.error(err);
           });
-        this.$router.go(0);
+        
       },
 
       edit_proj_prompt(proj_id) {
@@ -227,12 +228,12 @@
               } else {
                 this.$message.error(res.data.msg);
               }
+              this.$router.go(0);
             })
             .catch((err) => {
               this.$message.error(err);
             });
-        this.$router.go(0);
-        // alert(this.get_now_time());
+
       },
 
       invite_member_prompt() {
