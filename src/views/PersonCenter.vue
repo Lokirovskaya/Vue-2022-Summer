@@ -277,8 +277,8 @@ import qs from "qs";
     margin: 10px;
   }
   #team_button{
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     border-radius: 40px;
     border-style: solid;
     border-width: 1px;
@@ -288,8 +288,8 @@ import qs from "qs";
     justify-content: center;
   }
   #team_pic {
-    width: 50px;
-    height: 50px;
+    width: 70px;
+    height: 70px;
     border-radius: 15px;
     /* border-style: solid;
     border-width: 1px;
@@ -298,7 +298,7 @@ import qs from "qs";
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.5;
+    opacity: 0.6;
   }
   #team_pic:hover{
       /* background-color:rgb(255,240,245); */
@@ -307,7 +307,7 @@ import qs from "qs";
   }
 
   #team_name {
-    color: grey;
+    /* color: grey; */
     margin-top: 10px;
   }
 
