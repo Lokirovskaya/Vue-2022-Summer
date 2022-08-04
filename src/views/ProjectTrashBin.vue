@@ -22,21 +22,88 @@
 </template>
 
 <script>
-  //   import qs from 'qs';
+    import qs from 'qs';
   export default {
     name: 'ProjectTrashBin',
     data() {
-      return { trash_bin_projs: [
-        {proj_id: 1, proj_name: '测试1', proj_info: 'aaa', delete_time: '111'},
-        {proj_id: 2, proj_name: '测试2', proj_info: 'bbb', delete_time: '222'},
-      ] };
+      return { 
+        // trash_bin_projs: [
+        // {proj_id: 1, proj_name: '测试1', proj_info: 'aaa', delete_time: '111'},
+        // {proj_id: 2, proj_name: '测试2', proj_info: 'bbb', delete_time: '222'},],
+        trash_bin_projs:[],
+      team_id:this.$route.query.id };
     },
     methods: {
-      // recover_proj(proj_id) {
-      // },
+      recover_proj(proj_id) {
+        this.$axios.post('/project/recover', qs.stringify({proj_id}), {
+        headers: {
+        userid: this.$store.state.userid,
+        token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      this.$message.success(res.data.msg);
+    } else {
+      this.$message.error(res.data.msg);
+    }
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+  this.$router.go(0);
+      },
 
-      // clear_proj(proj_id) {
-      // }
+      clear_proj(proj_id) {
+        this.$axios.post('project/clearProj', qs.stringify({proj_id}), {
+        headers: {
+        userid: this.$store.state.userid,
+        token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      this.$message.success(res.data.msg);
+    } else {
+      this.$message.error(res.data.msg);
+    }
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+  this.$router.go(0) 
+      },
+
+      init_trashbin(){
+        let teamid_ifo = {
+          team_id:this.team_id,
+        }
+        this.$axios.post('/project/getDeletedProjList', qs.stringify(teamid_ifo), {
+        headers: {
+      userid: this.$store.state.userid,
+      token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    console.log(res.data.data);
+    if (res.data.errno === 0) {
+      // this.$message.success(res.data.msg);
+      console.log(res.data.data);
+      this.trash_bin_projs = res.data.data;
+    } else {
+      this.$message.error(res.data.msg);
+    }
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+      }
+    },
+    mounted: function () {
+      // alert('页面一加载，就会弹出此窗口')
+      // alert(this.team_id);
+      this.init_trashbin();
+      
     },
   };
 </script>

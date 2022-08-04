@@ -17,7 +17,7 @@
               </el-button>
             </div>
 
-            <img :src="'http://43.138.55.69'+url_now" class="avatar">
+            <img :src="'http://stcmp.shlprn.cn/api'+url_now" class="avatar">
             <div style="font-size: 25px; margin: 5px;">{{username}}</div>
 
             <el-descriptions border style="margin: 15px;">
@@ -56,9 +56,8 @@
 
             <el-upload class="avatar-uploader" action="" :http-request="upload_file" :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload" :limit="1" :auto-upload="true">
-              <img v-if="url_upload" :src="url_upload" class="avatar">
-              <img v_else src="../assets/user_photo.jpg" class="avatar">
-              <!-- <img src="url_upload" class="avatar"> -->
+              <img v-if="url_upload" :src="'http://stcmp.shlprn.cn/api'+url_upload" class="avatar">
+              <img v_else :src="'http://stcmp.shlprn.cn/api'+url_now" class="avatar">
             </el-upload>
             <div>点击上方修改头像</div>
 

@@ -4,22 +4,23 @@
     <el-divider>团队项目</el-divider>
 
     <div id="projs">
-      <el-card class="one-proj box-card" shadow="hover">
+      <el-card v-for="(proj, i) in proj_data" :key="i" :index="'1-' + i" class="one-proj box-card" shadow="hover">
         <div style="text-align: right">
           <el-dropdown>
             <i class="el-icon-more" style="font-size: 18px"></i>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
-                <div @click="edit_proj(0)">编辑项目</div>
+                <div @click="edit_proj(proj.proj_id)">编辑项目</div>
               </el-dropdown-item>
               <el-dropdown-item style="color: red">
-                <div @click="delete_proj(0)">删除项目</div>
+                <div @click="delete_proj(proj.proj_id)">删除项目</div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
         </div>
+        <div><h2 style="color:rgb(80,80,80)">{{ proj.proj_name }}</h2></div>
 
-        <div>因为 teamspace 好像坏掉了，所以这里没有显示项目，可以在左边导航栏看到<br><br>右边的那个新建项目是可用的</div>
+        <!-- <div>因为 teamspace 好像坏掉了，所以这里没有显示项目，可以在左边导航栏看到<br><br>右边的那个新建项目是可用的</div> -->
       </el-card>
 
       <el-card class="new-proj box-card" shadow="hover">
@@ -134,6 +135,8 @@
           end_time: '',
         },
         editing_proj_id: 0,
+
+        proj_data:[],
       };
     },
 
@@ -165,6 +168,7 @@
           .catch((err) => {
             this.$message.error(err);
           });
+          this.$router.go(0);
       },
 
       edit_proj_prompt(proj_id) {
@@ -191,21 +195,65 @@
 
       // eslint-disable-next-line no-unused-vars
       delete_proj(proj_id) {
-        // todo~
+        // todo~ 
+        console.log('delete:'+proj_id)
+        let delete_proj_ifo = {
+          proj_id:proj_id,
+          time:this.get_now_time(),
+        }
+        console.log('proj_id:'+delete_proj_ifo.proj_id),
+        console.log('time:'+delete_proj_ifo.time),
+        this.$axios.post('/project/deleteProj', qs.stringify(delete_proj_ifo), {
+        headers: {
+        userid: this.$store.state.userid,
+        token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      this.$message.success(res.data.msg);
+    } else {
+      this.$message.error(res.data.msg);
+    }
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+  this.$router.go(0);
+        // alert(this.get_now_time());
       },
+
+      get_now_time(){
+          var date = new Date();
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+    var second = date.getSeconds();
+    month = month < 10 ? ('0' + month) : month;
+    day = day < 10 ? ('0' + day) : day;
+    hour = hour < 10 ? ('0' + hour) : hour;
+    minute = minute < 10 ? ('0' + minute) : minute;
+    second = second < 10 ? ('0' + second) : second;
+    var time = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+    return time;
+      },
+      
 
       get_team_info() {
         this.team_id = this.$route.query.id;
 
         this.$axios
-          .post('/team/teamspace', qs.stringify({ team_id: this.team_id }), {
+          .post('/team/teamspace', qs.stringify({ teamid: this.team_id }), {
             headers: {
               userid: this.$store.state.userid,
               token: this.$store.state.token,
             },
           })
           .then((res) => {
-            console.log(res.data.data);
+            console.log(res.data.projs);
+            this.proj_data = res.data.projs;
           })
           .catch((err) => {
             this.$message.error(err);
