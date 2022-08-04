@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
 
 const routes = [
   {
@@ -45,6 +45,11 @@ const routes = [
     component: () => import('../views/PersonCenter.vue'),
   },
   {
+    path: '/prototype',
+    name: 'prototype',
+    component: () => import('../views/PrototypeView.vue'),
+  },
+  {
     path: '/file',
     name: 'file',
     component: () => import('../views/FileView.vue'),
@@ -54,7 +59,7 @@ const routes = [
 const router = new VueRouter({
   mode: 'hash',
   base: process.env.BASE_URL,
-  routes
-})
+  routes,
+});
 
-export default router
+export default router;
