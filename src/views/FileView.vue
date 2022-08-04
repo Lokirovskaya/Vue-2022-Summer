@@ -99,6 +99,12 @@ export default {
                             console.log(res.data);//测试一下
                             this.$message.success('重命名成功');
                             this.file_rename_dialog_visible = false;
+                            for(var item of this.file_list){
+                                if(item.file_id === this.file_rename_id){
+                                    item.file_name = this.file_rename;
+                                }
+                            }
+                            //console.log(this.file_list);
                             this.file_rename = ''; //争取把源数据(文档名)也修改了
                         } else {
                             this.$message.error(res.data.msg);
@@ -125,6 +131,15 @@ export default {
                         if (res.data.errno === 0) {
                             console.log(res.data);//测试一下
                             //this.$message.success('重命名成功' + this.file_rename_id);
+                            var i = 0;
+                            for(var item of this.file_list){
+                                if(item.file_id === file_id){
+                                    break;
+                                }else{
+                                    i++;
+                                }
+                            }
+                            this.file_list.splice(i, 1);
                         } else {
                             this.$message.error(res.data.msg);
                         }
@@ -151,6 +166,17 @@ export default {
                         if (res.data.errno === 0) {
                             console.log(res.data);//测试一下
                             this.$message.success('新建文档成功');
+                            let fid = res.data.file_id;
+                            let item = {
+                                file_id: fid,
+                                file_name: this.new_file_name,
+                                file_creator: this.$store.state.username,
+                                create_time: time,
+                                last_modify_time: time,
+                                last_modify_user_id: this.$store.state.userid,
+                                last_modify_user_name: this.$store.state.username,
+                            };
+                            this.file_list.push(item);
                             this.new_file_dialog_visible = false;
                             this.new_file_name = ''; //争取把源数据(文档名)也修改了
                         } else {
