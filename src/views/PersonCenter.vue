@@ -31,15 +31,15 @@
         <div id="teams">
       <!-- <div v-for=" team in team_ifo" :key="team.id" class="one-team"> -->
         
-        <div v-if="JSON.stringify(this.team_ifo) == '{}'">
+        <!-- <div v-if="JSON.stringify(this.team_ifo) != '{}'"> -->
         <div v-for="(team, i) in team_ifo" :key="i" :index="'1-' + i" class="one-team">
         <router-link :to="{ path: '/team', query: { id: team.teamid } }">
         <el-button id="team_button"><img src="../assets/team.png" id="team_pic" @click="goto_team"></el-button>
         </router-link>
         <div id="team_name">{{ team.teamname }}</div>
       </div>
-        </div>
-        <div v-else> <h4 style="color:rgb(100,100,100)">暂无团队</h4></div>
+        <!-- </div> -->
+        <!-- <div v-else> <h4 style="color:rgb(100,100,100)">暂无团队</h4></div> -->
 
     </div>
         </div>

@@ -3,7 +3,8 @@
     <el-table :data="member_data" stripe border>
       <el-table-column label="头像" min-width="10%">
         <template scope="scope">
-          <img class="avatar" :src="'http://stcmp.shlprn.cn/api' + scope.row.member_photo" />
+          <img class="avatar" :src="'http://stcmp.shlprn.cn' + scope.row.member_photo" />
+          <!-- <img :src="'http://stcmp.shlprn.cn'+this.$store.state.user_photo" class="avatar"> -->
         </template>
       </el-table-column>
       <el-table-column prop="member_id" label="ID" min-width="15%"></el-table-column>
@@ -72,8 +73,11 @@
 
 <style scoped>
   .avatar {
-    width: 15px;
-    height: 15px;
-    border-radius: 8px;
+    width: 35px;
+    height: 35px;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 1px;
+    border-color:rgb(230,230,250);
   }
 </style>

@@ -47,8 +47,8 @@
 
     <div id="members">
       <div class="one-member" v-for="member in member_data" :key="member.member_id">
-        <router-link :to="{ path: '/personcenter', query: { id: member.member_id } }">
-          <el-button class="avatar"><img :src="member.member_photo" /></el-button>
+        <router-link class="avatar" :to="{ path: '/personcenter', query: { id: member.member_id } }">
+          <el-button class="avatar"><img :src="'http://stcmp.shlprn.cn' + member.member_photo" class="avatar"></el-button>
         </router-link>
         <div id="username">{{ member.member_name }}</div>
       </div>
@@ -392,10 +392,19 @@
     width: 90px;
     height: 90px;
     border-radius: 45px;
-    background-color: greenyellow;
+    border-style: solid;
+    border-color: rgb(230,230,250);;
+    border-width: 1px;
+    /* background-color: greenyellow; */
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .avatar :hover{
+    border-radius: 45px;
+    background-color: rgb(230,230,250);
+    opacity: 0.9;
   }
 
   #username {
@@ -412,4 +421,5 @@
     padding-left: 40px;
     text-align: left;
   }
+
 </style>
