@@ -25,7 +25,9 @@
           </el-dropdown>
         </div>
         <div>
-          <h2 style="color: rgb(80, 80, 80)">{{ proj.proj_name }}</h2>
+          <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
+            <el-link class="proj-title">{{ proj.proj_name }}</el-link>
+          </router-link>
         </div>
       </el-card>
 
@@ -48,7 +50,9 @@
     <div id="members">
       <div class="one-member" v-for="member in member_data" :key="member.member_id">
         <router-link class="avatar" :to="{ path: '/personcenter', query: { id: member.member_id } }">
-          <el-button class="avatar"><img :src="'http://stcmp.shlprn.cn' + member.member_photo" class="avatar"></el-button>
+          <el-button class="avatar"
+            ><img :src="'http://stcmp.shlprn.cn' + member.member_photo" class="avatar"
+          /></el-button>
         </router-link>
         <div id="username">{{ member.member_name }}</div>
       </div>
@@ -187,7 +191,6 @@
           .catch((err) => {
             this.$message.error(err);
           });
-        
       },
 
       edit_proj_prompt(proj_data) {
@@ -267,7 +270,6 @@
             .catch((err) => {
               this.$message.error(err);
             });
-
       },
 
       invite_member_prompt() {
@@ -391,6 +393,12 @@
     min-height: 200px;
   }
 
+  .proj-title {
+    font-size: 25px;
+    color: #333;
+    font-weight: bold;
+  }
+
   .one-proj {
     width: 200px;
     height: 200px;
@@ -424,7 +432,7 @@
     height: 90px;
     border-radius: 45px;
     border-style: solid;
-    border-color: rgb(230,230,250);;
+    border-color: rgb(230, 230, 250);
     border-width: 1px;
     /* background-color: greenyellow; */
     display: flex;
@@ -432,9 +440,9 @@
     justify-content: center;
   }
 
-  .avatar :hover{
+  .avatar :hover {
     border-radius: 45px;
-    background-color: rgb(230,230,250);
+    background-color: rgb(230, 230, 250);
     opacity: 0.9;
   }
 
@@ -453,4 +461,8 @@
     text-align: left;
   }
 
+  a,
+  .router-link-active {
+    text-decoration: none;
+  }
 </style>
