@@ -13,7 +13,7 @@
     </div>
 
     <div style="width: 500px">
-      <div id="drag-area" @mousedown="unset_active()">
+      <div id="drag-area" ref="screenshotArea" @mousedown="unset_active()">
         <VueDragResize
           v-for="(element, i) in drag_elements"
           :key="element.id"
@@ -55,7 +55,8 @@
 
     <div id="right-area">
       <div id="button-area" style="text-align: left">
-        <el-button type="success" @click="save_prototype()">保存原型</el-button>
+        <el-button type="success" @click="save_prototype()">提交原型</el-button>
+        <el-button type="primary" @click="get_screenshot_prompt()">保存原型为图片</el-button>
       </div>
 
       <div id="info-area" v-if="activated_index >= 0">
@@ -85,15 +86,36 @@
         </div>
       </div>
     </div>
+
+    <!-- save-image-dialog -->
+    <el-dialog title="保存图片" :visible.sync="save_image_dialog_visible" width="40%">
+      <div>
+        <el-radio v-model="save_image_ext" label="png">png</el-radio>
+        <el-radio v-model="save_image_ext" label="jpg">jpg</el-radio>
+      </div>
+      <br/>
+      <div>
+        <el-input v-model="save_image_filename_noext" placeholder="请输入文件名">
+          <template slot="append">.{{save_image_ext}}</template>
+        </el-input>
+      </div>
+      
+      <div slot="footer">
+        <el-button @click="save_image_dialog_visible = false">取消</el-button>
+        <el-button type="primary" @click="get_screenshot()">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import qs from 'qs';
   import VueDragResize from 'vue-drag-resize';
+  import html2canvas from 'html2canvas';
+  import Canvas2Image from '@/assets/canvas2image.js';
   export default {
     name: 'PrototypeView',
-    components: { VueDragResize, normal_button: { template: `<h1>ddd</h1>` } },
+    components: { VueDragResize },
 
     data() {
       return {
@@ -114,6 +136,10 @@
         ],
 
         drag_elements: [], // 参考 add_element
+
+        save_image_dialog_visible: false,
+        save_image_ext: 'png',
+        save_image_filename_noext: '',
       };
     },
 
@@ -185,7 +211,7 @@
           })
           .then((res) => {
             if (res.data.errno === 0) {
-              this.$message.success('...');
+              this.$message.success('原型提交成功');
             } else {
               this.$message.error(res.data.msg);
             }
@@ -194,6 +220,29 @@
             this.$message.error(err);
           });
         console.log(JSON.stringify(this.drag_elements));
+      },
+
+      get_screenshot_prompt() {
+        this.save_image_dialog_visible = true;
+      },
+
+      get_screenshot() {
+        return html2canvas(this.$refs.screenshotArea, {
+          dpi: 192,
+          scale: 2,
+          useCORS: true,
+        }).then((canvas) => {
+          var link = document.createElement('a');
+          link.download = this.save_image_filename_noext + '.' + this.save_image_ext;
+
+          if (this.save_image_ext === 'png') {
+            link.href = Canvas2Image.convertToPNG(canvas, canvas.width, canvas.height).src;
+          } else if (this.save_image_ext === 'jpg') {
+            link.href = Canvas2Image.convertToPNG(canvas, canvas.width, canvas.height).src;
+          }
+
+          link.click();
+        });
       },
     },
   };
@@ -233,6 +282,7 @@
     width: 500px;
     height: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+    background-color: white;
   }
 
   .drag-element {
