@@ -198,7 +198,7 @@
 
       save_prototype() {
         let post_data = {
-          proto_id: 1, // todo
+          proto_id: this.$route.query.id, // todo
           proto_content: JSON.stringify(this.drag_elements),
         };
 
