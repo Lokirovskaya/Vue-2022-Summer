@@ -1,5 +1,5 @@
 <template>
-    <div class="Project">
+    <div id="project">
         <div v-if="this.proj_modify === 0">
             <!--项目内容描述-->
             <el-divider><i class="el-icon-info"></i>&nbsp;项目基本信息</el-divider>
@@ -38,7 +38,7 @@
                         <i class="el-icon-s-custom"></i>
                         参与成员
                     </template>
-                    <span v-for="item in members1" :key="item.userid" @click="toPC">
+                    <span v-for="item in members" :key="item.userid" @click="toPC(item.userid)">
                         <el-tooltip class="item" effect="light" :content="item.truename" placement="bottom">
                             <el-avatar size="15" :src="item.photo"></el-avatar>
                         </el-tooltip>
@@ -75,8 +75,8 @@
                 proj_modify = 0;
             input_proj_name = '';
             input_proj_info = '';
-            input_proj_end = undefined;
-            input_proj_start = undefined;">返回</el-button>
+            input_proj_end = '';
+            input_proj_start = '';">返回</el-button>
             </div>
             <div style="margin-left:30%;margin-right:30%;">
             <span>
@@ -159,8 +159,8 @@ export default {
             proj_info: '', //项目简介
             proj_modify: 0, // 项目信息修改
             input_proj_name: '', //输入的项目名称
-            input_proj_start: undefined, //输入的项目开始时间
-            input_proj_end: undefined, //输入的项目结束时间
+            input_proj_start: '', //输入的项目开始时间
+            input_proj_end: '', //输入的项目结束时间
             input_proj_info: '', //输入的项目简介
             members: [], //用户列表
             members1: [
@@ -187,20 +187,21 @@ export default {
     },
     methods: {
         toPD() { //Prototype design
-            this.$router.push({ path: '/' });
+            this.$router.push({ path: '/', query: { id: this.$route.query.id } });
         },
         toPE() {//Photo Edit
-            this.$router.push({ path: '/' });
+            this.$router.push({ path: '/', query: { id: this.$route.query.id } });
         },
         toFE() {//File edit
-            this.$router.push({ path: '/' });
+            this.$router.push({ path: '/file', query: { id: this.$route.query.id }});
         },
-        toPC() {//Personal Center
-            this.$router.push({ path: '/personcenter' });
+        toPC(userid) {//Personal Center
+            this.$router.push({ path: '/personcenter' , query: { id: userid}});
         },
         EditProjInfo() {
             //修改了项目名
             if (this.proj_name !== this.input_proj_name) {
+                console.log('准备修改项目名字');
                 this.$axios.post('/project/rename', qs.stringify({ proj_id: this.$route.query.id, new_name: this.input_proj_name }), {
                     headers: {
                         userid: this.$store.state.userid,
@@ -220,11 +221,12 @@ export default {
                     });
             }
             //console.log(this.input_proj_end >= this.input_proj_start);
-            if (this.this.input_proj_end >= this.input_proj_start) {
+            if (this.input_proj_end <= this.input_proj_start) {
                 this.$message.error('项目结束日期不得早于等于开始日期');
             } else {
                 //修改了项目开始日期
                 if (this.proj_start !== this.input_proj_start) {
+                    console.log('准备修改项目开始日期');
                     this.$axios.post('/project/modifyProjInfo', qs.stringify({ proj_id: this.$route.query.id, judge: 2, start: this.input_proj_start }), {
                         headers: {
                             userid: this.$store.state.userid,
@@ -245,6 +247,7 @@ export default {
                 }
                 //修改了项目结束日期
                 if (this.proj_end !== this.input_proj_end) {
+                    console.log('准备修改项目结束日期');
                     this.$axios.post('/project/modifyProjInfo', qs.stringify({ proj_id: this.$route.query.id, judge: 3, end: this.input_proj_end }), {
                         headers: {
                             userid: this.$store.state.userid,
@@ -266,6 +269,7 @@ export default {
             }
             //修改了项目简介
             if (this.proj_info !== this.input_proj_info) {
+                console.log('准备修改项目简介');
                 this.$axios.post('/project/modifyProjInfo', qs.stringify({ proj_id: this.$route.query.id, judge: 1, info: this.input_proj_info }), {
                     headers: {
                         userid: this.$store.state.userid,

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  //   import qs from 'qs';
+    import qs from 'qs';
   export default {
     name: 'ProjectTrashBin',
     data() {
@@ -32,11 +32,50 @@
       ] };
     },
     methods: {
-      // recover_proj(proj_id) {
-      // },
+      recover_proj(proj_id) {
+        this.$axios.post('/project/recover', qs.stringify({proj_id}), {
+        headers: {
+        userid: this.$store.state.userid,
+        token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      this.$message.success(res.data.msg);
+    } else {
+      this.$message.error(res.data.msg);
+    }
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+      },
 
-      // clear_proj(proj_id) {
-      // }
+      clear_proj(proj_id) {
+        this.$axios.post('project/clearProj', qs.stringify({proj_id}), {
+        headers: {
+        userid: this.$store.state.userid,
+        token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      this.$message.success(res.data.msg);
+    } else {
+      this.$message.error(res.data.msg);
+    }
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+      },
+      init_trashbin(){
+        
+      }
+    },
+    mounted: function () {
+      // alert('页面一加载，就会弹出此窗口')
+      this.init_trashbin();
     },
   };
 </script>

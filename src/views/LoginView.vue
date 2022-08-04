@@ -52,7 +52,7 @@ import qs from "qs";
               this.$store.commit('set_userphoto', res.data.data.photo.url); 
               this.$store.commit('set_email', res.data.data.email); 
               this.$store.commit('set_truename', res.data.data.truename); 
-              // alert('username:'+res.data.data.username+'\nemail:'+res.data.data.email+'\ntruename:'+res.data.data.truename+'\ntoken:'+res.data.data.token);
+              // alert('username:'+res.data.data.username+'\nemail:'+res.data.data.email+'\ntruename:'+res.data.data.truename+'\ntoken:'+res.data.data.authorization);
             }
             else {
               this.$message.error(res.data.msg);
