@@ -310,6 +310,7 @@
             } else {
               this.$message.error(res.data.msg);
             }
+            this.$router.go(0);
           })
           .catch((err) => {
             this.$message.error(err);
