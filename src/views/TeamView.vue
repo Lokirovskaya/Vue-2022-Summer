@@ -16,10 +16,10 @@
             <i class="el-icon-more" style="font-size: 18px"></i>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item>
-                <div @click="edit_proj(proj.proj_id)">编辑项目</div>
+                <div @click="edit_proj_prompt(proj)">编辑项目</div>
               </el-dropdown-item>
               <el-dropdown-item style="color: red">
-                <div @click="delete_proj(proj.proj_id)">删除项目</div>
+                <div @click="delete_proj_prompt(proj.proj_id)">删除项目</div>
               </el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -66,7 +66,7 @@
     </div>
 
     <div class="button">
-      <router-link :to="{path: '/teammanagement', query: {id: team_id}}">
+      <router-link :to="{ path: '/teammanagement', query: { id: team_id } }">
         <el-button type="primary">成员管理</el-button>
       </router-link>
     </div>
@@ -111,7 +111,7 @@
       </el-form>
       <div slot="footer">
         <el-button @click="edit_proj_dialog_visible = false">取消</el-button>
-        <el-button type="primary" @click="create_proj()">确定</el-button>
+        <el-button type="primary" @click="edit_proj()">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -140,8 +140,8 @@
 
         edit_proj_dialog_visible: false,
         edit_proj_dialog_data: {
+          proj_id: 0,
           proj_name: '',
-          team_id: 0,
           proj_info: '',
           start_time: '',
           end_time: '',
@@ -159,6 +159,11 @@
       },
 
       create_proj() {
+        if (this.new_proj_dialog_data.proj_name.trim() === '') {
+          this.$message.error('请输入项目名');
+          return;
+        }
+
         this.new_proj_dialog_visible = false;
 
         let post_data = this.new_proj_dialog_data;
@@ -185,15 +190,43 @@
         
       },
 
-      edit_proj_prompt(proj_id) {
+      edit_proj_prompt(proj_data) {
         this.edit_proj_dialog_visible = true;
-        this.editing_proj_id = proj_id;
+        this.edit_proj_dialog_data.proj_id = proj_data.proj_id;
+        this.edit_proj_dialog_data.proj_name = proj_data.proj_name;
+        this.edit_proj_dialog_data.proj_info = proj_data.proj_info;
+        this.edit_proj_dialog_data.start_time = proj_data.start_time;
+        this.edit_proj_dialog_data.end_time = proj_data.end_time;
       },
 
       edit_proj() {
+        if (this.edit_proj_dialog_data.proj_name.trim() === '') {
+          this.$message.error('请输入项目名');
+          return;
+        }
+
         this.edit_proj_dialog_visible = false;
 
-        // let post_data = this.edit_proj_dialog_data;
+        let post_data = this.edit_proj_dialog_data; // 参考 edit_proj_prompt
+
+        this.$axios
+          .post('/project/modifyProjInfo', qs.stringify(post_data), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$message.success('新建项目成功');
+              this.$router.go(0);
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
       },
 
       delete_proj_prompt(proj_id) {
@@ -225,6 +258,7 @@
             .then((res) => {
               if (res.data.errno === 0) {
                 this.$message.success(res.data.msg);
+                this.$router.go(0);
               } else {
                 this.$message.error(res.data.msg);
               }
@@ -260,8 +294,6 @@
           teamid: this.team_id,
           userid: invite_key,
         };
-
-        console.log(post_data);
 
         this.$axios
           .post('/team/invite_user', qs.stringify(post_data), {
