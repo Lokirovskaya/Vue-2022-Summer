@@ -20,14 +20,7 @@
       </div>
   <br><br><br>
   <el-button type="warning" plain @click="goto_login">登录/注册</el-button>
-  <!-- <el-divider></el-divider> -->
-  <br>
-  <!-- <el-divider>
-    <div style="font-size: 10px; color: gray;">2022 软工小学期 小组9</div>
-  </el-divider> -->
-  <br>
-  <!-- <div id="title">墨书团队协作与管理平台</div> -->
-  <!-- <img src="pics.url"> -->
+  <br><br>
   </div>
 </div>
   
@@ -38,19 +31,13 @@
     name: 'HomeView',
     data(){
       return{
-        //   pics:[
-        // {url:'../assets/主页.jpg'},
-        // {url:'../assets/主页.jpg'},
-        // {url:'../assets/主页.jpg'},],
         pics:[{photo:'1.jpg',sentence:'管理您的项目和团队'},{photo:'2.jpg',sentence:'轻松设计原型图'},{photo:'3.jpg',sentence:'支持多人在线编辑'}],
-        // sentences:['']
         imageHeight: 400,
 
       }
     
     },
-      
-
+    
     components: {},
 
     methods: {
@@ -76,7 +63,7 @@
 
   }
   #background {
-    background:url("../assets/bk5.jpg");
+    background:url("../assets/homeview_bk.jpg");
   width:100%;
   height:100%;
   /* position:fixed; */
@@ -89,11 +76,6 @@
     opacity: 0.75;
     line-height: 200px;
     margin: 0;
-  }
-  
-  .el-carousel__item{
-    /* background-color: yellow; */
-    /* background-color: yellow; */
   }
    #title {
     width: 100%;
