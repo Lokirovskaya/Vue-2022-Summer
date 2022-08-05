@@ -25,20 +25,27 @@
             v-if="my_permission >= 1 && scope.row.member_permission === 0"
             >设为管理</el-button
           >
-          <el-button
+          <!-- <el-button
             type="warning"
             size="small"
             @click="remove_admin(scope.row.member_id)"
             v-else-if="my_permission === 2 && scope.row.member_permission === 1"
             >取消管理</el-button
-          >
+          > -->
           <el-button type="info" size="small" disabled v-else>设为管理</el-button>
 
-          <el-button
+          <!-- <el-button
             type="danger"
             size="small"
             @click="remove_user(scope.row.member_id)"
             v-if="my_permission > scope.row.member_permission"
+            >移出团队</el-button
+          > -->
+          <el-button
+            type="danger"
+            size="small"
+            @click="remove_user(scope.row.member_id)"
+            v-if="scope.row.member_permission == 0"
             >移出团队</el-button
           >
           <el-button type="info" size="small" disabled v-else>移出团队</el-button>
@@ -158,6 +165,6 @@
     border-radius: 20px;
     border-style: solid;
     border-width: 1px;
-    border-color:rgb(230,230,250);
+    border-color: rgb(230, 230, 250);
   }
 </style>
