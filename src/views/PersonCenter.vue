@@ -258,7 +258,7 @@ import qs from "qs";
     border-radius: 20px;
     border-style: solid;
     border-width: 2px;
-    border-color:rgb(230,230,250);
+    border-color:#D3D3D3;
   }
   .avatar :hover{
     display: flex;
@@ -282,15 +282,15 @@ import qs from "qs";
     border-radius: 40px;
     border-style: solid;
     border-width: 1px;
-    border-color:rgb(230,230,250);
+    border-color:rgb(200,200,200);
     display: flex;
     align-items: center;
     justify-content: center;
   }
   #team_pic {
-    width: 70px;
-    height: 70px;
-    border-radius: 15px;
+    width: 50px;
+    height: 50px;
+    border-radius: px;
     /* border-style: solid;
     border-width: 1px;
     border-color:rgb(230,230,250); */
@@ -298,12 +298,12 @@ import qs from "qs";
     display: flex;
     align-items: center;
     justify-content: center;
-    opacity: 0.6;
+    opacity: 0.4;
   }
   #team_pic:hover{
       /* background-color:rgb(255,240,245); */
         filter:alpha(opacity=100); 
-        opacity: 0.8;
+        opacity: 0.7;
   }
 
   #team_name {
