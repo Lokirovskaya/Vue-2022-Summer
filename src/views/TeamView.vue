@@ -28,6 +28,9 @@
           <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
             <el-link class="proj-title">{{ proj.proj_name }}</el-link>
           </router-link>
+          <br/>
+          <br/>
+          <div>{{ proj.proj_info }}</div>
         </div>
       </el-card>
 
@@ -49,7 +52,7 @@
 
     <div id="members">
       <div class="one-member" v-for="member in member_data" :key="member.member_id">
-            <img :src="'http://stcmp.shlprn.cn' + member.member_photo" class="avatar">
+        <img :src="'http://stcmp.shlprn.cn' + member.member_photo" class="avatar" />
         <div id="username">{{ member.member_name }}</div>
       </div>
 
@@ -217,7 +220,7 @@
           })
           .then((res) => {
             if (res.data.errno === 0) {
-              this.$message.success('新建项目成功');
+              this.$message.success('编辑项目成功');
               this.$router.go(0);
             } else {
               this.$message.error(res.data.msg);
@@ -303,10 +306,10 @@
           .then((res) => {
             if (res.data.errno === 0) {
               this.$message.success('成功邀请成员！');
+              this.$router.go(0);
             } else {
               this.$message.error(res.data.msg);
             }
-            this.$router.go(0);
           })
           .catch((err) => {
             this.$message.error(err);

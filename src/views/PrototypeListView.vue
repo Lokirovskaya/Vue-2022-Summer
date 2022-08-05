@@ -234,7 +234,7 @@ export default {
 
 .one-prototype {
     width: 200px;
-    height: 200px;
+    height: 300px;
     padding: 20px;
     margin: 10px;
 }

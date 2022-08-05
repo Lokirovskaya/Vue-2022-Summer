@@ -197,7 +197,7 @@ export default {
             this.$router.push({ path: '/prototypelist', query: { id: this.$route.query.id } });
         },
         toPE() {//Photo Edit
-            window.open("https://www.diagrams.net/");
+            window.open("https://app.diagrams.net/?src=about");
         },
         toFE() {//File edit
             this.$router.push({ path: '/file', query: { id: this.$route.query.id } });
