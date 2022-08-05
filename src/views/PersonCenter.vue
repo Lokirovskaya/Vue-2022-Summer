@@ -7,6 +7,7 @@
           <div style="display: flex; justify-items: center; align-items: center; flex-direction: column;">
 
             <div v-if="is_visit_self === 0" style="margin-left: auto;">
+              <br>
               <el-button style="position:relative;left:-10px;" @click="
                 modify_state = 1;
                 input_username = username;
@@ -18,7 +19,7 @@
             </div>
 
             <img :src="'http://stcmp.shlprn.cn'+this.$store.state.user_photo" class="avatar">
-            <div id="username">{{username}}</div>
+            <div id="username_pc">{{username}}</div>
 
             <el-descriptions border style="margin: 15px;">
               <el-descriptions-item label="uid"><div class="ifo">{{uid}}</div></el-descriptions-item>
@@ -313,9 +314,9 @@ import qs from "qs";
     font-size: 14px;
   }
 
-  #username {
+  #username_pc {
     font-size: 25px; 
-    font-weight: 650;
+    font-weight: 500;
     color: rgb(70, 70, 70);
     margin: 5px;
   }

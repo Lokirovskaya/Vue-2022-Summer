@@ -31,6 +31,7 @@
       </div>
     </el-col>
     <el-col :span="12">
+      
       <div class="grid-content" style="text-align: right">
         <div v-if="this.$store.state.login_state === 0">
           <el-link :underline="false" style="position: relative;bottom:-19px" @click="goto_login">登录/注册

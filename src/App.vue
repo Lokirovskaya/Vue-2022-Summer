@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <nav>
+    <!-- <nav>
       <router-link to="/">主页</router-link> |
       <router-link to="/teammanagement">团队管理</router-link> |
       <router-link to="/login">登录</router-link> |
@@ -9,7 +9,7 @@
       <router-link to="/personcenter">个人中心</router-link> |
       <router-link to="/prototype">原型设计</router-link> |
       <router-link to="/fileedit">文档编辑</router-link>
-    </nav>
+    </nav> -->
 
     <MenuTop />
 
