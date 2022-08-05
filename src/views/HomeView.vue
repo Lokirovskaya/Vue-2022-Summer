@@ -19,7 +19,9 @@
   </el-carousel>
       </div>
   <br><br><br>
+  <div v-if="this.$store.state.login_state === 0">
   <el-button type="warning" plain @click="goto_login">登录/注册</el-button>
+  </div>
   <br><br>
   </div>
 </div>
