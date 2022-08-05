@@ -124,7 +124,7 @@
           <el-button
             type="primary"
             icon="el-icon-bottom"
-            @click="drag_elements[activated_index].z++"
+            @click="drag_elements[activated_index].z--"
             circle
           ></el-button>
         </div>
@@ -200,7 +200,7 @@
           active: false,
           x: 10,
           y: 10,
-          z: 0,
+          z: 500,
           width: item.width,
           height: item.height,
           font_size: 15,
@@ -351,7 +351,9 @@
             } else {
               this.$message.error(res.data.msg);
             }
-            
+
+            console.log(this.drag_elements)
+
             // 重新编制 id，防止 key 冲突
             let len = this.drag_elements.length
             for (let i = 0 ; i < len; i++) {
