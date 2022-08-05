@@ -27,7 +27,7 @@
             </el-descriptions>
 
           </div>
-          <el-divider>我的团队</el-divider>
+          <el-divider><i class="el-icon-user-solid"></i>&nbsp;我的团队</el-divider>
         <div id="teams">
       <!-- <div v-for=" team in team_ifo" :key="team.id" class="one-team"> -->
         
