@@ -18,12 +18,12 @@
             </div>
 
             <img :src="'http://stcmp.shlprn.cn'+this.$store.state.user_photo" class="avatar">
-            <div style="font-size: 25px; margin: 5px;">{{username}}</div>
+            <div id="username">{{username}}</div>
 
             <el-descriptions border style="margin: 15px;">
-              <el-descriptions-item label="uid">{{uid}}</el-descriptions-item>
-              <el-descriptions-item label="姓名">{{truename}}</el-descriptions-item>
-              <el-descriptions-item label="邮箱">{{email}}</el-descriptions-item>
+              <el-descriptions-item label="uid"><div class="ifo">{{uid}}</div></el-descriptions-item>
+              <el-descriptions-item label="姓名"><div class="ifo">{{truename}}</div></el-descriptions-item>
+              <el-descriptions-item label="邮箱"><div class="ifo">{{email}}</div></el-descriptions-item>
             </el-descriptions>
 
           </div>
@@ -307,8 +307,24 @@ import qs from "qs";
   }
 
   #team_name {
-    /* color: grey; */
+    color: #696969;
     margin-top: 10px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+
+  #username {
+    font-size: 25px; 
+    font-weight: 650;
+    color: rgb(70, 70, 70);
+    margin: 5px;
+  }
+
+  .ifo {
+    font-size: 15px; 
+    font-weight: 450;
+    color: rgb(70, 70, 70);
+    /* margin: 5px; */
   }
 
 
