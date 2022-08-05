@@ -1,6 +1,6 @@
 <template>
     <div id="FileEdit">
-        <div id="vditor"></div>
+        <div id="vditor" style="text-align: left;"></div>
         <el-button @click="upload" style="margin-top:5px;">上传</el-button>
     </div>
 </template>
