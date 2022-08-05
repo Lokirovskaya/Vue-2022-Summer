@@ -49,11 +49,7 @@
 
     <div id="members">
       <div class="one-member" v-for="member in member_data" :key="member.member_id">
-        <router-link class="avatar" :to="{ path: '/personcenter', query: { id: member.member_id } }">
-          <el-button class="avatar"
-            ><img :src="'http://stcmp.shlprn.cn' + member.member_photo" class="avatar"
-          /></el-button>
-        </router-link>
+            <img :src="'http://stcmp.shlprn.cn' + member.member_photo" class="avatar">
         <div id="username">{{ member.member_name }}</div>
       </div>
 
