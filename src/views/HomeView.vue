@@ -1,9 +1,13 @@
 <template>
+<div id="background">
   <div class="home">
-      <!-- <img class="background" src="../assets/主页.jpg"> -->
-      <div id="title">墨书团队协作与管理平台</div>
+    <br>
+      <div id="title">墨书</div>
+      <div id="title2">M&nbsp;O&nbsp;S&nbsp;H&nbsp;U&nbsp;</div>
+      <br><br>
       <!-- <el-divider></el-divider> -->
-<el-carousel :interval="4000" type="card" height="400px">
+      <div id="carousel">
+<el-carousel :interval="4000" type="card" height="400px" left="10px">
     <el-carousel-item v-for="item in pics" :key="item">
       <!-- <div>{{item.sentence}}</div> -->
       <img
@@ -13,15 +17,19 @@
         >
     </el-carousel-item>
   </el-carousel>
-  <!-- <el-divider></el-divider>
-  <br><br><br> -->
-  <el-divider>
+      </div>
+  <br><br><br>
+  <el-button type="warning" plain @click="goto_login">登录/注册</el-button>
+  <!-- <el-divider></el-divider> -->
+  <br>
+  <!-- <el-divider>
     <div style="font-size: 10px; color: gray;">2022 软工小学期 小组9</div>
-  </el-divider>
+  </el-divider> -->
   <br>
   <!-- <div id="title">墨书团队协作与管理平台</div> -->
   <!-- <img src="pics.url"> -->
   </div>
+</div>
   
 </template>
 
@@ -45,17 +53,35 @@
 
     components: {},
 
-    methods: {},
+    methods: {
+      goto_login(){
+        this.$router.push({path:'/login'});
+      }
+    },
   };
 </script>
 
-<style scoped>
-  .background {
-    background:url("../assets/主页.jpg");
+<style>
+  body {
+    /* background-color: #FAF0E6; */
+    margin:0;
+  padding:0;
+  border:0
+  }
+  #carousel {
+    /* display: flex; */
+    justify-content:center;
+    margin-left: 15px;
+    margin-right: 15px;
+
+  }
+  #background {
+    background:url("../assets/bk5.jpg");
   width:100%;
   height:100%;
-  position:fixed;
-  /* background-size:cover; */
+  /* position:fixed; */
+  background-size:100% 100%;
+  /* opacity :0.8 */
   }
   .el-carousel__item h3 {
     /* color: #475669; */
@@ -71,14 +97,32 @@
   }
    #title {
     width: 100%;
-    height: 110px;
+    height: 80px;
+    font-family: "微软雅黑";
     font-size: 52px;
-    color: #484455;
-    font-weight: bolder;
+    /* color: rgb(80, 80, 80); */
+    color: #2F4F4F;
+    font-weight: 900;
     letter-spacing: 10px;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    opacity: 0.8;
+  }
+  #title2 {
+    width: 100%;
+    height: 10px;
+    font-family: "微软雅黑";
+    font-size: 10px;
+    /* color: rgb(80, 80, 80); */
+    color: #2F4F4F;
+    font-weight: 900;
+    letter-spacing: 5px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0.6;
   }
 </style>
