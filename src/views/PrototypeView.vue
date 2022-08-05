@@ -14,8 +14,13 @@
       </el-button>
     </div>
 
-    <div style="width: 500px">
-      <div id="drag-area" ref="screenshotArea" @mousedown="unset_active()">
+    <div :style="'width:' + canvas_width + 'px;'" :key="canvas_key">
+      <div
+        id="drag-area"
+        ref="screenshotArea"
+        :style="'width:' + canvas_width + 'px;height:' + canvas_height + 'px;'"
+        @mousedown="unset_active()"
+      >
         <VueDragResize
           v-for="(element, i) in drag_elements"
           :key="element.id"
@@ -59,18 +64,44 @@
         <el-button type="success" @click="save_prototype()">保存原型</el-button>
         <el-button type="primary" @click="download_screenshot_prompt()">下载原型为图片</el-button>
       </div>
+      <div>
+        页面大小：
+
+        <span>
+          宽<el-input-number
+            v-model="canvas_width"
+            :controls="false"
+            :min="100"
+            :max="1500"
+            @change="update_canvas_size()"
+            class="canvas-size-input"
+          ></el-input-number>
+        </span>
+        <span>
+          高<el-input-number
+            v-model="canvas_height"
+            :controls="false"
+            :min="100"
+            :max="2000"
+            @change="update_canvas_size()"
+            class="canvas-size-input"
+          ></el-input-number
+        ></span>
+      </div>
+
+      <el-divider></el-divider>
 
       <div id="info-area" v-if="activated_index >= 0">
-        <div class="title">详细信息</div>
+        <div class="title">组件信息</div>
         <div style="text-align: left">
           <div>
             {{ drag_elements[activated_index].name }}
             ({{ drag_elements[activated_index].x }}, {{ drag_elements[activated_index].y }})
           </div>
-          <div>
+          <!-- <div>
             width: {{ drag_elements[activated_index].width }} height:
             {{ drag_elements[activated_index].height }}
-          </div>
+          </div> -->
           <div>
             显示文字：
             <el-input v-model="drag_elements[activated_index].text"></el-input>
@@ -84,8 +115,18 @@
             ></el-input-number>
           </div>
           <el-button type="danger" icon="el-icon-delete" @click="delete_activated()" circle></el-button>
-          <el-button type="primary" icon="el-icon-top" @click="drag_elements[activated_index].z++;" circle></el-button>
-          <el-button type="primary" icon="el-icon-bottom" @click="drag_elements[activated_index].z++;" circle></el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-top"
+            @click="drag_elements[activated_index].z++"
+            circle
+          ></el-button>
+          <el-button
+            type="primary"
+            icon="el-icon-bottom"
+            @click="drag_elements[activated_index].z++"
+            circle
+          ></el-button>
         </div>
       </div>
     </div>
@@ -139,6 +180,10 @@
         ],
 
         drag_elements: [], // 参考 add_element
+
+        canvas_width: 500,
+        canvas_height: 600,
+        canvas_key: 0, // 为了刷新 canvas 设置的 key
 
         save_image_dialog_visible: false,
         save_image_ext: 'png',
@@ -200,13 +245,15 @@
         this.activated_index = -1;
       },
 
+      update_canvas_size() {
+        this.canvas_key++;
+      },
+
       save_prototype() {
         let post_data = {
           proto_id: this.$route.query.id,
           proto_content: JSON.stringify(this.drag_elements),
         };
-
-        console.log(post_data);
 
         this.$axios
           .post('project/upload_proto', qs.stringify(post_data), {
@@ -304,6 +351,13 @@
             } else {
               this.$message.error(res.data.msg);
             }
+            
+            // 重新编制 id，防止 key 冲突
+            let len = this.drag_elements.length
+            for (let i = 0 ; i < len; i++) {
+              this.drag_elements[i].id = i;
+            }
+            this.id = len;
           })
           .catch((err) => {
             this.$message.error(err);
@@ -348,8 +402,9 @@
 
   #drag-area {
     position: absolute;
-    width: 500px;
-    height: 100%;
+    /* will set by this.canvas_width/height now */
+    /* width: 100%; */
+    /* height: 100%; */
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
     background-color: white;
   }
@@ -370,6 +425,11 @@
   #button-area {
     width: 100%;
     height: 60px;
+  }
+
+  .canvas-size-input {
+    width: 65px;
+    margin: 5px;
   }
 
   #info-area {
