@@ -1,6 +1,6 @@
 <template>
   <div id="main">
-    <div id="title">{{ team_name }} (id: {{ team_id }})</div>
+    <div id="title">{{ team_name }}</div>
     <el-divider>团队项目</el-divider>
 
     <div id="projs">
@@ -15,9 +15,9 @@
           <el-dropdown>
             <i class="el-icon-more" style="font-size: 18px"></i>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>
+              <!-- <el-dropdown-item>
                 <div @click="edit_proj_prompt(proj)">编辑项目</div>
-              </el-dropdown-item>
+              </el-dropdown-item> -->
               <el-dropdown-item style="color: red">
                 <div @click="delete_proj_prompt(proj.proj_id)">删除项目</div>
               </el-dropdown-item>

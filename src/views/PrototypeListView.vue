@@ -22,7 +22,7 @@
                 </div>
 
                 <div>原型图名:{{item.proto_name}}<br>
-                    原型图ID:{{item.proto_id}}<br>
+                    <!-- 原型图ID:{{item.proto_id}}<br> -->
                     创建者:{{item.creator_name}}<br>
                 </div>
                 <img :src="item.proto_photo" style="width: 160px;" />
