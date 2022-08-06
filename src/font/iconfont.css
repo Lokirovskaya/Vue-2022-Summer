@@ -1,0 +1,79 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3570869 */
+  src: url('iconfont.woff2?t=1659708422205') format('woff2'),
+       url('iconfont.woff?t=1659708422205') format('woff'),
+       url('iconfont.ttf?t=1659708422205') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-h1:before {
+  content: "\e61d";
+}
+
+.icon-picture:before {
+  content: "\e67c";
+}
+
+.icon-blockquote:before {
+  content: "\e608";
+}
+
+.icon-bold:before {
+  content: "\e7f7";
+}
+
+.icon-strikethrough:before {
+  content: "\e7f9";
+}
+
+.icon-italic:before {
+  content: "\e7fb";
+}
+
+.icon-redo:before {
+  content: "\e652";
+}
+
+.icon-undo:before {
+  content: "\e739";
+}
+
+.icon-paragraph:before {
+  content: "\e67b";
+}
+
+.icon-code:before {
+  content: "\e638";
+}
+
+.icon-h:before {
+  content: "\e61a";
+}
+
+.icon-si-glyph-bullet-list:before {
+  content: "\e62a";
+}
+
+.icon-Highlight:before {
+  content: "\e68c";
+}
+
+.icon-horizontal-rule:before {
+  content: "\e61b";
+}
+
+.icon-orderedlist:before {
+  content: "\ebcd";
+}
+
+.icon-bx-code-block:before {
+  content: "\e636";
+}
+

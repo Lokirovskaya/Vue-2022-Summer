@@ -10,7 +10,9 @@
       <router-link to="/prototype">原型设计</router-link> |
       <router-link to="/fileedit">文档编辑</router-link>
     </nav> -->
-
+    <nav>
+      <router-link to="/fileedit">文档编辑</router-link>
+    </nav>
     <MenuTop />
 
     <MenuLeft v-if="this.$store.state.login_state !== 0">
