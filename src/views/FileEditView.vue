@@ -4,109 +4,118 @@
             <div class="editor__header">
                 <!--粗体-->
                 <el-tooltip class="item" effect="dark" content="粗体" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().toggleBold().run()"
-                    :class="{ 'is-active': editor.isActive('bold') }">
-                    <i class="iconfont">&#xe7f7;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().toggleBold().run()"
+                        :class="{ 'is-active': editor.isActive('bold') }">
+                        <i class="iconfont">&#xe7f7;</i>
+                    </el-button>
                 </el-tooltip>
                 <!--斜体-->
                 <el-tooltip class="item" effect="dark" content="斜体" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().toggleItalic().run()"
-                    :class="{ 'is-active': editor.isActive('italic') }">
-                    <i class="iconfont">&#xe7fb;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().toggleItalic().run()"
+                        :class="{ 'is-active': editor.isActive('italic') }">
+                        <i class="iconfont">&#xe7fb;</i>
+                    </el-button>
                 </el-tooltip>
                 <!--Strike-->
                 <el-tooltip class="item" effect="dark" content="划掉" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().toggleStrike().run()"
-                    :class="{ 'is-active': editor.isActive('strike') }">
-                    <i class="iconfont">&#xe7f9;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().toggleStrike().run()"
+                        :class="{ 'is-active': editor.isActive('strike') }">
+                        <i class="iconfont">&#xe7f9;</i>
+                    </el-button>
                 </el-tooltip>
                 <!--code-->
                 <el-tooltip class="item" effect="dark" content="代码" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().toggleCode().run()"
-                    :class="{ 'is-active': editor.isActive('code') }">
-                    <i class="iconfont">&#xe638;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().toggleCode().run()"
+                        :class="{ 'is-active': editor.isActive('code') }">
+                        <i class="iconfont">&#xe638;</i>
+                    </el-button>
                 </el-tooltip>
                 <!--Highlight-->
                 <el-tooltip class="item" effect="dark" content="高亮" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().toggleHighlight().run()"
-                    :class="{ 'is-active': editor.isActive('highlight') }">
-                    <i class="iconfont">&#xe68c;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().toggleHighlight().run()"
+                        :class="{ 'is-active': editor.isActive('highlight') }">
+                        <i class="iconfont">&#xe68c;</i>
+                    </el-button>
                 </el-tooltip>
                 <div class="divider"></div>
                 <!--H1-->
                 <el-tooltip class="item" effect="dark" content="标题1" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
-                    :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
-                    <i class="iconfont">&#xe61a;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+                        :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
+                        <i class="iconfont">&#xe61a;</i>
+                    </el-button>
                 </el-tooltip>
                 <!--H2-->
                 <el-tooltip class="item" effect="dark" content="标题2" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-                    :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
-                    <i class="iconfont">&#xe61d;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+                        :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
+                        <i class="iconfont">&#xe61d;</i>
+                    </el-button>
                 </el-tooltip>
                 <!--Bulletlist-->
                 <el-tooltip class="item" effect="dark" content="无序列表" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().toggleBulletList().run()"
-                    :class="{ 'is-active': editor.isActive('bulletList') }">
-                    <i class="iconfont">&#xe62a;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().toggleBulletList().run()"
+                        :class="{ 'is-active': editor.isActive('bulletList') }">
+                        <i class="iconfont">&#xe62a;</i>
+                    </el-button>
                 </el-tooltip>
                 <!--OrderdList-->
                 <el-tooltip class="item" effect="dark" content="有序列表" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().toggleOrderedList().run()"
-                    :class="{ 'is-active': editor.isActive('orderedList') }">
-                    <i class="iconfont">&#xebcd;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().toggleOrderedList().run()"
+                        :class="{ 'is-active': editor.isActive('orderedList') }">
+                        <i class="iconfont">&#xebcd;</i>
+                    </el-button>
                 </el-tooltip>
                 <!--TaskList-->
                 <!--codeblock-->
                 <el-tooltip class="item" effect="dark" content="代码块" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().toggleCodeBlock().run()"
-                    :class="{ 'is-active': editor.isActive('codeBlock') }">
-                    <i class="iconfont">&#xe636;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().toggleCodeBlock().run()"
+                        :class="{ 'is-active': editor.isActive('codeBlock') }">
+                        <i class="iconfont">&#xe636;</i>
+                    </el-button>
                 </el-tooltip>
                 <div class="divider"></div>
                 <!--blockquote-->
                 <el-tooltip class="item" effect="dark" content="引用" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().toggleBlockquote().run()"
-                    :class="{ 'is-active': editor.isActive('blockquote') }">
-                    <i class="iconfont">&#xe608;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().toggleBlockquote().run()"
+                        :class="{ 'is-active': editor.isActive('blockquote') }">
+                        <i class="iconfont">&#xe608;</i>
+                    </el-button>
                 </el-tooltip>
                 <!--HorizontalRule-->
                 <el-tooltip class="item" effect="dark" content="分割线" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().setHorizontalRule().run()">
-                    <i class="iconfont">&#xe61b;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().setHorizontalRule().run()">
+                        <i class="iconfont">&#xe61b;</i>
+                    </el-button>
                 </el-tooltip>
                 <!--Image-->
                 <el-tooltip class="item" effect="dark" content="插入图片" placement="bottom">
-                <el-upload class="menu-item" style="position:relative; bottom:-5px" action="" :http-request="uploadImage" :on-success="handleImageSuccess"
-                    :before-upload="beforeImageUpload" :auto-upload="true" :showFileList="false">
-                    <i class="iconfont">&#xe67c;</i>
-                </el-upload>
+                    <el-upload class="menu-item" style="position:relative; bottom:-5px" action=""
+                        :http-request="uploadImage" :on-success="handleImageSuccess" :before-upload="beforeImageUpload"
+                        :auto-upload="true" :showFileList="false">
+                        <i class="iconfont">&#xe67c;</i>
+                    </el-upload>
                 </el-tooltip>
                 <div class="divider"></div>
                 <!--undo-->
                 <el-tooltip class="item" effect="dark" content="撤销" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().undo().run()" :disabled="!editor.can().undo()">
-                    <i class="iconfont">&#xe739;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().undo().run()"
+                        :disabled="!editor.can().undo()">
+                        <i class="iconfont">&#xe739;</i>
+                    </el-button>
                 </el-tooltip>
                 <!--redo-->
                 <el-tooltip class="item" effect="dark" content="重做" placement="bottom">
-                <button class="menu-item" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().redo()">
-                    <i class="iconfont">&#xe652;</i>
-                </button>
+                    <el-button class="menu-item" @click="editor.chain().focus().redo().run()"
+                        :disabled="!editor.can().redo()">
+                        <i class="iconfont">&#xe652;</i>
+                    </el-button>
+                </el-tooltip>
+                <!--save-->
+                <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
+                    <el-button class="menu-item" @click="Save">
+                        <i class="iconfont">&#xe762;</i>
+                    </el-button>
                 </el-tooltip>
             </div>
             <editor-content class="editor__content" :editor="editor" />
@@ -142,6 +151,7 @@ import Image from '@tiptap/extension-image'
 
 import * as Y from 'yjs'
 import { WebsocketProvider } from "y-websocket";
+//import { HocuspocusProvider } from '@hocuspocus/provider'
 
 import qs from "qs"
 
@@ -193,32 +203,47 @@ export default {
             this.imageUrl = URL.createObjectURL(file.raw);
             this.url_upload = this.imageUrl;
         },
-    },
-    mounted() {
-        //使用edit_file判断当前文档的状态:operation为0时表示有人,为2时表示此人为第一个人进入
-        var operation = undefined;
-        this.$axios.post('/project/edit_file', qs.stringify({ userid: this.$store.state.userid, file_id: this.$route.query.id, status: 1 }), {
-            headers: {
-                userid: this.$store.state.userid,
-                token: this.$store.state.token,
-            }
-        })
-            .then(res => {
-                if (res.data.errno === 0) {
-                    console.log(res.data);//测试一下
-                    //this.$message.success('重命名成功' + this.file_rename_id);
-                    operation = res.data.operation;
-                } else {
-                    this.$message.error(res.data.msg);
+        Save() {
+            var date = new Date();
+            var year = date.getFullYear();
+            var month = date.getMonth() + 1;
+            var day = date.getDate();
+            var hour = date.getHours();
+            var minute = date.getMinutes();
+            var second = date.getSeconds();
+            month = month < 10 ? '0' + month : month;
+            day = day < 10 ? '0' + day : day;
+            hour = hour < 10 ? '0' + hour : hour;
+            minute = minute < 10 ? '0' + minute : minute;
+            second = second < 10 ? '0' + second : second;
+            var time_str = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+            this.$axios.post('/project/modifyFile', qs.stringify({ file_id: this.$route.query.id, content: this.editor.getHTML(), modify_time: time_str }), {
+                headers: {
+                    userid: this.$store.state.userid,
+                    token: this.$store.state.token,
                 }
             })
-            .catch(err => {
-                this.$message.error(err);
-            });
+                .then(res => {
+                    if (res.data.errno === 0) {
+                        console.log(res.data);//测试一下
+                        //console.log('修改文档内容成功');
+                        this.$message.success('文档已保存!');
+                        //this.$message.success('重命名成功' + this.file_rename_id);
+                    } else {
+                        this.$message.error(res.data.msg);
+                    }
+                })
+                .catch(err => {
+                    this.$message.error(err);
+                });
+        }
+    },
+    mounted() {
         //初始化协同编辑和编辑器的相关参数
         const ydoc = new Y.Doc();
         // this.provider = new WebrtcProvider('tiptap-collaboration-cursor-extension', ydoc)
         this.provider = new WebsocketProvider('wss://demos.yjs.dev', this.$route.query.id, ydoc);
+        //this.provider = new HocuspocusProvider({ url: 'ws://127.0.0.1:1234', name: this.$route.query.id, ydoc})
         this.editor = new Editor({
             extensions: [
                 Blockquote,
@@ -251,34 +276,10 @@ export default {
                     },
                 }),
             ],
-            //content: 'null'
         });
-        if (operation === 2) {//说明为第一个进入文档的人,得从后端获取文档内容
-            this.$axios.post('/project/getFileContent', qs.stringify({ file_id: this.$route.query.id }), {
-                headers: {
-                    userid: this.$store.state.userid,
-                    token: this.$store.state.token,
-                }
-            })
-                .then(res => {
-                    if (res.data.errno === 0) {
-                        console.log(res.data);//测试一下
-                        //this.$message.success('重命名成功' + this.file_rename_id);
-                        this.editor.commands.setContent(res.data.content);
-                    } else {
-                        this.$message.error(res.data.msg);
-                    }
-                })
-                .catch(err => {
-                    this.$message.error(err);
-                });
-        }
-    },
-
-    beforeDestroy() {
-        //edit_file
-        var operation = undefined;
-        this.$axios.post('/project/edit_file', qs.stringify({ userid: this.$store.state.userid, file_id: this.$route.query.id, status: 0 }), {
+        //使用edit_file判断当前文档的状态:operation为0时表示有人,为2时表示此人为第一个人进入
+        /*
+        this.$axios.post('/project/edit_file', qs.stringify({ userid: this.$store.state.userid, fileid: this.$route.query.id, status: 1 }), {
             headers: {
                 userid: this.$store.state.userid,
                 token: this.$store.state.token,
@@ -288,48 +289,98 @@ export default {
                 if (res.data.errno === 0) {
                     console.log(res.data);//测试一下
                     //this.$message.success('重命名成功' + this.file_rename_id);
-                    operation = res.data.operation;
+                    if (res.data.operation == 2) {//说明为第一个进入文档的人,得从后端获取文档内容
+                        this.$axios.post('/project/getFileContent', qs.stringify({ file_id: this.$route.query.id }), {
+                            headers: {
+                                userid: this.$store.state.userid,
+                                token: this.$store.state.token,
+                            }
+                        })
+                            .then(res => {
+                                if (res.data.errno === 0) {
+                                    console.log(this.editor.getHTML());
+                                    //this.editor.commands.clearContent(true);
+                                    console.log(this.editor.getHTML());
+                                    console.log(res);//测试一下
+                                    //this.$message.success('重命名成功' + this.file_rename_id);
+                                    console.log('获取文档内容成功');
+                                    //this.editor.commands.setContent(res.data.content);
+                                    console.log(this.editor.getHTML());
+                                } else {
+                                    this.$message.error(res.data.msg);
+                                }
+                            })
+                            .catch(err => {
+                                this.$message.error(err);
+                            });
+                    }
+                    console.log('mounted: ' + res.data.operation);
                 } else {
                     this.$message.error(res.data.msg);
                 }
             })
             .catch(err => {
                 this.$message.error(err);
-            });
-        if (operation === 1) { //说明是最后一个离开的,此时要将文档内容保存到后端
-            var date = new Date();
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var day = date.getDate();
-            var hour = date.getHours();
-            var minute = date.getMinutes();
-            var second = date.getSeconds();
-            month = month < 10 ? '0' + month : month;
-            day = day < 10 ? '0' + day : day;
-            hour = hour < 10 ? '0' + hour : hour;
-            minute = minute < 10 ? '0' + minute : minute;
-            second = second < 10 ? '0' + second : second;
-            var time_str = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
-            this.$axios.post('/project/modifyFile', qs.stringify({ file_id: this.$route.query.id, content: this.editor.getHTML(), modify_time: time_str }), {
-                headers: {
-                    userid: this.$store.state.userid,
-                    token: this.$store.state.token,
+            }); */
+    },
+
+    beforeDestroy() {
+        //edit_file
+        /*
+        this.$axios.post('/project/edit_file', qs.stringify({ userid: this.$store.state.userid, fileid: this.$route.query.id, status: 0 }), {
+            headers: {
+                userid: this.$store.state.userid,
+                token: this.$store.state.token,
+            }
+        })
+            .then(res => {
+                if (res.data.errno === 0) {
+                    console.log(res);//测试一下
+                    //this.$message.success('重命名成功' + this.file_rename_id);
+                    if (res.data.operation == 1) { //说明是最后一个离开的,此时要将文档内容保存到后端
+                        var date = new Date();
+                        var year = date.getFullYear();
+                        var month = date.getMonth() + 1;
+                        var day = date.getDate();
+                        var hour = date.getHours();
+                        var minute = date.getMinutes();
+                        var second = date.getSeconds();
+                        month = month < 10 ? '0' + month : month;
+                        day = day < 10 ? '0' + day : day;
+                        hour = hour < 10 ? '0' + hour : hour;
+                        minute = minute < 10 ? '0' + minute : minute;
+                        second = second < 10 ? '0' + second : second;
+                        var time_str = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+                        this.$axios.post('/project/modifyFile', qs.stringify({ file_id: this.$route.query.id, content: this.editor.getHTML(), modify_time: time_str }), {
+                            headers: {
+                                userid: this.$store.state.userid,
+                                token: this.$store.state.token,
+                            }
+                        })
+                            .then(res => {
+                                if (res.data.errno === 0) {
+                                    console.log(res.data);//测试一下
+                                    console.log('修改文档内容成功');
+                                    this.provider.disconnect();
+                                    //this.$message.success('重命名成功' + this.file_rename_id);
+                                } else {
+                                    this.$message.error(res.data.msg);
+                                }
+                            })
+                            .catch(err => {
+                                this.$message.error(err);
+                            });
+                    }
+                } else {
+                    this.$message.error(res.data.msg);
                 }
             })
-                .then(res => {
-                    if (res.data.errno === 0) {
-                        console.log(res.data);//测试一下
-                        //this.$message.success('重命名成功' + this.file_rename_id);
-                    } else {
-                        this.$message.error(res.data.msg);
-                    }
-                })
-                .catch(err => {
-                    this.$message.error(err);
-                });
-        }
+            .catch(err => {
+                this.$message.error(err);
+            }); */
         this.editor.destroy();
         this.provider.destroy();
+        console.log('all destroyed');
     },
 }
 </script>
