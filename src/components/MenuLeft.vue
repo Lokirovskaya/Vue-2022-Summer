@@ -79,6 +79,9 @@
             console.log(res);
             if (res.data.errno === 0) {
               this.$message.success('团队创建成功！');
+              setTimeout(()=> {
+                this.$router.go(0);
+              }, 500);
             } else {
               this.$message.error(res.data.msg);
             }

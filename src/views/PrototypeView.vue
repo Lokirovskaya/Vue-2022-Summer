@@ -252,6 +252,8 @@
       save_prototype() {
         let post_data = {
           proto_id: this.$route.query.id,
+          canvas_width: this.canvas_width,
+          canvas_height: this.canvas_height,
           proto_content: JSON.stringify(this.drag_elements),
         };
 
@@ -284,13 +286,13 @@
 
         let b64 = canvas.toDataURL('image/png');
 
-        let post_dat = {
+        let post_data = {
           proto_id: this.$route.query.id,
           base64_photo: b64,
         };
 
         this.$axios
-          .post('/project/upload_proto_photo', qs.stringify(post_dat), {
+          .post('/project/upload_proto_photo', qs.stringify(post_data), {
             headers: {
               userid: this.$store.state.userid,
               token: this.$store.state.token,
@@ -346,17 +348,19 @@
           })
           .then((res) => {
             if (res.data.errno === 0) {
+              this.canvas_width = res.data.canvas_width;
+              this.canvas_height = res.data.canvas_height;
               // res.data.proto_content 在后端具有默认值 '[]'
               this.drag_elements = JSON.parse(res.data.proto_content);
             } else {
               this.$message.error(res.data.msg);
             }
 
-            console.log(this.drag_elements)
+            console.log(this.drag_elements);
 
             // 重新编制 id，防止 key 冲突
-            let len = this.drag_elements.length
-            for (let i = 0 ; i < len; i++) {
+            let len = this.drag_elements.length;
+            for (let i = 0; i < len; i++) {
               this.drag_elements[i].id = i;
             }
             this.id = len;

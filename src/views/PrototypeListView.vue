@@ -1,6 +1,6 @@
 <template>
     <div id="prototype">
-        <div id="title">原型标题标题标题</div>
+        <div id="title">原型编辑</div>
 
         <div id="prototypes">
             <el-card class="one-prototype box-card" shadow="hover" v-for="item in prototype_list" :key="item.proto_id">
@@ -234,7 +234,7 @@ export default {
 
 .one-prototype {
     width: 200px;
-    height: 200px;
+    height: 300px;
     padding: 20px;
     margin: 10px;
 }

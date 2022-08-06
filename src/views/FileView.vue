@@ -1,6 +1,6 @@
 <template>
     <div id="file">
-        <div id="title">文档标题标题标题</div>
+        <div id="title">文档编辑</div>
 
         <div id="files">
             <el-card class="one-file box-card" shadow="hover" v-for="item in file_list" :key="item.file_id">
