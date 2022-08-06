@@ -3,80 +3,111 @@
         <div class="editor" v-if="editor">
             <div class="editor__header">
                 <!--粗体-->
+                <el-tooltip class="item" effect="dark" content="粗体" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().toggleBold().run()"
                     :class="{ 'is-active': editor.isActive('bold') }">
                     <i class="iconfont">&#xe7f7;</i>
                 </button>
+                </el-tooltip>
                 <!--斜体-->
+                <el-tooltip class="item" effect="dark" content="斜体" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().toggleItalic().run()"
                     :class="{ 'is-active': editor.isActive('italic') }">
                     <i class="iconfont">&#xe7fb;</i>
                 </button>
+                </el-tooltip>
                 <!--Strike-->
+                <el-tooltip class="item" effect="dark" content="划掉" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().toggleStrike().run()"
                     :class="{ 'is-active': editor.isActive('strike') }">
                     <i class="iconfont">&#xe7f9;</i>
                 </button>
+                </el-tooltip>
                 <!--code-->
+                <el-tooltip class="item" effect="dark" content="代码" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().toggleCode().run()"
                     :class="{ 'is-active': editor.isActive('code') }">
                     <i class="iconfont">&#xe638;</i>
                 </button>
+                </el-tooltip>
                 <!--Highlight-->
+                <el-tooltip class="item" effect="dark" content="高亮" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().toggleHighlight().run()"
                     :class="{ 'is-active': editor.isActive('highlight') }">
                     <i class="iconfont">&#xe68c;</i>
                 </button>
+                </el-tooltip>
                 <div class="divider"></div>
                 <!--H1-->
+                <el-tooltip class="item" effect="dark" content="标题1" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
                     :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
                     <i class="iconfont">&#xe61a;</i>
                 </button>
+                </el-tooltip>
                 <!--H2-->
+                <el-tooltip class="item" effect="dark" content="标题2" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
                     :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
                     <i class="iconfont">&#xe61d;</i>
                 </button>
+                </el-tooltip>
                 <!--Bulletlist-->
+                <el-tooltip class="item" effect="dark" content="无序列表" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().toggleBulletList().run()"
                     :class="{ 'is-active': editor.isActive('bulletList') }">
                     <i class="iconfont">&#xe62a;</i>
                 </button>
+                </el-tooltip>
                 <!--OrderdList-->
+                <el-tooltip class="item" effect="dark" content="有序列表" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().toggleOrderedList().run()"
                     :class="{ 'is-active': editor.isActive('orderedList') }">
                     <i class="iconfont">&#xebcd;</i>
                 </button>
+                </el-tooltip>
                 <!--TaskList-->
                 <!--codeblock-->
+                <el-tooltip class="item" effect="dark" content="代码块" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().toggleCodeBlock().run()"
                     :class="{ 'is-active': editor.isActive('codeBlock') }">
                     <i class="iconfont">&#xe636;</i>
                 </button>
+                </el-tooltip>
                 <div class="divider"></div>
                 <!--blockquote-->
+                <el-tooltip class="item" effect="dark" content="引用" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().toggleBlockquote().run()"
                     :class="{ 'is-active': editor.isActive('blockquote') }">
                     <i class="iconfont">&#xe608;</i>
                 </button>
+                </el-tooltip>
                 <!--HorizontalRule-->
+                <el-tooltip class="item" effect="dark" content="分割线" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().setHorizontalRule().run()">
                     <i class="iconfont">&#xe61b;</i>
                 </button>
+                </el-tooltip>
                 <!--Image-->
-                <button class="menu-item" @click="uploadImage">
+                <el-tooltip class="item" effect="dark" content="插入图片" placement="bottom">
+                <el-upload class="menu-item" style="position:relative; bottom:-5px" action="" :http-request="uploadImage" :on-success="handleImageSuccess"
+                    :before-upload="beforeImageUpload" :auto-upload="true" :showFileList="false">
                     <i class="iconfont">&#xe67c;</i>
-                </button>
+                </el-upload>
+                </el-tooltip>
                 <div class="divider"></div>
                 <!--undo-->
+                <el-tooltip class="item" effect="dark" content="撤销" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().undo().run()" :disabled="!editor.can().undo()">
                     <i class="iconfont">&#xe739;</i>
                 </button>
+                </el-tooltip>
                 <!--redo-->
+                <el-tooltip class="item" effect="dark" content="重做" placement="bottom">
                 <button class="menu-item" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().redo()">
                     <i class="iconfont">&#xe652;</i>
                 </button>
+                </el-tooltip>
             </div>
             <editor-content class="editor__content" :editor="editor" />
             <div class="editor__foot">
@@ -124,7 +155,7 @@ export default {
             editor: null,
             provider: null,
             file: 0, //文件ID作为聊天室的名字
-            color:[ '#f783ac', '#BAF093', '#FBF499', '#F98281', '#FBBC8B', '#95F9DC', '#938fEE', '#B7E260', '#FA8C5F', '#67B1EA'],//颜色列表
+            color: ['#f783ac', '#BAF093', '#FBF499', '#F98281', '#FBBC8B', '#95F9DC', '#938fEE', '#B7E260', '#FA8C5F', '#67B1EA'],//颜色列表
         };
     },
     methods: {
@@ -132,16 +163,35 @@ export default {
             console.log(this.editor.getText());
             console.log(this.editor.getHTML());
         },
-        setColor () {
-            var i = Math.floor(Math.random()*10);
+        setColor() {
+            var i = Math.floor(Math.random() * 10);
             return this.color[i];
-        }, 
+        },
+        beforeImageUpload(file) {
+            console.log('before');
+            const isJPG = file.type === 'image/jpeg';
+            const isLt2M = file.size / 1024 / 1024 < 2;
+            if (!isJPG) {
+                this.$message.error('上传图片只能是 JPG 格式!');
+            }
+            if (!isLt2M) {
+                this.$message.error('上传图片大小不能超过 2MB!');
+            }
+            return isJPG && isLt2M;
+        },
         uploadImage() {
             //上传文件接受url
             const url = null;
+            //上传图片并且获取其url
             if (url) {
                 this.editor.chain().focus().setImage({ src: url }).run();
             }
+        },
+        handleImageSuccess(res, file) {
+            console.log('success');
+            // alert('imageurl:' + this.imageUrl);
+            this.imageUrl = URL.createObjectURL(file.raw);
+            this.url_upload = this.imageUrl;
         },
     },
     mounted() {
