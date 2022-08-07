@@ -2,8 +2,8 @@
   <div id="top">
     <el-col :span="12">
       <div class="grid-content">
-        <el-menu  class="el-menu-demo" mode="horizontal" @select="SelectIndex">
-<!-- 
+        <el-menu class="el-menu-demo" mode="horizontal" @select="SelectIndex">
+          <!-- 
           <el-menu-item index="1">
             导航1
           </el-menu-item>
@@ -31,7 +31,7 @@
       </div>
     </el-col>
     <el-col :span="12">
-      
+
       <div class="grid-content" style="text-align: right">
         <div v-if="this.$store.state.login_state === 0">
           <el-link :underline="false" style="position: relative;bottom:-19px" @click="goto_login">登录/注册
@@ -41,9 +41,9 @@
         <div v-else>
           <el-dropdown @command="User_Command">
             <div>
-              <img :src="'http://stcmp.shlprn.cn'+this.$store.state.user_photo" 
+              <img :src="'http://stcmp.shlprn.cn' + this.$store.state.user_photo"
                 style="height: 35px;width: 35px;position: relative;bottom: -14px; border-radius: 3px;">
-              
+
               <!--<el-avatar style="position: relative;bottom: -13.5px" shape="square" :size="35" v-bind:src="User.pho"></el-avatar>-->
               <span style="position: relative;bottom: -3px">&nbsp;{{ this.$store.state.username }}&nbsp;&nbsp;</span>
             </div>
