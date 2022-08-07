@@ -80,7 +80,7 @@ export default {
         this.$store.commit('set_token', '');
         this.$router.push({ path: '/' });
       }).catch(() => {
-
+        return;
       });
     },
     User_Command(command) {

@@ -4,7 +4,7 @@
     <div v-if="this.$store.state.login_state == 0">
     <h1>请登录</h1>
 
-    <el-input placeholder="输入uid或邮箱" v-model="userid" clearable style="width:300px"></el-input>
+    <el-input placeholder="输入邮箱" v-model="userid" clearable style="width:300px"></el-input>
     <p>
       <el-input placeholder="输入密码" v-model="password" clearable style="width:300px" show-password></el-input>
     <p>

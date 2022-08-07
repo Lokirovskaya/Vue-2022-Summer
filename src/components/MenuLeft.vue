@@ -4,7 +4,43 @@
       <el-menu background-color="#F4F3EF" text-color="#000" active-text-color="#7AC29A" :collapse="true">
         <el-submenu index="1">
           <template slot="title">
-            <div class="el-icon-s-custom">
+            <div style="width: 100%; text-align: right; bod">
+              <img :src="'http://stcmp.shlprn.cn' + this.$store.state.user_photo" class="avatar" />
+            </div>
+          </template>
+
+          <el-menu-item-group>
+            <template slot="title">
+              <div style="font-size: 20px; color: #555; font-weight: bold">
+                {{ this.$store.state.username }}
+              </div>
+            </template>
+
+            <el-menu-item>
+              <router-link :to="{ path: '/personcenter' }">
+                <el-link :underline="false">
+                  <span class="el-icon-postcard"></span>
+                  <span>个人中心</span>
+                </el-link>
+              </router-link>
+            </el-menu-item>
+
+            <el-menu-item>
+              <div @click="logout()">
+                <el-link :underline="false">
+                  <span class="el-icon-switch-button"></span>
+                  <span>退出登录</span>
+                </el-link>
+              </div>
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+
+        <el-divider></el-divider>
+
+        <el-submenu index="2">
+          <template slot="title">
+            <div class="el-icon-user">
               <br />
               <div style="font-size: 12px; margin-top: 5px">团队</div>
             </div>
@@ -12,9 +48,12 @@
 
           <el-menu-item-group>
             <div slot="title">我加入的团队</div>
-            <el-menu-item v-for="(team, i) in teamdata" :key="i" :index="'team'+i">
+            <el-menu-item v-for="(team, i) in teamdata" :key="team.teamid" :index="'team' + i">
               <router-link :to="{ path: '/team', query: { id: team.teamid } }">
-                <el-link>{{ team.teamname }}</el-link>
+                <el-link :underline="false">
+                  <span class="el-icon-user"></span>
+                  <span>{{ team.teamname }}</span>
+                </el-link>
               </router-link>
             </el-menu-item>
           </el-menu-item-group>
@@ -22,8 +61,8 @@
           <el-menu-item-group>
             <el-menu-item>
               <template slot="title">
-                <div @click="create_team_prompt()" style="font-color: #7AC29A;">
-                  <i class="el-icon-plus"></i>
+                <div @click="create_team_prompt()" style="font-color: #7ac29a">
+                  <span class="el-icon-circle-plus-outline"></span>
                   <span>新建团队</span>
                 </div>
               </template>
@@ -31,7 +70,7 @@
           </el-menu-item-group>
         </el-submenu>
 
-        <el-submenu index="2">
+        <el-submenu index="3">
           <template slot="title">
             <div class="el-icon-tickets">
               <br />
@@ -41,10 +80,27 @@
 
           <el-menu-item-group>
             <div slot="title">最近项目</div>
-            <el-menu-item v-for="(team, i) in teamdata" :key="i" :index="'proj'+i">
-              <router-link :to="{ path: '/team', query: { id: team.teamid } }">
-                <el-link>{{ team.teamname }}</el-link>
+            <el-menu-item v-for="(proj, i) in recent_proj" :key="proj.proj_id" :index="'proj' + i">
+              <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
+                <el-link :underline="false">
+                  <span class="el-icon-user"></span>
+                  <span>{{ proj.team_name }}</span>
+                  <span style="font-weight: bold"> / </span>
+                  <span class="el-icon-tickets"></span>
+                  <span style="font-weight: bold">{{ proj.proj_name }}</span>
+                </el-link>
               </router-link>
+            </el-menu-item>
+          </el-menu-item-group>
+
+          <el-menu-item-group>
+            <el-menu-item>
+              <template slot="title">
+                <div @click="clear_recent_proj()" style="font-color: #7ac29a">
+                  <span class="el-icon-circle-close"></span>
+                  <span>清除所有</span>
+                </div>
+              </template>
             </el-menu-item>
           </el-menu-item-group>
         </el-submenu>
@@ -66,10 +122,30 @@
       return {
         // 结构见文档 /team/userspace
         teamdata: [],
+        // {proj_id, proj_name, team_name}
+        recent_proj: [],
       };
     },
 
     methods: {
+      logout() {
+        this.$confirm('此操作将退出登录, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            this.$store.commit('set_userstate_to_unlogged'); //切换到游客状态
+            this.$store.commit('set_userid', 0);
+            this.$store.commit('set_username', '');
+            this.$store.commit('set_token', '');
+            this.$router.push({ path: '/' });
+          })
+          .catch(() => {
+            return;
+          });
+      },
+
       create_team_prompt() {
         let teamname;
 
@@ -98,7 +174,6 @@
             },
           })
           .then((res) => {
-            console.log(res);
             if (res.data.errno === 0) {
               this.$message.success('团队创建成功！');
               setTimeout(() => {
@@ -111,6 +186,11 @@
           .catch((err) => {
             this.$message.error(err);
           });
+      },
+
+      clear_recent_proj() {
+        this.recent_proj.splice(0, this.recent_proj.length);
+        this.$store.commit('clear_recent_proj');
       },
     },
 
@@ -128,6 +208,8 @@
         .catch((err) => {
           this.$message.error(err);
         });
+
+      this.recent_proj = this.$store.state.recent_proj;
     },
   };
 </script>
@@ -146,6 +228,15 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
     background-color: #f4f3ef;
     padding-right: 1px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 25px;
+    position: relative;
+    left: -10px;
+    top: 15px;
   }
 
   #right {

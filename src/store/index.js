@@ -1,8 +1,8 @@
-import Vue from 'vue'
-import Vuex from 'vuex'
+import Vue from 'vue';
+import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 
-Vue.use(Vuex)
+Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
@@ -14,6 +14,7 @@ export default new Vuex.Store({
     user_email: '',
     user_truename: '',
     token: '',
+    recent_proj: [],
   },
   getters: {},
   mutations: {
@@ -40,6 +41,34 @@ export default new Vuex.Store({
     },
     set_token(state, token) {
       state.token = token;
+    },
+    // 'info' should be {proj_id, proj_name, team_name}
+    push_recent_proj(state, info) {
+      let found = -1;
+      let len = state.recent_proj.length;
+      for (let i = 0; i < len; i++) {
+        if (state.recent_proj[i].proj_id === info.proj_id) {
+          found = i;
+          break;
+        }
+      }
+
+      if (found >= 0) {
+        state.recent_proj.splice(found, 1);
+      }
+
+      state.recent_proj.unshift({
+        proj_id: info.proj_id,
+        proj_name: info.proj_name,
+        team_name: info.team_name,
+      });
+
+      if (state.recent_proj.length > 10) {
+        state.recent_proj.pop();
+      }
+    },
+    clear_recent_proj(state) {
+      state.recent_proj.splice(0, state.recent_proj.length);
     },
   },
   actions: {},
