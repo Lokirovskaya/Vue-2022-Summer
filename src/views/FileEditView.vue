@@ -240,6 +240,7 @@ export default {
       }],
     };
   },
+
   methods: {
     test() {
       console.log(this.editor.getText());
@@ -337,15 +338,136 @@ export default {
       //value值1为PDF,2为Markdown,3为Docx
       if (this.value === '') {
         this.$message.error('请选择导出格式')
-      } else if (this.value === '1') {
+      } else if (this.value === '2') {
         console.log('download success!' + this.value);
         const turndown = new TurndownService({
           emDelimiter: '_',
           linkStyle: 'inlined',
-          headingStyle: 'atx'
-        });
+          headingStyle: 'atx',
+        })
+        turndown.addRule('td', {
+          filter: ['td'],
+          replacement: function (content) {
+            content = content.trim();
+            content = content.replace(/\|/g, '/');
+            content = content.replace(/\n+/g, ' <br> ');
+            content = '|' + content
+            // console.log('td:'+content);
+            return content
+          }
+        })
+        turndown.addRule('th', {
+          filter: ['th'],
+          replacement: function (content, node) {
+            content = content.trim();
+            content = content.replace(/\|/g, '/');
+            content = content.replace(/\n+/g, ' <br> ');
+            content = '|#$&%th$#%&' + content
+            if (node.getAttribute('colspan') != null) { //如果表头存在合并单元格，对其进行处理
+              //repeatStringNumTimes
+              let repeatStr = '';
+              for (let i = 0; i < node.getAttribute('colspan'); i++) {
+                repeatStr += '|';
+              }
+              content = content + repeatStr;
+            }
+            // console.log('th:'+content);
+            return content
+          }
+        })
+        turndown.addRule('tr', {
+          filter: ['tr'],
+          replacement: function (content) {
+            content = '|\n' + content.trim();
+            // console.log('tr:'+content);
+            return content
+          }
+        })
+        turndown.addRule('table', {
+          filter: ['table'],
+          replacement: function (content) {
+            // 删首尾空，删除最前面多余的|，并在最后补全|
+            //console.log('table1:'+content);
+            content = content.trim();
+            content = content.replace(/\n+/g, '\n');
+            content = content.replace(/\n\|\n/g, '|\n');
+            if (content.indexOf('|\n') === 0) {
+              content = content.substring(1, content.length) + '|';
+            }
+            content = content.trim();
+            // 如果表最前端包含<caption>表名标签的，通过下面代码优化让<caption>变成独立一行
+            //console.log('table2:'+content);
+            var captionLine = '';
+            if (content.slice(0, 1) != '|' && (content.slice(-1) != '|')) {
+              captionLine = content.slice(0, content.indexOf('|\n'));//captionn那行
+              content = content.slice(content.indexOf('|\n') + 2);
+              content = content + '|'
+            }
+            // 检查表格包含几个|，数字减1就是列数，模拟出markdown表格中间的---：
+            var verticalLineCount = 0;
+            var strs = new Array();
+            //var thExist = false;
+            strs = content.split('\n');
+            for (let i = 0; i < strs.length; i++) { // 计算最多列数
+              if (strs[i].indexOf('|') >= 0) {
+                let tempnum = strs[i].match(/\|/ig).length;
+                if (tempnum > verticalLineCount) {
+                  verticalLineCount = tempnum;
+                }
+              }
+            }
+            let repeatStr = '';
+            for (let i = 0; i < verticalLineCount; i++) {
+              repeatStr += '|';
+            }
+            var buildTh = repeatStr.trim(); // 构造没有表头时候，markdown需要的表头 比如：| | | |
+            let repeatStr1 = '';
+            for (let i = 0; i < verticalLineCount - 1; i++) {
+              repeatStr1 += '---|';
+            }
+            var tableMDLine = '|' + repeatStr1; // 构造markdown表中间的横线 比如：|---|---|---|
+            // 检查是否包含表头
+            //console.log('table3:'+content);
+            if (content.indexOf('|#$&%th$#%&') >= 0) {
+              content = content.replace(/\|#\$&%th\$#%&/g, '|');
+              content = content.replace('\n', '\n' + tableMDLine + '\n');
+            }
+            else {
+              content = buildTh + '\n' + tableMDLine + '\n' + content;
+            }
+            content = '\n' + captionLine + '\n\n' + content + '\n\n';
+            //console.log('table4:'+content);
+            return content
+          }
+        })
+        turndown.addRule('pre', {
+          filter: ['pre'],
+          replacement: function (content) {
+            return content
+          }
+        })
+        turndown.addRule('code', {
+          filter: ['code'],
+          replacement: function (content) {
+            content = '```\n' + content + '\n```'
+            return content
+          }
+        })
+        turndown.addRule('s', {
+          filter: ['s'],
+          replacement: function (content) {
+            return '~~' + content + '~~'
+          }
+        })
+        turndown.addRule('mark', {
+          filter: ['mark'],
+          replacement: function (content) {
+            return '==' + content + '=='
+          }
+        })
         //console.log(this.editor.getHTML());
         const file_name = this.$route.query.name + '.md';
+        console.log(this.editor.getText()); // todo
         const data = turndown.turndown(this.editor.getHTML());
         const blob = new Blob([data], { type: "text/plain" });
         const a = document.createElement("a");
@@ -355,7 +477,7 @@ export default {
         URL.revokeObjectURL(a.href);
         a.remove();
         this.download_menu_visible = false;
-      } else if (this.value === '2') {
+      } else if (this.value === '1') {
         console.log('download success!' + this.value);
         console.log(this.editor.getHTML());
         this.download_menu_visible = false;
