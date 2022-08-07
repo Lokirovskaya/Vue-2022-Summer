@@ -1,6 +1,14 @@
 <template>
-  <div style="width: 100%; height: 100%; padding: 20px;">
-    <el-tabs  v-model="current_tab_name">
+  <div style="width: 100%; height: 100%; padding: 20px">
+    <div id="title">
+      <router-link :to="{ path: '/team', query: { id: this.proj_team_id } }">
+        <el-link :underline="false" id="back-arrow">
+          <span class="el-icon-arrow-left back-arrow"></span>
+        </el-link>
+      </router-link>
+      <span>{{ proj_name }}</span>
+    </div>
+    <el-tabs v-model="current_tab_name" @tab-click="tab_change">
       <el-tab-pane label="项目信息" name="info"><ProjectInfoView /></el-tab-pane>
       <el-tab-pane label="原型设计" name="prototype"><PrototypeListView /></el-tab-pane>
       <el-tab-pane label="UML图" name="uml">todo</el-tab-pane>
@@ -10,17 +18,91 @@
 </template>
 
 <script>
+  import qs from 'qs';
+
   import ProjectInfoView from '@/views/ProjectInfoView.vue';
   import PrototypeListView from '@/views/PrototypeListView.vue';
   import FileView from '@/views/FileView.vue';
+
   export default {
     name: 'ProjectView',
     components: { ProjectInfoView, PrototypeListView, FileView },
+
     data() {
       return {
         current_tab_name: 'info',
+        proj_name: '',
+        proj_team_id: 0,
       };
+    },
+
+    methods: {
+      tab_change() {
+        this.$router.push({ query: { ...this.$route.query, tab: this.current_tab_name } });
+      },
+
+      get_proj_info() {
+        this.$axios
+          .post('/project/detail', qs.stringify({ proj_id: this.$route.query.id }), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.proj_name = res.data.proj_name;
+              this.proj_team_id = res.data.proj_team_id;
+
+              let recent_info = {
+                proj_id: this.$route.query.id,
+                proj_name: res.data.proj_name,
+                team_name: res.data.proj_team,
+              };
+              this.$store.commit('push_recent_proj', recent_info);
+
+              console.log('recent', this.$store.state.recent_proj);
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
+    },
+
+    created() {
+      if ('tab' in this.$route.query) {
+        this.current_tab_name = this.$route.query.tab;
+      } else {
+        this.current_tab_name = 'info';
+      }
+      this.get_proj_info();
+    },
+
+    watch: {
+      $route(to, from) {
+        if (to.query.id !== from.query.id) {
+          this.id = to.query.id;
+          this.get_proj_info();
+        }
+      },
     },
   };
 </script>
 
+<style scoped>
+  #title {
+    width: 100%;
+    height: 60px;
+    padding-top: 10px;
+    text-align: left;
+    font-size: 35px;
+    font-weight: bold;
+  }
+
+  #back-arrow {
+    font-size: 30px;
+  }
+</style>

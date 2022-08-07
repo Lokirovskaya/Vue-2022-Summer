@@ -50,7 +50,7 @@
   };
 </script>
 
-<style>
+<style scoped>
   body {
     /* background-color: #FAF0E6; */
     margin:0;
