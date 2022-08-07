@@ -1,78 +1,85 @@
 <template>
   <div id="main">
-    <div id="title">{{ team_name }} (id: {{ team_id }})</div>
-    <el-divider>团队项目</el-divider>
+    <div id="title">{{ team_name }}</div>
 
-    <div id="projs">
-      <el-card
-        v-for="(proj, i) in proj_data"
-        :key="i"
-        :index="'1-' + i"
-        class="one-proj box-card"
-        shadow="hover"
-      >
-        <div style="text-align: right">
-          <el-dropdown>
-            <i class="el-icon-more" style="font-size: 18px"></i>
-            <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>
-                <div @click="edit_proj_prompt(proj)">编辑项目</div>
-              </el-dropdown-item>
-              <el-dropdown-item style="color: red">
-                <div @click="delete_proj_prompt(proj.proj_id)">删除项目</div>
-              </el-dropdown-item>
-            </el-dropdown-menu>
-          </el-dropdown>
+    <el-tabs>
+      <el-tab-pane label="团队信息">
+        <el-divider>团队项目</el-divider>
+        <div id="projs">
+          <div v-for="(proj, i) in proj_data" :key="i" class="one-proj">
+            <div style="height: 60%">
+              <!-- <div style="background-color: gray;"></div> -->
+              <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
+                <img style="width: 100%; height: 100%; border-radius: 20px" src="@/assets/logo.png" />
+              </router-link>
+            </div>
+
+            <div style="height: 30%; margin-left: 10px">
+              <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
+                <el-link class="proj-title">{{ proj.proj_name }}</el-link>
+              </router-link>
+            </div>
+
+            <div style="height: 30%; margin-left: 10px">
+              <span>{{ proj.proj_info }}</span>
+              <span style="text-align: right; float: right; margin-right: 10px">
+                <el-dropdown>
+                  <i class="el-icon-more" style="font-size: 18px"></i>
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item>
+                      <div @click="edit_proj_prompt(proj)">编辑项目</div>
+                    </el-dropdown-item>
+                    <el-dropdown-item style="color: red">
+                      <div @click="delete_proj_prompt(proj.proj_id)">删除项目</div>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+              </span>
+            </div>
+          </div>
+
+          <div class="new-proj">
+            <div @click="create_proj_prompt()">
+              <i class="el-icon-plus" style="font-size: 50px"></i>
+              <div style="font-size: 18px; color: gray">新建项目</div>
+            </div>
+          </div>
         </div>
-        <div>
-          <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
-            <el-link class="proj-title">{{ proj.proj_name }}</el-link>
+
+        <el-divider>团队成员</el-divider>
+
+        <div id="members">
+          <div class="one-member" v-for="member in member_data" :key="member.member_id">
+            <img :src="'http://stcmp.shlprn.cn' + member.member_photo" class="avatar" />
+            <div id="username">{{ member.member_name }}</div>
+          </div>
+
+          <div class="one-member">
+            <el-button
+              @click="invite_member_prompt()"
+              class="avatar invite-member"
+              style="background-color: #eee"
+            >
+              <i class="el-icon-plus"></i>
+            </el-button>
+            <div id="username">邀请新成员</div>
+          </div>
+        </div>
+      </el-tab-pane>
+
+      <el-tab-pane label="团队管理">
+        <div class="button">
+          <router-link :to="{ path: '/trashbin', query: { id: this.team_id } }">
+            <el-button icon="el-icon-delete">回收站</el-button>
           </router-link>
-          <br/>
-          <br/>
-          <div>{{ proj.proj_info }}</div>
         </div>
-      </el-card>
-
-      <el-card class="new-proj box-card" shadow="hover">
-        <div @click="create_proj_prompt()">
-          <i class="el-icon-plus" style="font-size: 50px"></i>
-          <div style="font-size: 18px; color: gray">新建项目</div>
+        <div class="button">
+          <router-link :to="{ path: '/teammanagement', query: { id: team_id } }">
+            <el-button type="primary">成员管理</el-button>
+          </router-link>
         </div>
-      </el-card>
-    </div>
-
-    <div class="button">
-      <router-link :to="{ path: '/trashbin', query: { id: this.team_id } }">
-        <el-button icon="el-icon-delete">回收站</el-button>
-      </router-link>
-    </div>
-
-    <el-divider>团队成员</el-divider>
-
-    <div id="members">
-      <div class="one-member" v-for="member in member_data" :key="member.member_id">
-        <img :src="'http://stcmp.shlprn.cn' + member.member_photo" class="avatar" />
-        <div id="username">{{ member.member_name }}</div>
-      </div>
-
-      <div class="one-member">
-        <el-button
-          @click="invite_member_prompt()"
-          class="avatar invite-member"
-          style="background-color: #eee"
-        >
-          <i class="el-icon-plus"></i>
-        </el-button>
-        <div id="username">邀请新成员</div>
-      </div>
-    </div>
-
-    <div class="button">
-      <router-link :to="{ path: '/teammanagement', query: { id: team_id } }">
-        <el-button type="primary">成员管理</el-button>
-      </router-link>
-    </div>
+      </el-tab-pane>
+    </el-tabs>
 
     <!-- new proj prompt dialog -->
     <el-dialog title="新建项目" :visible.sync="new_proj_dialog_visible" width="40%">
@@ -380,16 +387,17 @@
 
   #title {
     width: 100%;
+    height: 60px;
     padding-top: 10px;
     text-align: left;
-    font-size: 30px;
+    font-size: 35px;
+    font-weight: bold;
   }
 
   #projs {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    padding: 15px;
     min-height: 200px;
   }
 
@@ -400,27 +408,31 @@
   }
 
   .one-proj {
-    width: 200px;
-    height: 200px;
-    padding: 20px;
+    width: 250px;
+    height: 150px;
     margin: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04);
+    border-radius: 20px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
   }
 
   .new-proj {
-    width: 40px;
-    height: 200px;
-    padding: 20px;
+    width: 100px;
+    height: 150px;
     margin: 10px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04);
   }
 
   #members {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    padding-left: 40px;
   }
 
   .one-member {
@@ -438,6 +450,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    /* box-shadow: 0 6px 6px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04); */
   }
 
   .avatar :hover {
