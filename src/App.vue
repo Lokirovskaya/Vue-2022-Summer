@@ -1,17 +1,6 @@
 <template>
   <div id="app">
-    <!-- <nav>
-      <router-link to="/">主页</router-link> |
-      <router-link to="/teammanagement">团队管理</router-link> |
-      <router-link to="/login">登录</router-link> |
-      <router-link to="/project">项目</router-link> |
-      <router-link to="/team">团队主页</router-link> |
-      <router-link to="/personcenter">个人中心</router-link> |
-      <router-link to="/prototype">原型设计</router-link> |
-      <router-link to="/fileedit">文档编辑</router-link>
-    </nav> -->
-    <MenuTop />
-
+    <!-- <MenuTop /> -->
     <MenuLeft v-if="this.$store.state.login_state !== 0">
       <router-view />
     </MenuLeft>
@@ -20,10 +9,11 @@
 </template>
 
 <script>
-  import MenuTop from '@/components/MenuTop.vue';
+  // import MenuTop from '@/components/MenuTop.vue';
   import MenuLeft from '@/components/MenuLeft.vue';
   export default {
-    components: { MenuTop, MenuLeft },
+    // components: { MenuTop, MenuLeft },
+    components: { MenuLeft },
   };
 </script>
 <style>

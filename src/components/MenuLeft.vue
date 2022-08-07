@@ -4,6 +4,42 @@
       <el-menu background-color="#F4F3EF" text-color="#000" active-text-color="#7AC29A" :collapse="true">
         <el-submenu index="1">
           <template slot="title">
+            <div style="width: 100%; text-align: right; bod">
+              <img :src="'http://stcmp.shlprn.cn' + this.$store.state.user_photo" class="avatar" />
+            </div>
+          </template>
+
+          <el-menu-item-group>
+            <template slot="title">
+              <div style="font-size: 20px; color: #555; font-weight: bold">
+                {{ this.$store.state.username }}
+              </div>
+            </template>
+
+            <el-menu-item>
+              <router-link :to="{ path: '/personcenter' }">
+                <el-link :underline="false">
+                  <span class="el-icon-postcard"></span>
+                  <span>个人中心</span>
+                </el-link>
+              </router-link>
+            </el-menu-item>
+
+            <el-menu-item>
+              <div @click="logout()">
+                <el-link :underline="false">
+                  <span class="el-icon-switch-button"></span>
+                  <span>退出登录</span>
+                </el-link>
+              </div>
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+
+        <el-divider></el-divider>
+
+        <el-submenu index="2">
+          <template slot="title">
             <div class="el-icon-user">
               <br />
               <div style="font-size: 12px; margin-top: 5px">团队</div>
@@ -34,7 +70,7 @@
           </el-menu-item-group>
         </el-submenu>
 
-        <el-submenu index="2">
+        <el-submenu index="3">
           <template slot="title">
             <div class="el-icon-tickets">
               <br />
@@ -92,6 +128,24 @@
     },
 
     methods: {
+      logout() {
+        this.$confirm('此操作将退出登录, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        })
+          .then(() => {
+            this.$store.commit('set_userstate_to_unlogged'); //切换到游客状态
+            this.$store.commit('set_userid', 0);
+            this.$store.commit('set_username', '');
+            this.$store.commit('set_token', '');
+            this.$router.push({ path: '/' });
+          })
+          .catch(() => {
+            return;
+          });
+      },
+
       create_team_prompt() {
         let teamname;
 
@@ -137,7 +191,7 @@
       clear_recent_proj() {
         this.recent_proj.splice(0, this.recent_proj.length);
         this.$store.commit('clear_recent_proj');
-      }
+      },
     },
 
     created() {
@@ -174,6 +228,15 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
     background-color: #f4f3ef;
     padding-right: 1px;
+  }
+
+  .avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 25px;
+    position: relative;
+    left: -10px;
+    top: 15px;
   }
 
   #right {
