@@ -1,31 +1,53 @@
 <template>
   <div id="main">
     <div id="left">
-      <el-menu>
-        <el-submenu v-for="(team, i) in teamdata" :key="i" :index="'1-' + i">
+      <el-menu background-color="#F4F3EF" text-color="#000" active-text-color="#7AC29A" :collapse="true">
+        <el-submenu index="1">
           <template slot="title">
-            <router-link :to="{ path: '/team', query: { id: team.teamid } }">
-              <i class="el-icon-s-custom"></i>
-              <el-link>{{ team.teamname }}</el-link>
-            </router-link>
-          </template>
-
-          <el-menu-item v-for="(proj, j) in team.proj" :key="j" :index="'1-' + i + '-' + j">
-            <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
-              <i class="el-icon-tickets"></i>
-              <el-link>{{ proj.proj_name }}</el-link>
-            </router-link>
-          </el-menu-item>
-        </el-submenu>
-
-        <el-menu-item index="2">
-          <template slot="title">
-            <div @click="create_team_prompt()">
-              <i class="el-icon-plus"></i>
-              <span>新建团队</span>
+            <div class="el-icon-s-custom">
+              <br />
+              <div style="font-size: 12px; margin-top: 5px">团队</div>
             </div>
           </template>
-        </el-menu-item>
+
+          <el-menu-item-group>
+            <div slot="title">我加入的团队</div>
+            <el-menu-item v-for="(team, i) in teamdata" :key="i" :index="'team'+i">
+              <router-link :to="{ path: '/team', query: { id: team.teamid } }">
+                <el-link>{{ team.teamname }}</el-link>
+              </router-link>
+            </el-menu-item>
+          </el-menu-item-group>
+
+          <el-menu-item-group>
+            <el-menu-item>
+              <template slot="title">
+                <div @click="create_team_prompt()" style="font-color: #7AC29A;">
+                  <i class="el-icon-plus"></i>
+                  <span>新建团队</span>
+                </div>
+              </template>
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+
+        <el-submenu index="2">
+          <template slot="title">
+            <div class="el-icon-tickets">
+              <br />
+              <div style="font-size: 12px; margin-top: 5px">项目</div>
+            </div>
+          </template>
+
+          <el-menu-item-group>
+            <div slot="title">最近项目</div>
+            <el-menu-item v-for="(team, i) in teamdata" :key="i" :index="'proj'+i">
+              <router-link :to="{ path: '/team', query: { id: team.teamid } }">
+                <el-link>{{ team.teamname }}</el-link>
+              </router-link>
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
       </el-menu>
     </div>
 
@@ -79,7 +101,7 @@
             console.log(res);
             if (res.data.errno === 0) {
               this.$message.success('团队创建成功！');
-              setTimeout(()=> {
+              setTimeout(() => {
                 this.$router.go(0);
               }, 500);
             } else {
@@ -112,22 +134,25 @@
 
 <style scoped>
   #main {
-    display: table;
+    display: flex;
     width: 100%;
     height: 100%;
   }
 
   #left {
-    display: table-cell;
-    width: 250px;
+    width: 65px;
     min-height: 100%;
     text-align: left;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+    background-color: #f4f3ef;
+    padding-right: 1px;
   }
 
   #right {
-    display: table-cell;
+    width: 100%;
     text-align: center;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   }
 
   a,
