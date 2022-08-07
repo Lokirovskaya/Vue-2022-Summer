@@ -142,44 +142,7 @@
       </div>
       <!--分割线-->
       <br /><br />
-      <el-divider><i class="fa-solid fa-gear"></i>&nbsp;功能区</el-divider>
       <br />
-
-      <!--项目功能模块跳转-->
-      <div style="margin-left: 15%; margin-right: 15%">
-        <el-col :span="6">
-          <el-card :body-style="{ padding: '5px' }" shadow="hover">
-            <div @click="toPD">
-              <img src="https://s2.loli.net/2022/08/03/bNg8tkfHR7YG3vu.png" class="image" />
-              <div style="padding: 14px">
-                <span>原型设计</span>
-              </div>
-            </div>
-          </el-card>
-        </el-col>
-
-        <el-col :span="6" :offset="3">
-          <el-card :body-style="{ padding: '5px' }" shadow="hover">
-            <div @click="toPE">
-              <img src="https://s2.loli.net/2022/08/03/Fwx156ctoqUKWX7.png" class="image" />
-              <div style="padding: 14px">
-                <span>绘制图</span>
-              </div>
-            </div>
-          </el-card>
-        </el-col>
-
-        <el-col :span="6" :offset="3">
-          <el-card :body-style="{ padding: '5px' }" shadow="hover">
-            <div @click="toFE">
-              <img src="https://s2.loli.net/2022/08/03/Rs2HO48IXf5PFlu.png" class="image" />
-              <div style="padding: 14px">
-                <span>编辑文档</span>
-              </div>
-            </div>
-          </el-card>
-        </el-col>
-      </div>
     </div>
   </div>
 </template>
@@ -228,18 +191,6 @@
       };
     },
     methods: {
-      toPD() {
-        //Prototype design
-        this.$router.push({ path: '/prototypelist', query: { id: this.$route.query.id } });
-      },
-      toPE() {
-        //Photo Edit
-        window.open('https://app.diagrams.net/?src=about');
-      },
-      toFE() {
-        //File edit
-        this.$router.push({ path: '/file', query: { id: this.$route.query.id } });
-      },
       EditProjInfo() {
         //改版函数
         if (
