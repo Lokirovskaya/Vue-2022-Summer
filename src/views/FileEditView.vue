@@ -471,7 +471,7 @@ export default {
         })
         //console.log(this.editor.getHTML());
         const file_name = this.$route.query.name + '.md';
-        console.log(this.editor.getText()); // todo
+        console.log(this.editor.getHTML()); // todo
         const data = turndown.turndown(this.editor.getHTML());
         const blob = new Blob([data], { type: "text/plain" });
         const a = document.createElement("a");
@@ -495,6 +495,7 @@ export default {
     },
     gerarPdfDoComponente() {
       //var content = document.querySelector('#pdfDom');
+      /*
       var pdfDom = document.querySelector('#pdfDom')
       var width = pdfDom.offsetWidth; //dom宽
       var height = pdfDom.offsetHeight; //dom高
@@ -513,44 +514,7 @@ export default {
       canvas.style.width = width + 'px';
       canvas.style.height = height + 'px';
       var context = canvas.getContext("2d")
-      context.scale(2, 2) // 增强图片清晰度
-      html2canvas(pdfDom, opts).then(function (canvas) {
-        let contentWidth = canvas.width
-        let contentHeight = canvas.height
-        let pageHeight = contentWidth / 592.28 * 841.89
-        let leftHeight = contentHeight
-        let position = 0
-        //a4纸的尺寸[595.28,841.89]，html 页面生成的 canvas 在pdf中图片的宽高
-        let imgWidth = 590
-        let imgHeight = 592.28 / contentWidth * contentHeight
-        /*
-        var a = document.getElementById("pdfDom").getElementsByTagName("img");
-        for(var item of a){
-          var src1 = item.getAttribute("src") +'1';
-          item.setAttribute("src", src1);
-        } */
-        let pageData = canvas.toDataURL('image/jpeg', 1.0)//0-1清晰度
-        let PDF = new JsPDF('', 'pt', 'a4')// 下载尺寸 a4 纸 比例
-        //有两个高度需要区分，一个是html页面的实际高度，和生成pdf的页面高度(841.89)
-        //当内容未超过pdf一页显示的范围，无需分页
-        if (leftHeight < pageHeight) {
-          // PDF.addImage(pageData, 'JPEG', 左，上，宽度，高度)设置
-          PDF.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight)
-        } else {
-          while (leftHeight > 0) {
-            PDF.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
-            leftHeight -= pageHeight
-            position -= 841.89
-            //避免添加空白页
-            if (leftHeight > 0) {
-              PDF.addPage()
-            }
-          }
-        }
-
-        PDF.save(this.$route.query.name + '.pdf')
-      })
-      /*
+      context.scale(2, 2) // 增强图片清晰度*/
       html2canvas(document.querySelector('#pdfDom')).then(canvas => {
         let contentWidth = canvas.width
         let contentHeight = canvas.height
@@ -574,7 +538,7 @@ export default {
           }
         }
         PDF.save(this.$route.query.name + '.pdf')
-      }) */
+      })
     },
     exportWord() {
       const name = this.$route.query.name + '.doc'
@@ -801,7 +765,7 @@ export default {
   border-right-color: rgb(13, 13, 13);
   position: fixed;
   width: fill;
-  z-index:1000;
+  z-index: 1000;
   background-color: white;
 }
 
@@ -811,6 +775,7 @@ export default {
   padding-right: 1rem;
   padding-bottom: 1.25rem;
   padding-left: 1rem;
+  min-height: 40em;
   text-align: left;
   flex: 1 1 auto;
   flex-grow: 1;
