@@ -12,7 +12,8 @@
                                 <div @click="edit_file(item.file_id)">编辑文档</div>
                             </el-dropdown-item>
                             <el-dropdown-item>
-                                <div @click="file_rename_dialog_visible = true; file_rename_id = item.file_id;">重命名</div>
+                                <div @click="file_rename_dialog_visible = true; file_rename_id = item.file_id;">重命名
+                                </div>
                             </el-dropdown-item>
                             <el-dropdown-item style="color: red">
                                 <div @click="delete_file(item.file_id)">删除文档</div>
@@ -21,10 +22,10 @@
                     </el-dropdown>
                 </div>
 
-                <div>文档名:{{item.file_name}}<br>
-                    文档ID:{{item.file_id}}<br>
-                    文档创建者:{{item.file_creator}}<br>
-                    文档创建时间:{{item.create_time}}<br>
+                <div>文档名:{{ item.file_name }}<br>
+                    文档ID:{{ item.file_id }}<br>
+                    文档创建者:{{ item.file_creator }}<br>
+                    文档创建时间:{{ item.create_time }}<br>
                 </div>
             </el-card>
 
@@ -38,9 +39,12 @@
             <!-- new proj prompt dialog -->
             <el-dialog title="新建文档" :visible.sync="new_file_dialog_visible" width="40%">
                 <div style="margin-left:10%;margin-right:10%;">
-
                     <el-input placeholder="请输入新建文档名" prefix-icon="el-icon-notebook-2" v-model="new_file_name">
                     </el-input>
+                    <el-select v-model="value" clearable placeholder="请选择模板(非必选)" style="position: relative;top:10px;">
+                        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                        </el-option>
+                    </el-select>
                 </div>
                 <div slot="footer">
                     <el-button @click="new_file_dialog_visible = false">取消</el-button>
@@ -51,7 +55,6 @@
             <!--rename file prompt dialog -->
             <el-dialog title="重命名文档" :visible.sync="file_rename_dialog_visible" width="40%">
                 <div style="margin-left:10%;margin-right:10%;">
-
                     <el-input placeholder="请输入新名字" prefix-icon="el-icon-notebook-2" v-model="file_rename">
                     </el-input>
                 </div>
@@ -76,12 +79,29 @@ export default {
             file_rename_id: 0, //重命名文档的id
             file_rename: '',
             file_list: [], //文档列表
+            value: '',
+            options: [{
+                value: '选项1',
+                label: '黄金糕'
+            }, {
+                value: '选项2',
+                label: '双皮奶'
+            }, {
+                value: '选项3',
+                label: '蚵仔煎'
+            }, {
+                value: '选项4',
+                label: '龙须面'
+            }, {
+                value: '选项5',
+                label: '北京烤鸭'
+            }],
         }
     },
     methods: {
         edit_file(file_id) {
             console.log(file_id);
-            this.$router.push({ path: '/fileedit' , query: {id: file_id} }); //跳转到该文档的编辑界面
+            this.$router.push({ path: '/fileedit', query: { id: file_id } }); //跳转到该文档的编辑界面
         },
         rename_file() {
             console.log(this.file_rename_id);
@@ -99,8 +119,8 @@ export default {
                             console.log(res.data);//测试一下
                             this.$message.success('重命名成功');
                             this.file_rename_dialog_visible = false;
-                            for(var item of this.file_list){
-                                if(item.file_id === this.file_rename_id){
+                            for (var item of this.file_list) {
+                                if (item.file_id === this.file_rename_id) {
                                     item.file_name = this.file_rename;
                                 }
                             }
@@ -132,10 +152,10 @@ export default {
                             console.log(res.data);//测试一下
                             //this.$message.success('重命名成功' + this.file_rename_id);
                             var i = 0;
-                            for(var item of this.file_list){
-                                if(item.file_id === file_id){
+                            for (var item of this.file_list) {
+                                if (item.file_id === file_id) {
                                     break;
-                                }else{
+                                } else {
                                     i++;
                                 }
                             }
@@ -190,7 +210,7 @@ export default {
         },
     },
     mounted() {
-        this.$axios.post('/project/getFileList', qs.stringify({  proj_id: this.$route.query.id }), {
+        this.$axios.post('/project/getFileList', qs.stringify({ proj_id: this.$route.query.id }), {
             headers: {
                 userid: this.$store.state.userid,
                 token: this.$store.state.token,

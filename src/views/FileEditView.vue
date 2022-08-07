@@ -97,6 +97,44 @@
                     </el-upload>
                 </el-tooltip>
                 <div class="divider"></div>
+                <!--CreateTable-->
+                <el-tooltip class="item" effect="dark" content="插入表格" placement="bottom">
+                    <el-button class="menu-item"
+                        @click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()">
+                        <i class="iconfont">&#xe61b;</i>
+                    </el-button>
+                </el-tooltip>
+                <!--Deletetable-->
+                <el-tooltip class="item" effect="dark" content="删除表格" placement="bottom">
+                    <el-button class="menu-item" @click="editor.chain().focus().deleteTable().run()">
+                        <i class="iconfont">&#xe61b;</i>
+                    </el-button>
+                </el-tooltip>
+                <!--InsertColumn-->
+                <el-tooltip class="item" effect="dark" content="插入列" placement="bottom">
+                    <el-button class="menu-item" @click="editor.chain().focus().addColumnAfter().run()">
+                        <i class="iconfont">&#xe61b;</i>
+                    </el-button>
+                </el-tooltip>
+                <!--DeleteColumn-->
+                <el-tooltip class="item" effect="dark" content="删除列" placement="bottom">
+                    <el-button class="menu-item" @click="editor.chain().focus().deleteColumn().run()">
+                        <i class="iconfont">&#xe61b;</i>
+                    </el-button>
+                </el-tooltip>
+                <!--InsertRow-->
+                <el-tooltip class="item" effect="dark" content="插入行" placement="bottom">
+                    <el-button class="menu-item" @click="editor.chain().focus().addRowAfter().run()">
+                        <i class="iconfont">&#xe61b;</i>
+                    </el-button>
+                </el-tooltip>
+                <!--DeleteRow-->
+                <el-tooltip class="item" effect="dark" content="删除行" placement="bottom">
+                    <el-button class="menu-item" @click="editor.chain().focus().deleteRow().run()">
+                        <i class="iconfont">&#xe61b;</i>
+                    </el-button>
+                </el-tooltip>
+                <div class="divider"></div>
                 <!--undo-->
                 <el-tooltip class="item" effect="dark" content="撤销" placement="bottom">
                     <el-button class="menu-item" @click="editor.chain().focus().undo().run()"
@@ -114,6 +152,12 @@
                 <!--save-->
                 <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
                     <el-button class="menu-item" @click="Save">
+                        <i class="iconfont">&#xe762;</i>
+                    </el-button>
+                </el-tooltip>
+                <!--download-->
+                <el-tooltip class="item" effect="dark" content="下载" placement="bottom">
+                    <el-button class="menu-item" @click="Download">
                         <i class="iconfont">&#xe762;</i>
                     </el-button>
                 </el-tooltip>
@@ -148,6 +192,10 @@ import HorizontalRule from '@tiptap/extension-horizontal-rule'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import Gapcursor from '@tiptap/extension-gapcursor'
 import Image from '@tiptap/extension-image'
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
 
 import * as Y from 'yjs'
 import { WebsocketProvider } from "y-websocket";
@@ -177,7 +225,7 @@ export default {
             var i = Math.floor(Math.random() * 10);
             return this.color[i];
         },
-        beforeImageUpload(file) {
+        beforeImageUpload(file) { //检查格式和大小
             console.log('before');
             const isJPG = file.type === 'image/jpeg';
             const isLt2M = file.size / 1024 / 1024 < 2;
@@ -189,13 +237,37 @@ export default {
             }
             return isJPG && isLt2M;
         },
-        uploadImage() {
+        uploadImage(e) {
             //上传文件接受url
-            const url = null;
+            let formData = new FormData();
+            formData.append('in_file', e.file);
+            let my_axios = this.$axios.create({
+                withCredentials: true,
+                headers: {
+                    userid: this.$store.state.userid,
+                    token: this.$store.state.token,
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            my_axios.post('/project/upload_file_image', { file_id: this.$route.query.id, image: e.file })
+                .then(res => {
+                    if (res.data.errno === 0) {
+                        this.$message.success('上传图片成功成功！');
+                        var url = null;
+                        url = 'http://stcmp.shlprn.cn'+ res.data.url;
+                        if (url) {
+                            this.editor.chain().focus().setImage({ src: url }).run();
+                        }
+                    }
+                    else {
+                        this.$message.error(res.data.msg);
+                    }
+                })
+                .catch(err => {
+                    this.$message.error(err);
+                });
             //上传图片并且获取其url
-            if (url) {
-                this.editor.chain().focus().setImage({ src: url }).run();
-            }
+
         },
         handleImageSuccess(res, file) {
             console.log('success');
@@ -236,6 +308,9 @@ export default {
                 .catch(err => {
                     this.$message.error(err);
                 });
+        },
+        Download() {
+            console.log('download success!');
         }
     },
     mounted() {
@@ -264,6 +339,12 @@ export default {
                 Gapcursor,
                 Image,
                 Dropcursor,
+                Table.configure({
+                    resizable: true,
+                }),
+                TableRow,
+                TableHeader,
+                TableCell,
                 Highlight.configure({ multicolor: true }),
                 Collaboration.configure({
                     document: ydoc,
@@ -624,6 +705,65 @@ export default {
     border-top-right-radius: 0.5rem;
     border-bottom-right-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
+}
+
+.tableWrapper {
+    padding: 1rem 0;
+    padding-top: 1rem;
+    padding-right: 0px;
+    padding-bottom: 1rem;
+    padding-left: 0px;
+    overflow-x: auto;
+}
+
+tbody {
+    display: table-row-group;
+    vertical-align: middle;
+    border-color: inherit;
+    border-top-color: inherit;
+    border-right-color: inherit;
+    border-bottom-color: inherit;
+    border-left-color: inherit;
+}
+
+tr {
+    display: table-row;
+    vertical-align: inherit;
+    border-color: inherit;
+    border-top-color: inherit;
+    border-right-color: inherit;
+    border-bottom-color: inherit;
+    border-left-color: inherit;
+}
+
+.ProseMirror table th {
+    font-weight: 700;
+    text-align: left;
+    background-color: #f1f3f5;
+}
+
+.ProseMirror table td,
+.ProseMirror table th {
+    min-width: 1em;
+    border: 2px solid #ced4da;
+    padding: 3px 5px;
+    vertical-align: top;
+    box-sizing: border-box;
+    position: relative;
+}
+
+.ProseMirror table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    margin-top: 0px;
+    margin-right: 0px;
+    margin-bottom: 0px;
+    margin-left: 0px;
+    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
 
 :focus-visible {
