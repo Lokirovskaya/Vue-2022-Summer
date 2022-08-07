@@ -48,8 +48,10 @@
               {{ element.text }}
             </div>
             <component
-              :is="element.tag"
               class="drag-element"
+              :is="element.tag"
+              v-bind="element.props"
+              v-model="element.dummy_model"
               :style="'height: 100%; font-size:' + element.font_size + 'px;'"
             >
               {{ element.text }}
@@ -69,7 +71,7 @@
 
         <span>
           宽<el-input-number
-            v-model="canvas_width"
+            v-model="self_model"
             :controls="false"
             :min="100"
             :max="1500"
@@ -93,41 +95,12 @@
 
       <div id="info-area" v-if="activated_index >= 0">
         <div class="title">组件信息</div>
-        <div style="text-align: left">
-          <div>
-            {{ drag_elements[activated_index].name }}
-            ({{ drag_elements[activated_index].x }}, {{ drag_elements[activated_index].y }})
-          </div>
-          <!-- <div>
-            width: {{ drag_elements[activated_index].width }} height:
-            {{ drag_elements[activated_index].height }}
-          </div> -->
-          <div>
-            显示文字：
-            <el-input v-model="drag_elements[activated_index].text"></el-input>
-          </div>
-          <div>
-            字体大小：
-            <el-input-number
-              v-model="drag_elements[activated_index].font_size"
-              :min="12"
-              :max="64"
-            ></el-input-number>
-          </div>
-          <el-button type="danger" icon="el-icon-delete" @click="delete_activated()" circle></el-button>
-          <el-button
-            type="primary"
-            icon="el-icon-top"
-            @click="drag_elements[activated_index].z++"
-            circle
-          ></el-button>
-          <el-button
-            type="primary"
-            icon="el-icon-bottom"
-            @click="drag_elements[activated_index].z--"
-            circle
-          ></el-button>
-        </div>
+        <GeneralToolBar
+          :ActiveElement="drag_elements[activated_index]"
+          @delete-clicked="delete_activated()"
+        />
+        <ButtonToolBar :ActiveElement="drag_elements[activated_index]" />
+        <InputToolBar :ActiveElement="drag_elements[activated_index]" />
       </div>
     </div>
 
@@ -157,27 +130,23 @@
   import VueDragResize from 'vue-drag-resize';
   import html2canvas from 'html2canvas';
   import Canvas2Image from '@/assets/canvas2image.js';
+
+  import toolbar_items from '@/views/PrototypeViews/ToolBarItems.js';
+  import GeneralToolBar from '@/views/PrototypeViews/ToolBars/GeneralToolBar.vue';
+  import ButtonToolBar from '@/views/PrototypeViews/ToolBars/ButtonToolBar.vue';
+  import InputToolBar from '@/views/PrototypeViews/ToolBars/InputToolBar.vue';
   export default {
     name: 'PrototypeView',
-    components: { VueDragResize },
+    components: { VueDragResize, GeneralToolBar, ButtonToolBar, InputToolBar },
 
     data() {
       return {
+        dummy: 0,
         id: 0, // 只是为了 v-for 的 key，没有实际意义
 
         activated_index: -1,
 
-        toolbar_items: [
-          { name: '按钮', tag: 'el-button', width: 90, height: 40, text: '按钮', inner_text: true },
-          { name: '文本', tag: 'div', width: 70, height: 20, text: '文本', inner_text: true },
-          { name: '输入框', tag: 'el-input', width: 150, height: 40, text: '', inner_text: false },
-          { name: '单选框', tag: 'el-radio', width: 70, height: 20, text: '单选框', inner_text: true },
-          { name: '多选框', tag: 'el-checkbox', width: 70, height: 20, text: '多选框', inner_text: true },
-          { name: '开关', tag: 'el-switch', width: 50, height: 30, text: '', inner_text: false },
-          { name: '滑块', tag: 'el-slider', width: 150, height: 40, text: '', inner_text: false },
-          { name: '评分', tag: 'el-rate', width: 140, height: 20, text: '', inner_text: false },
-          { name: '卡片', tag: 'el-card', width: 200, height: 200, text: '卡片', inner_text: true },
-        ],
+        toolbar_items, // import from js
 
         drag_elements: [], // 参考 add_element
 
@@ -206,6 +175,8 @@
           font_size: 15,
           text: item.text,
           inner_text: item.inner_text,
+          props: item.props,
+          self_model: 0,  // 给那些没有 v-model 就运作不了的家伙一个出口
         };
         this.drag_elements.push(element);
         this.id++;
