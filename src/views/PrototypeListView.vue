@@ -1,6 +1,6 @@
 <template>
     <div id="prototype">
-        <div id="title">原型标题标题标题</div>
+        <div id="title">原型编辑</div>
 
         <div id="prototypes">
             <el-card class="one-prototype box-card" shadow="hover" v-for="item in prototype_list" :key="item.proto_id">
@@ -22,7 +22,7 @@
                 </div>
 
                 <div>原型图名:{{item.proto_name}}<br>
-                    原型图ID:{{item.proto_id}}<br>
+                    <!-- 原型图ID:{{item.proto_id}}<br> -->
                     创建者:{{item.creator_name}}<br>
                 </div>
                 <img :src="item.proto_photo" style="width: 160px;" />

@@ -8,6 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@hocuspocus/provider": "^1.0.0-alpha.39",
     "@tiptap/extension-blockquote": "^2.0.0-beta.29",
     "@tiptap/extension-bold": "^2.0.0-beta.28",
     "@tiptap/extension-bullet-list": "^2.0.0-beta.29",
