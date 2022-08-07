@@ -37,7 +37,7 @@ const routes = [
   {
     path: '/project',
     name: 'project',
-    component: () => import('../views/ProjectView.vue'),
+    component: () => import('../views/ProjectViews/ProjectMainView.vue'),
   },
   {
     path: '/personcenter',
@@ -47,17 +47,17 @@ const routes = [
   {
     path: '/prototypelist',
     name: 'prototypelist',
-    component: () => import('../views/PrototypeListView.vue'),
+    component: () => import('../views/ProjectViews/PrototypeListView.vue'),
   },
   {
     path: '/prototype',
     name: 'prototype',
-    component: () => import('../views/PrototypeView.vue'),
+    component: () => import('../views/PrototypeViews/PrototypeEdit.vue'),
   },
   {
     path: '/file',
     name: 'file',
-    component: () => import('../views/FileView.vue'),
+    component: () => import('../views/ProjectViews/FileView.vue'),
   },
   {
     path: '/fileedit',

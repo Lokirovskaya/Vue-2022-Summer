@@ -1,43 +1,55 @@
 <template>
-  <div id="prototype">
-    <div id="title">原型编辑</div>
-
-    <div id="prototypes">
-      <div v-for="(proto, i) in prototype_list" :key="i" class="one-prototype">
-        <div style="height: 70%">
-          <!-- <div style="background-color: gray;"></div> -->
-          <router-link :to="{ path: '/prototype', query: { id: proto.proto_id } }">
-            <img style="width: 100%; height: 100%; border-radius: 20px" src="@/assets/logo.png" />
-          </router-link>
-        </div>
-
-        <div style="height: 30%; margin-left: 10px">
-          <span>
-            <router-link :to="{ path: '/prototype', query: { id: proto.proto_id } }">
-              <el-link class="proto-title">{{ proto.proto_name }}</el-link>
-            </router-link>
-          </span>
-
-          <span style="text-align: right; float: right; margin-right: 10px; margin-top: 10px">
-            <el-dropdown>
-              <i class="el-icon-more" style="font-size: 18px"></i>
-              <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item>
-                  <div @click="edit_prototype(proto.proto_id)">编辑原型</div>
-                </el-dropdown-item>
-                <el-dropdown-item style="color: red">
-                  <div @click="delete_prototype(proto.proto_id)">删除原型</div>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </el-dropdown>
-          </span>
-        </div>
+  <div id="main">
+    <div id="left">
+      <div class="title">从模板新建</div>
+      <div id="template-prototypes">
+        <div class="one-template-prototype"></div>
+        <div class="one-template-prototype"></div>
+        <div class="one-template-prototype"></div>
       </div>
+    </div>
 
-      <div class="new-prototype">
-        <div @click="new_prototype_dialog_visible = true">
-          <i class="el-icon-plus" style="font-size: 50px"></i>
-          <div style="font-size: 18px; color: gray">新建原型</div>
+    <div id="right">
+      <div class="title">项目原型</div>
+      <el-divider></el-divider>
+
+      <div id="prototypes">
+        <div class="one-prototype" v-for="(proto, i) in prototype_list" :key="i">
+          <div style="height: 70%">
+            <!-- <div style="background-color: gray;"></div> -->
+            <router-link :to="{ path: '/prototype', query: { id: proto.proto_id } }">
+              <img style="width: 100%; height: 100%; border-radius: s" src="@/assets/logo.png" />
+            </router-link>
+          </div>
+
+          <div style="height: 30%; margin-left: 10px">
+            <span>
+              <router-link :to="{ path: '/prototype', query: { id: proto.proto_id } }">
+                <el-link class="proto-title">{{ proto.proto_name }}</el-link>
+              </router-link>
+            </span>
+
+            <span style="text-align: right; float: right; margin-right: 10px; margin-top: 10px">
+              <el-dropdown>
+                <i class="el-icon-more" style="font-size: 18px"></i>
+                <el-dropdown-menu slot="dropdown">
+                  <el-dropdown-item>
+                    <div @click="edit_prototype(proto.proto_id)">编辑原型</div>
+                  </el-dropdown-item>
+                  <el-dropdown-item style="color: red">
+                    <div @click="delete_prototype(proto.proto_id)">删除原型</div>
+                  </el-dropdown-item>
+                </el-dropdown-menu>
+              </el-dropdown>
+            </span>
+          </div>
+        </div>
+
+        <div class="new-prototype">
+          <div @click="new_prototype_dialog_visible = true">
+            <i class="el-icon-plus" style="font-size: 50px"></i>
+            <div style="font-size: 18px; color: gray">新建原型</div>
+          </div>
         </div>
       </div>
     </div>
@@ -230,18 +242,29 @@
 </script>
 
 <style scoped>
-  #prototype {
+  #main {
     width: 100%;
-    min-height: 100%;
+    height: 100%;
     display: flex;
-    flex-direction: column;
   }
 
-  #title {
+  #left {
+    width: 350px;
+    height: 100%;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04);
+  }
+
+  #right {
+    width: 100%;
+    height: 100%;
+    padding-left: 20px;
+  }
+
+  .title {
     width: 100%;
     padding-top: 10px;
     text-align: left;
-    font-size: 30px;
+    font-size: 25px;
   }
 
   #prototypes {
@@ -278,6 +301,23 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04);
+  }
+
+  #template-prototypes {
+    overflow-y: auto;
+    height: 100%;
+    padding: 15px;
+  }
+
+  .one-template-prototype {
+    width: 200px;
+    height: 120px;
+    margin: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04);
+    border-radius: 20px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
   }
 
   a,
