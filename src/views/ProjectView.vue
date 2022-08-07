@@ -60,8 +60,6 @@
                 team_name: res.data.proj_team,
               };
               this.$store.commit('push_recent_proj', recent_info);
-
-              console.log('recent', this.$store.state.recent_proj);
             } else {
               this.$message.error(res.data.msg);
             }
