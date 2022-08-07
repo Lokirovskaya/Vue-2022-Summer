@@ -1,7 +1,7 @@
 <template>
   <div id="main">
     <div id="left">
-      <el-menu  background-color="#F4F3EF" text-color="#000" active-text-color="#7AC29A" :collapse="true">
+      <el-menu background-color="#ECF5FF" text-color="#000" active-text-color="#7AC29A" :collapse="true">
         <el-submenu index="1">
           <template slot="title">
             <div style="width: 100%; text-align: right; bod">
@@ -222,10 +222,10 @@ export default {
 
 #left {
   width: 65px;
-  height: fill;
+  height: 100%;
   text-align: left;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-  background-color: #f4f3ef;
+  background-color: #ECF5FF;
   padding-right: 1px;
 }
 
@@ -240,9 +240,12 @@ export default {
 
 #right {
   width: 100%;
+  height: 100%;
   text-align: center;
   background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  padding-left: 20px;
+  padding-bottom: 0px;
 }
 
 a,

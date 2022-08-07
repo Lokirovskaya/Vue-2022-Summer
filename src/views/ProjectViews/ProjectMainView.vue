@@ -1,5 +1,5 @@
 <template>
-  <div style="width: 100%; height: 100%; padding: 20px">
+  <div style="width: 100%; height: 100%;">
     <div id="title">
       <router-link :to="{ path: '/team', query: { id: this.proj_team_id } }">
         <el-link :underline="false" id="back-arrow">
@@ -20,9 +20,9 @@
 <script>
   import qs from 'qs';
 
-  import ProjectInfoView from '@/views/ProjectInfoView.vue';
-  import PrototypeListView from '@/views/PrototypeListView.vue';
-  import FileView from '@/views/FileView.vue';
+  import ProjectInfoView from '@/views/ProjectViews/ProjectInfoView.vue';
+  import PrototypeListView from '@/views/ProjectViews/PrototypeListView.vue';
+  import FileView from '@/views/ProjectViews/FileView.vue';
 
   export default {
     name: 'ProjectView',

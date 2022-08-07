@@ -30,9 +30,6 @@
           </div>
           <el-divider><i class="el-icon-user-solid"></i>&nbsp;我的团队</el-divider>
         <div id="teams">
-      <!-- <div v-for=" team in team_ifo" :key="team.id" class="one-team"> -->
-        
-        <!-- <div v-if="JSON.stringify(this.team_ifo) != '{}'"> -->
         <div v-for="(team, i) in team_ifo" :key="i" :index="'1-' + i" class="one-team">
         <router-link :to="{ path: '/team', query: { id: team.teamid } }">
         <el-button id="team_button"><img src="../assets/team.png" id="team_pic" @click="goto_team"></el-button>
@@ -48,20 +45,14 @@
              <div style="display: flex; justify-items: center; align-items: center; flex-direction: column;">
 
             <div v-if="is_visit_self === 0" style="margin-left: auto;">
-              <el-button style="position:relative;left:-10px;" @click="
-                modify_state = 0;
-                input_username = username;
-                input_password = '';
-                input_password2 = '';
-                ">
+              <br>
+              <el-button style="position:relative;left:-10px;" @click="go_back">
                 返回
               </el-button>
             </div>
 
             <el-upload class="avatar-uploader" action="" :http-request="upload_file" :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"  :auto-upload="true" :showFileList="false">
-              <!-- <img v-if="url_upload" :src="'http://stcmp.shlprn.cn/api'+url_upload" class="avatar">
-              <img v_else :src="'http://stcmp.shlprn.cn/api'+url_now" class="avatar"> -->
               <img :src="'http://stcmp.shlprn.cn'+this.$store.state.user_photo" class="avatar">
             </el-upload>
             <div>点击上方修改头像</div>
@@ -111,9 +102,6 @@ import qs from "qs";
         input_password: undefined,
         input_password2: undefined,
         is_visit_self: 0, //0：访问自己主页
-        url_upload: undefined,
-        url_now: this.$store.state.user_photo,
-        // team_ifo:[{teamname:'a',teamid:1},{teamname:'b',teamid:2}],
         team_ifo:[],
       }
     },
@@ -136,6 +124,7 @@ import qs from "qs";
             if (res.data.errno === 0) {
               this.$message.success(res.data.msg);
               this.$store.commit('set_username', res.data.username); 
+              // this.$router.go(0);
               // this.modify_state = 0;
             }
             else {
@@ -194,9 +183,8 @@ import qs from "qs";
           .then(res => {
             if (res.data.errno === 0) {
               this.$message.success('头像修改成功！');
-              this.url_now = res.data.photo;
-              this.url_upload = res.data.photo;
-              this.$store.state.user_photo = res.data.photo;
+              console.log('new:'+res.data.photo);
+              this.$store.commit('set_userphoto', res.data.photo); 
             }
             else {
               this.$message.error(res.data.msg);
@@ -210,7 +198,6 @@ import qs from "qs";
         console.log('success');
         // alert('imageurl:' + this.imageUrl);
         this.imageUrl = URL.createObjectURL(file.raw);
-        this.url_upload = this.imageUrl;
       },
       beforeAvatarUpload(file) {
         console.log('before');
@@ -241,12 +228,18 @@ import qs from "qs";
               this.$message.error(err);
             });
 
+      },
+
+      go_back() {
+          this.modify_state = 0;
+                this.$router.go(0);
       }
 
     },
     mounted: function () {
       // alert('页面一加载，就会弹出此窗口')
       this.init_teamifo();
+      console.log(this.$store.state.user_photo)
     },
   };
 </script>
