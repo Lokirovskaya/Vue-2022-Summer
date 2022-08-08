@@ -26,6 +26,15 @@
             </el-menu-item>
 
             <el-menu-item>
+              <router-link :to="{ path: '/doccenter' }">
+                <el-link :underline="false">
+                  <span class="el-icon-postcard"></span>
+                  <span>文档中心</span>
+                </el-link>
+              </router-link>
+            </el-menu-item>
+
+            <el-menu-item>
               <div @click="logout()">
                 <el-link :underline="false">
                   <span class="el-icon-switch-button"></span>
@@ -104,6 +113,47 @@
             </el-menu-item>
           </el-menu-item-group>
         </el-submenu>
+
+        <el-submenu index="4">
+          <template slot="title">
+            <div class="el-icon-folder-opened">
+              <br />
+              <div style="display:flex; font-size: 12px; margin-top: 5px; justify-content:center">文档</div>
+            </div>
+          </template>
+
+          <el-menu-item-group>
+            <div slot="title">项目文档</div>
+            <el-menu-item v-for="(doc, i) in doc_ifo" :key="doc.doc_name" :index="'doc' + i">
+              <!-- <router-link :to="{ path: '/project', query: { id: proj.proj_id } }"> -->
+                <el-link :underline="false">
+                  <el v-for="(doc, i) in doc_ifo" :key="doc.doc_name" :index="'doc' + i">
+                      <li></li>
+                  </el>
+
+                  <span class="el-icon-tickets"></span>
+                  <span>{{ doc.belong_proj }}</span>
+                  <span style="font-weight: bold"> / </span>
+                  
+                  <span class="el-icon-folder-opened"></span>
+                  <span style="font-weight: bold">{{ doc.doc_name }}</span>
+                </el-link>
+              <!-- </router-link> -->
+            </el-menu-item>
+          </el-menu-item-group>
+
+          <el-menu-item-group>
+            <el-menu-item>
+              <template slot="title">
+                <div @click="clear_recent_doc()" style="font-color: #7ac29a">
+                  <span class="el-icon-circle-close"></span>
+                  <span>清除所有</span>
+                </div>
+              </template>
+            </el-menu-item>
+          </el-menu-item-group>
+        </el-submenu>
+
       </el-menu>
     </div>
     <div id="right">
@@ -123,6 +173,20 @@ export default {
       teamdata: [],
       // {proj_id, proj_name, team_name}
       recent_proj: [],
+      doc_ifo:[
+        {
+          doc_name:'abc',
+          belong_proj:'proj1',
+        },
+        {
+          doc_name:'abc',
+          belong_proj:'proj2',
+        },
+        {
+          doc_name:'abc',
+          belong_proj:'proj3',
+        },
+      ],
     };
   },
 
@@ -210,6 +274,9 @@ export default {
 
     this.recent_proj = this.$store.state.recent_proj;
   },
+  clear_recent_doc(){
+
+  }
 };
 </script>
 
