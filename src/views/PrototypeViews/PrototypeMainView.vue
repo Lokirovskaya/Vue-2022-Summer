@@ -10,8 +10,8 @@
       <span>原型名称</span>
     </div>
     <el-tabs v-model="current_tab_name" @tab-click="tab_change">
-      <el-tab-pane label="原型编辑" name="info"><PrototypeEdit /></el-tab-pane>
-      <el-tab-pane label="原型预览" name="prototype"><PrototypePreview /></el-tab-pane>
+      <el-tab-pane label="原型编辑" name="edit"><PrototypeEdit /></el-tab-pane>
+      <el-tab-pane label="原型预览" name="preview"><PrototypePreview /></el-tab-pane>
     </el-tabs>
   </div>
 </template>
@@ -28,7 +28,7 @@
 
     data() {
       return {
-        current_tab_name: 'info',
+        current_tab_name: 'edit',
         proj_name: '',
         proj_team_id: 0,
       };
@@ -48,7 +48,7 @@
       if ('tab' in this.$route.query) {
         this.current_tab_name = this.$route.query.tab;
       } else {
-        this.current_tab_name = 'info';
+        this.current_tab_name = 'edit';
       }
       this.get_proj_info();
     },

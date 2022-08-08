@@ -2,24 +2,15 @@
 <template>
   <div style="text-align: left">
     <div>
-      <span>选项：</span>
+      <span>下拉表项：</span>
       <span>
-        <el-select v-model="ActiveElement.props.type" placeholder="选择颜色" style="width: 200px">
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-            :style="'color:' + item.color + ';font-weight:bold;'"
-          >
-          </el-option>
-        </el-select>
         <el-input
           type="textarea"
           :autosize="{ minRows: 2 }"
           placeholder="请输入下拉框的所有选项，一行一个"
           v-model="text"
           @change="change_items"
+          style="width: 200px"
         >
         </el-input>
       </span>
@@ -36,7 +27,7 @@
 
 <script>
   export default {
-    name: 'ButtonToolBar',
+    name: 'SelectToolBar',
     props: ['ActiveElement'],
     data() {
       return {
@@ -45,7 +36,17 @@
     },
 
     methods: {
-      change_items() {},
+      change_items() {
+        let lines = this.text.split('\n');
+        let options = [];
+        let len = lines.length;
+        for (let i = 0; i < len; i++) {
+          if (lines[i].trim() === '') continue;
+          options.push({ value: lines[i].trim() });
+        }
+        // eslint-disable-next-line vue/no-mutating-props
+        this.ActiveElement.child_props = options;
+      },
     },
   };
 </script>

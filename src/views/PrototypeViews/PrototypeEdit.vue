@@ -14,50 +14,66 @@
       </el-button>
     </div>
 
-    <div :style="'width:' + canvas_width + 'px;'" :key="canvas_key">
-      <div
-        id="drag-area"
-        ref="screenshotArea"
-        :style="'width:' + canvas_width + 'px;height:' + canvas_height + 'px;'"
-        @mousedown="unset_active()"
-      >
-        <VueDragResize
-          v-for="(element, i) in drag_elements"
-          :key="element.id"
-          :parentLimitation="true"
-          :x="element.x"
-          :y="element.y"
-          :z="element.z"
-          :w="element.width"
-          :h="element.height"
-          :isActive="element.active"
-          :minw="20"
-          :minh="20"
-          :snapToGrid="true"
-          :gridX="10"
-          :gridY="10"
-          @activated="set_active(i)"
-          @dragging="set_position($event, i)"
-          @resizing="set_size($event, i)"
+    <div id="work-area">
+      <div :style="'width:' + canvas_width + 'px;'" :key="canvas_key">
+        <div
+          id="drag-area"
+          ref="screenshotArea"
+          :style="
+            'width:' +
+            canvas_width +
+            'px;height:' +
+            canvas_height +
+            'px; transform: scale(' +
+            canvas_scale +
+            ');'
+          "
+          @mousedown="unset_active()"
         >
-          <div style="height: 100%; display: flex; align-items: center">
-            <div
-              v-if="element.inner_text === false"
-              :style="'white-space: nowrap; margin-right: 5px; font-size:' + element.font_size + 'px;'"
-            >
-              {{ element.text }}
+          <VueDragResize
+            v-for="(element, i) in drag_elements"
+            :key="element.id"
+            :parentLimitation="true"
+            :x="element.x"
+            :y="element.y"
+            :z="element.z"
+            :w="element.width"
+            :h="element.height"
+            :isActive="element.active"
+            :minw="20"
+            :minh="20"
+            :snapToGrid="true"
+            :gridX="10"
+            :gridY="10"
+            @activated="set_active(i)"
+            @dragging="set_position($event, i)"
+            @resizing="set_size($event, i)"
+          >
+            <div style="height: 100%; display: flex; align-items: center">
+              <div
+                v-if="element.inner_text === false"
+                :style="'white-space: nowrap; margin-right: 5px; font-size:' + element.font_size + 'px;'"
+              >
+                {{ element.text }}
+              </div>
+              <component
+                class="drag-element"
+                :is="element.tag"
+                v-bind="element.props"
+                v-model="element.self_model"
+                :style="'height: 100%; font-size:' + element.font_size + 'px;'"
+              >
+                <component
+                  v-for="(child_prop, j) in element.child_props"
+                  :key="j"
+                  :is="element.child_tag"
+                  v-bind="child_prop"
+                ></component>
+                {{ element.text }}
+              </component>
             </div>
-            <component
-              class="drag-element"
-              :is="element.tag"
-              v-bind="element.props"
-              v-model="element.dummy_model"
-              :style="'height: 100%; font-size:' + element.font_size + 'px;'"
-            >
-              {{ element.text }}
-            </component>
-          </div>
-        </VueDragResize>
+          </VueDragResize>
+        </div>
       </div>
     </div>
 
@@ -71,7 +87,7 @@
 
         <span>
           宽<el-input-number
-            v-model="self_model"
+            v-model="canvas_width"
             :controls="false"
             :min="100"
             :max="1500"
@@ -91,18 +107,22 @@
         ></span>
       </div>
 
-      <el-divider></el-divider>
+      <!-- <el-divider></el-divider> -->
 
       <div id="info-area" v-if="activated_index >= 0">
-        <div class="title">组件信息</div>
         <GeneralToolBar
           :ActiveElement="drag_elements[activated_index]"
           @delete-clicked="delete_activated()"
         />
-        <ButtonToolBar :ActiveElement="drag_elements[activated_index]" />
-        <InputToolBar :ActiveElement="drag_elements[activated_index]" />
+        <component
+          :is="drag_elements[activated_index].tool"
+          :ActiveElement="drag_elements[activated_index]"
+        ></component>
       </div>
     </div>
+
+    <!-- debug -->
+    <!-- <div style="width: 300px">{{ drag_elements }}</div> -->
 
     <!-- save-image-dialog -->
     <el-dialog title="下载原型为图片" :visible.sync="save_image_dialog_visible" width="40%">
@@ -135,13 +155,22 @@
   import GeneralToolBar from '@/views/PrototypeViews/ToolBars/GeneralToolBar.vue';
   import ButtonToolBar from '@/views/PrototypeViews/ToolBars/ButtonToolBar.vue';
   import InputToolBar from '@/views/PrototypeViews/ToolBars/InputToolBar.vue';
+  import RadioToolBar from '@/views/PrototypeViews/ToolBars/RadioToolBar.vue';
+  import SelectToolBar from '@/views/PrototypeViews/ToolBars/SelectToolBar.vue';
+
   export default {
     name: 'PrototypeView',
-    components: { VueDragResize, GeneralToolBar, ButtonToolBar, InputToolBar },
+    components: {
+      VueDragResize,
+      GeneralToolBar,
+      ButtonToolBar,
+      InputToolBar,
+      RadioToolBar,
+      SelectToolBar,
+    },
 
     data() {
       return {
-        dummy: 0,
         id: 0, // 只是为了 v-for 的 key，没有实际意义
 
         activated_index: -1,
@@ -153,6 +182,7 @@
         canvas_width: 500,
         canvas_height: 600,
         canvas_key: 0, // 为了刷新 canvas 设置的 key
+        canvas_scale: 1,
 
         save_image_dialog_visible: false,
         save_image_ext: 'png',
@@ -166,6 +196,7 @@
           id: this.id,
           name: item.name,
           tag: item.tag,
+          tool: item.tool,
           active: false,
           x: 10,
           y: 10,
@@ -176,7 +207,9 @@
           text: item.text,
           inner_text: item.inner_text,
           props: item.props,
-          self_model: 0,  // 给那些没有 v-model 就运作不了的家伙一个出口
+          self_model: '', // 给那些没有 v-model 就运作不了的家伙一个出口
+          child_tag: item.child_tag,
+          child_props: item.child_props,
         };
         this.drag_elements.push(element);
         this.id++;
@@ -282,31 +315,30 @@
       },
 
       download_screenshot_prompt() {
+        this.unset_active();
         this.save_image_dialog_visible = true;
       },
 
-      download_screenshot() {
+      async download_screenshot() {
         if (this.save_image_filename_noext.trim() === '') {
           this.$message.error('请输入文件名');
           return;
         }
 
-        return html2canvas(this.$refs.screenshotArea, {
+        const canvas = await html2canvas(this.$refs.screenshotArea, {
           dpi: 192,
           scale: 2,
           useCORS: true,
-        }).then((canvas) => {
-          var link = document.createElement('a');
-          link.download = this.save_image_filename_noext.trim() + '.' + this.save_image_ext;
-
-          if (this.save_image_ext === 'png') {
-            link.href = Canvas2Image.convertToPNG(canvas, canvas.width, canvas.height).src;
-          } else if (this.save_image_ext === 'jpg') {
-            link.href = Canvas2Image.convertToPNG(canvas, canvas.width, canvas.height).src;
-          }
-
-          link.click();
         });
+
+        var link = document.createElement('a');
+        link.download = this.save_image_filename_noext.trim() + '.' + this.save_image_ext;
+        if (this.save_image_ext === 'png') {
+          link.href = Canvas2Image.convertToPNG(canvas, canvas.width, canvas.height).src;
+        } else if (this.save_image_ext === 'jpg') {
+          link.href = Canvas2Image.convertToPNG(canvas, canvas.width, canvas.height).src;
+        }
+        link.click();
       },
 
       get_prototype() {
@@ -326,8 +358,6 @@
             } else {
               this.$message.error(res.data.msg);
             }
-
-            console.log(this.drag_elements);
 
             // 重新编制 id，防止 key 冲突
             let len = this.drag_elements.length;
@@ -377,8 +407,16 @@
     margin: 0px;
   }
 
+  #work-area {
+    height: 460px;
+    width: 700px;
+    background-color: #ddd;
+    overflow: scroll;
+    padding: 10px;
+  }
+
   #drag-area {
-    position: absolute;
+    position: relative;
     /* will set by this.canvas_width/height now */
     /* width: 100%; */
     /* height: 100%; */
