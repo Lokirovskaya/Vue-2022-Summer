@@ -108,7 +108,8 @@ export default {
       if (this.file_rename === '') {
         this.$message.error('文档名不能为空');
       } else {
-        this.$axios.post('/project/renameFile', qs.stringify({ proj_id: this.$route.query.id, file_id: this.file_rename_id, file_name: this.file_rename }), {
+        var time = this.get_now_time();
+        this.$axios.post('/project/renameFile', qs.stringify({ proj_id: this.$route.query.id, file_id: this.file_rename_id, file_name: this.file_rename, teamid: this.$route.query.teamid, modify_time: time }), {//to change teamid
           headers: {
             userid: this.$store.state.userid,
             token: this.$store.state.token,
@@ -176,7 +177,7 @@ export default {
       } else {
         let date = new Date();
         let time = date.toLocaleString();
-        this.$axios.post('/project/createFile', qs.stringify({ file_name: this.new_file_name, create_time: time, proj_id: this.$route.query.id }), {
+        this.$axios.post('/project/createFile', qs.stringify({ file_name: this.new_file_name, create_time: time, proj_id: this.$route.query.id, teamid: this.$route.query.teamid, judge: 0, model: this.value, folder_id: 114514 }), {// to change teamid
           headers: {
             userid: this.$store.state.userid,
             token: this.$store.state.token,
@@ -207,6 +208,22 @@ export default {
             this.$message.error(err);
           });
       }
+    },
+    get_now_time() {
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var hour = date.getHours();
+      var minute = date.getMinutes();
+      var second = date.getSeconds();
+      month = month < 10 ? '0' + month : month;
+      day = day < 10 ? '0' + day : day;
+      hour = hour < 10 ? '0' + hour : hour;
+      minute = minute < 10 ? '0' + minute : minute;
+      second = second < 10 ? '0' + second : second;
+      var time_str = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
+      return time_str;
     },
   },
   mounted() {
