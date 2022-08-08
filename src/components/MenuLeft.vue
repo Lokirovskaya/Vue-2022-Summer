@@ -1,7 +1,7 @@
 <template>
   <div id="main">
     <div id="left">
-      <el-menu background-color="#F4F3EF" text-color="#000" active-text-color="#7AC29A" :collapse="true">
+      <el-menu background-color="#ECF5FF" text-color="#000" active-text-color="#7AC29A" :collapse="true">
         <el-submenu index="1">
           <template slot="title">
             <div style="width: 100%; text-align: right; bod" >
@@ -106,7 +106,6 @@
         </el-submenu>
       </el-menu>
     </div>
-
     <div id="right">
       <slot></slot>
     </div>
@@ -114,140 +113,143 @@
 </template>
 
 <script>
-  import qs from 'qs';
-  export default {
-    name: 'HomeView',
+import qs from 'qs';
+export default {
+  name: 'HomeView',
 
-    data() {
-      return {
-        // 结构见文档 /team/userspace
-        teamdata: [],
-        // {proj_id, proj_name, team_name}
-        recent_proj: [],
-      };
+  data() {
+    return {
+      // 结构见文档 /team/userspace
+      teamdata: [],
+      // {proj_id, proj_name, team_name}
+      recent_proj: [],
+    };
+  },
+
+  methods: {
+    logout() {
+      this.$confirm('此操作将退出登录, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+      })
+        .then(() => {
+          this.$store.commit('set_userstate_to_unlogged'); //切换到游客状态
+          this.$store.commit('set_userid', 0);
+          this.$store.commit('set_username', '');
+          this.$store.commit('set_token', '');
+          this.$router.push({ path: '/' });
+        })
+        .catch(() => {
+          return;
+        });
     },
 
-    methods: {
-      logout() {
-        this.$confirm('此操作将退出登录, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning',
+    create_team_prompt() {
+      let teamname;
+
+      this.$prompt('请输入团队名', '新建团队', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        inputPattern: /.+/,
+        inputErrorMessage: '团队名不能为空',
+      })
+        .then(({ value }) => {
+          if (value === '') return;
+          teamname = value;
+          this.create_team(teamname);
         })
-          .then(() => {
-            this.$store.commit('set_userstate_to_unlogged'); //切换到游客状态
-            this.$store.commit('set_userid', 0);
-            this.$store.commit('set_username', '');
-            this.$store.commit('set_token', '');
-            this.$router.push({ path: '/' });
-          })
-          .catch(() => {
-            return;
-          });
-      },
-
-      create_team_prompt() {
-        let teamname;
-
-        this.$prompt('请输入团队名', '新建团队', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          inputPattern: /.+/,
-          inputErrorMessage: '团队名不能为空',
-        })
-          .then(({ value }) => {
-            if (value === '') return;
-            teamname = value;
-            this.create_team(teamname);
-          })
-          .catch(() => {
-            return;
-          });
-      },
-
-      create_team(teamname) {
-        this.$axios
-          .post('/team/create_team', qs.stringify({ teamname: teamname }), {
-            headers: {
-              userid: this.$store.state.userid,
-              token: this.$store.state.token,
-            },
-          })
-          .then((res) => {
-            if (res.data.errno === 0) {
-              this.$message.success('团队创建成功！');
-              setTimeout(() => {
-                this.$router.go(0);
-              }, 500);
-            } else {
-              this.$message.error(res.data.msg);
-            }
-          })
-          .catch((err) => {
-            this.$message.error(err);
-          });
-      },
-
-      clear_recent_proj() {
-        this.recent_proj.splice(0, this.recent_proj.length);
-        this.$store.commit('clear_recent_proj');
-      },
+        .catch(() => {
+          return;
+        });
     },
 
-    created() {
+    create_team(teamname) {
       this.$axios
-        .post('/team/userspace', qs.stringify({}), {
+        .post('/team/create_team', qs.stringify({ teamname: teamname }), {
           headers: {
             userid: this.$store.state.userid,
             token: this.$store.state.token,
           },
         })
         .then((res) => {
-          this.teamdata = res.data.data;
+          if (res.data.errno === 0) {
+            this.$message.success('团队创建成功！');
+            setTimeout(() => {
+              this.$router.go(0);
+            }, 500);
+          } else {
+            this.$message.error(res.data.msg);
+          }
         })
         .catch((err) => {
           this.$message.error(err);
         });
-
-      this.recent_proj = this.$store.state.recent_proj;
     },
-  };
+
+    clear_recent_proj() {
+      this.recent_proj.splice(0, this.recent_proj.length);
+      this.$store.commit('clear_recent_proj');
+    },
+  },
+
+  created() {
+    this.$axios
+      .post('/team/userspace', qs.stringify({}), {
+        headers: {
+          userid: this.$store.state.userid,
+          token: this.$store.state.token,
+        },
+      })
+      .then((res) => {
+        this.teamdata = res.data.data;
+      })
+      .catch((err) => {
+        this.$message.error(err);
+      });
+
+    this.recent_proj = this.$store.state.recent_proj;
+  },
+};
 </script>
 
 <style scoped>
-  #main {
-    display: flex;
-    width: 100%;
-    height: 100%;
-  }
+#main {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
 
-  #left {
-    width: 65px;
-    min-height: 100%;
-    text-align: left;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-    background-color: #f4f3ef;
-    padding-right: 1px;
-  }
+#left {
+  width: 65px;
+  height: 100%;
+  text-align: left;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  background-color: #ECF5FF;
+  padding-right: 1px;
+}
 
-  .avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 25px;
-    position: relative;
-    left: -10px;
-    top: 15px;
-  }
+.avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 25px;
+  position: relative;
+  left: -10px;
+  top: 15px;
+}
 
-  #right {
-    width: 100%;
-    text-align: center;
-    background-color: #ffffff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
-  }
+#right {
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
+  padding-left: 20px;
+  padding-bottom: 0px;
+}
 
-  a,
-  .router-link-active {
-    text-decoration: none;
-  }
+a,
+.router-link-active {
+  text-decoration: none;
+}
 </style>

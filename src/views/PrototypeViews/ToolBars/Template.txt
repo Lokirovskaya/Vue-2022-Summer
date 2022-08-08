@@ -1,0 +1,13 @@
+<!-- eslint-disable vue/no-mutating-props -->
+<template>
+  <div style="text-align: left">
+
+  </div>
+</template>
+
+<script>
+  export default {
+    name: 'xxxxToolBar',
+    props: ['ActiveElement'],
+  };
+</script>
