@@ -93,7 +93,7 @@
         <!--Link-->
         <el-tooltip class="item" effect="dark" content="添加链接" placement="bottom">
           <el-button class="menu-item" @click="setLink" :class="{ 'is-active': editor.isActive('link') }">
-            <i class="iconfont">&#xe61b;</i>
+            <i class="iconfont">&#xe756;</i>
           </el-button>
         </el-tooltip>
         <!--Image-->
@@ -158,13 +158,13 @@
         <!--save-->
         <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
           <el-button class="menu-item" @click="Save">
-            <i class="iconfont">&#xe762;</i>
+            <i class="iconfont">&#xe7d9;</i>
           </el-button>
         </el-tooltip>
         <!--download-->
         <el-tooltip class="item" effect="dark" content="下载" placement="bottom">
           <el-button class="menu-item" @click="download_menu_visible = true">
-            <i class="iconfont">&#xe6cf;</i>
+            <i class="iconfont">&#xe7da;</i>
           </el-button>
         </el-tooltip>
       </div>
@@ -241,6 +241,7 @@ export default {
       html: null,
       color: ['#f783ac', '#BAF093', '#FBF499', '#F98281', '#FBBC8B', '#95F9DC', '#938fEE', '#B7E260', '#FA8C5F', '#67B1EA'],//颜色列表
       value: '',
+      db_file_name: '',
       options: [{
         value: '1',
         label: 'PDF'
@@ -613,17 +614,34 @@ export default {
       console.log('下载成功！')
     },
     exportPDF() {
-      const name = this.$route.query.name + '.pdf'
-      this.$axios.post('/project/get_pdf', qs.stringify({ file_id: this.$route.query.id }), {
+      const name = this.$route.query.name + '.pdf';
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var hour = date.getHours();
+      var minute = date.getMinutes();
+      var second = date.getSeconds();
+      month = month < 10 ? '0' + month : month;
+      day = day < 10 ? '0' + day : day;
+      hour = hour < 10 ? '0' + hour : hour;
+      minute = minute < 10 ? '0' + minute : minute;
+      second = second < 10 ? '0' + second : second;
+      this.db_file_name = year + '_' + month + '_' + day + '_' + hour + '_' + minute + '_' + second + '_' + this.$store.state.userid + '_' + this.$route.query.id + '.pdf';
+      this.$axios.post('/project/get_pdf', qs.stringify({ file_id: this.$route.query.id, file_name: this.db_file_name }), { responseType: 'blob' }, {
         headers: {
           userid: this.$store.state.userid,
           token: this.$store.state.token,
         }
       })
         .then(res => {
-          if (res.data.errno === 0) {
-            console.log(res.data.msg);//测试一下
-            let blob = new Blob([res.data.file_response]);
+          if (res.type == "application/json") {
+            let reader = new FileReader();
+            reader.onload = e => this.$alert(JSON.parse(e.target.result).xxxx);   //xxxx为字段名
+            reader.readerAsText(res);
+          } else {
+            console.log(res);//测试一下
+            let blob = new Blob([res.FileResponse]);
             const url = window.URL || window.webkitURL || window.moxURL;
             const link = document.createElement('a');
             link.href = url.createObjectURL(blob);
@@ -631,11 +649,10 @@ export default {
             link.click();
             url.revokeObjectURL(link.href);
             link.remove();
-            console.log('下载PDF成功！');
-            this.removePDF(res.data.db_file_name);
-          } else {
-            this.$message.error(res.data.msg);
+            console.log('下载PDF成功!');
+            this.removePDF();
           }
+
         })
         .catch(err => {
           this.$message.error(err);
@@ -666,9 +683,9 @@ export default {
       URL.revokeObjectURL(a.href);
       a.remove();
     },
-    removePDF(file_name) {
+    removePDF() {
       console.log('removePDF Start');
-      this.$axios.post('/project/delete_pdf', qs.stringify({ db_file_name: file_name }), {
+      this.$axios.post('/project/delete_pdf', qs.stringify({ file_name: this.db_file_name }), {
         headers: {
           userid: this.$store.state.userid,
           token: this.$store.state.token,
@@ -705,25 +722,6 @@ export default {
           this.$message.error(err);
         });
     },
-    getContentFromModel(model_id) {
-      this.$axios.post('/project/get_file_model', qs.stringify({ model_id: model_id }), {// to do
-        headers: {
-          userid: this.$store.state.userid,
-          token: this.$store.state.token,
-        }
-      })
-        .then(res => {
-          if (res.data.errno === 0) {
-            console.log(res.data);//to do
-            this.editor.setContent(res.data.model);
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        })
-        .catch(err => {
-          this.$message.error(err);
-        });
-    }
   },
   mounted() {
     //初始化协同编辑和编辑器的相关参数
@@ -783,7 +781,7 @@ export default {
           console.log(res.data);//测试一下
           if (res.data.new === 1 && res.data.model_id !== 0) {//为新文档,应该从模板中加载内容
             console.log('为新文档,应该从模板中加载内容');//to do
-            this.getContentFromModel(res.data.model_id);
+            this.editor.commands.setContent(res.data.model);
           } else if (res.data.new === 2) {//copy的新文档,从数据库加载内容
             console.log('copy的新文档,从数据库加载内容');
             this.getContentFromContent();

@@ -181,7 +181,7 @@ export default {
       if (this.new_file_name === '') {
         this.$message.error('文档名不能为空');
       } else {
-        let time = this.get_now_time;
+        let time = this.get_now_time();
         console.log(this.value);
         this.$axios.post('/project/createFile', qs.stringify({ file_name: this.new_file_name, create_time: time, proj_id: this.$route.query.id, teamid: this.$route.query.teamid, judge: 0, model: this.value === ''?0:this.value, folder_id: 114514 }), {// to change teamid
           headers: {
