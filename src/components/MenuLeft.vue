@@ -217,12 +217,11 @@ export default {
 #main {
   display: flex;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
 }
 
 #left {
   width: 65px;
-  height: 100%;
   text-align: left;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   background-color: #ECF5FF;
@@ -242,10 +241,10 @@ export default {
   width: 100%;
   height: 100%;
   text-align: center;
-  background-color: #ffffff;
+  background-color: #FFF;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
   padding-left: 20px;
-  padding-bottom: 0px;
+  padding-bottom: 20px;
 }
 
 a,

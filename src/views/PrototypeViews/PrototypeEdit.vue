@@ -207,7 +207,7 @@
           text: item.text,
           inner_text: item.inner_text,
           props: item.props,
-          self_model: '', // 给那些没有 v-model 就运作不了的家伙一个出口
+          self_model: '',
           child_tag: item.child_tag,
           child_props: item.child_props,
         };
@@ -355,16 +355,15 @@
               this.canvas_height = res.data.canvas_height;
               // res.data.proto_content 在后端具有默认值 '[]'
               this.drag_elements = JSON.parse(res.data.proto_content);
+              // 重新编制 id，防止 key 冲突
+              let len = this.drag_elements.length;
+              for (let i = 0; i < len; i++) {
+                this.drag_elements[i].id = i;
+              }
+              this.id = len;
             } else {
               this.$message.error(res.data.msg);
             }
-
-            // 重新编制 id，防止 key 冲突
-            let len = this.drag_elements.length;
-            for (let i = 0; i < len; i++) {
-              this.drag_elements[i].id = i;
-            }
-            this.id = len;
           })
           .catch((err) => {
             this.$message.error(err);
