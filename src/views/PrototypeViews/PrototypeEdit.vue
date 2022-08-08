@@ -160,6 +160,7 @@
 
   export default {
     name: 'PrototypeView',
+    props: ['protoid'],
     components: {
       VueDragResize,
       GeneralToolBar,
@@ -255,7 +256,7 @@
 
       save_prototype() {
         let post_data = {
-          proto_id: this.$route.query.id,
+          proto_id: this.protoid,
           canvas_width: this.canvas_width,
           canvas_height: this.canvas_height,
           proto_content: JSON.stringify(this.drag_elements),
@@ -291,7 +292,7 @@
         let b64 = canvas.toDataURL('image/png');
 
         let post_data = {
-          proto_id: this.$route.query.id,
+          proto_id: this.protoid,
           base64_photo: b64,
         };
 
@@ -343,7 +344,7 @@
 
       get_prototype() {
         this.$axios
-          .post('/project/get_proto', qs.stringify({ proto_id: this.$route.query.id }), {
+          .post('/project/get_proto', qs.stringify({ proto_id: this.protoid }), {
             headers: {
               userid: this.$store.state.userid,
               token: this.$store.state.token,
@@ -407,7 +408,7 @@
   }
 
   #work-area {
-    height: 460px;
+    height: 530px;
     width: 700px;
     background-color: #ddd;
     overflow: scroll;

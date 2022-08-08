@@ -1,13 +1,13 @@
 <template>
   <div id="main">
-    <div id="left">
-      <div class="title">从模板新建</div>
+    <!-- <div id="left">
+      <div class="title">从模板新建页面</div>
       <div id="template-prototypes">
         <div class="one-template-prototype"></div>
         <div class="one-template-prototype"></div>
         <div class="one-template-prototype"></div>
       </div>
-    </div>
+    </div> -->
 
     <div id="right">
       <div class="title">项目原型</div>
@@ -17,16 +17,19 @@
         <div class="one-prototype" v-for="(proto, i) in prototype_list" :key="i">
           <div style="height: 70%">
             <!-- <div style="background-color: gray;"></div> -->
-            <router-link :to="{ path: '/prototype', query: { id: proto.proto_id } }">
-              <img style="width: 100%; height: 100%; border-radius: s" src="@/assets/logo.png" />
-            </router-link>
+            <div
+              @click="prototype_click(proto.proto_id)"
+              style="width: 100%; height: 50px; border-radius: 10px"
+            >
+              <img src="@/assets/logo.png" />
+            </div>
           </div>
 
           <div style="height: 30%; margin-left: 10px">
             <span>
-              <router-link :to="{ path: '/prototype', query: { id: proto.proto_id } }">
+              <div @click="prototype_click(proto.proto_id)">
                 <el-link class="proto-title">{{ proto.proto_name }}</el-link>
-              </router-link>
+              </div>
             </span>
 
             <span style="text-align: right; float: right; margin-right: 10px; margin-top: 10px">
@@ -88,6 +91,7 @@
   import qs from 'qs';
   export default {
     name: 'PrototypeListView',
+    props: ['projid'],
     data() {
       return {
         new_prototype_dialog_visible: false, //控制新建原型图对话框的显示
@@ -99,6 +103,10 @@
       };
     },
     methods: {
+      // 通知父控件
+      prototype_click(prototype_id) {
+        this.$emit('proto-change', prototype_id);
+      },
       edit_prototype(prototype_id) {
         console.log(prototype_id);
         this.$router.push({ path: '/prototype', query: { id: prototype_id } }); //跳转到该文档的编辑界面
@@ -183,7 +191,7 @@
           this.$axios
             .post(
               '/project/create_proto',
-              qs.stringify({ proj_id: this.$route.query.id, proto_name: this.new_prototype_name }),
+              qs.stringify({ proj_id: this.projid, proto_name: this.new_prototype_name }),
               {
                 headers: {
                   userid: this.$store.state.userid,
@@ -219,7 +227,7 @@
     },
     mounted() {
       this.$axios
-        .post('/project/proj_proto', qs.stringify({ proj_id: this.$route.query.id }), {
+        .post('/project/proj_proto', qs.stringify({ proj_id: this.projid }), {
           headers: {
             userid: this.$store.state.userid,
             token: this.$store.state.token,
@@ -227,7 +235,7 @@
         })
         .then((res) => {
           if (res.data.errno === 0) {
-            console.log(res.data); //测试一下
+            // console.log(res.data); //测试一下
             //this.$message.success('重命名成功' + this.file_rename_id);
             this.prototype_list = res.data.protos_info; //争取把源数据(文档名)也修改了
           } else {

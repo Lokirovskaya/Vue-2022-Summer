@@ -45,16 +45,6 @@ const routes = [
     component: () => import('../views/PersonCenter.vue'),
   },
   {
-    path: '/prototypelist',
-    name: 'prototypelist',
-    component: () => import('../views/ProjectViews/PrototypeListView.vue'),
-  },
-  {
-    path: '/prototype',
-    name: 'prototype',
-    component: () => import('../views/PrototypeViews/PrototypeMainView.vue'),
-  },
-  {
     path: '/file',
     name: 'file',
     component: () => import('../views/ProjectViews/FileView.vue'),
@@ -69,6 +59,17 @@ const routes = [
     name: 'doccenter',
     component: () => import('../views/DocCenterView.vue'),
   },
+  // 它们被做成组件了，丧失路由权了呜呜呜
+  // {
+  //   path: '/prototypelist',
+  //   name: 'prototypelist',
+  //   component: () => import('../views/PrototypeViews/PrototypeList.vue'),
+  // },
+  // {
+  //   path: '/prototype',
+  //   name: 'prototype',
+  //   component: () => import('../views/PrototypeViews/PrototypeEdit.vue'),
+  // },
 ];
 
 const router = new VueRouter({
