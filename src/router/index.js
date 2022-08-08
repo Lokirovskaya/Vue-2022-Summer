@@ -70,6 +70,11 @@ const routes = [
   //   name: 'prototype',
   //   component: () => import('../views/PrototypeViews/PrototypeEdit.vue'),
   // },
+  {
+    path: '/protopreview',
+    name: 'protopreview',
+    component: () => import('../views/PrototypeViews/PrototypePreview.vue'),
+  },
 ];
 
 const router = new VueRouter({
