@@ -263,6 +263,78 @@ export default {
       console.log(this.editor.getText());
       console.log(this.editor.getHTML());
     },
+    init() {
+      //初始化协同编辑和编辑器的相关参数
+      const ydoc = new Y.Doc();
+      // this.provider = new WebrtcProvider('tiptap-collaboration-cursor-extension', ydoc)
+      this.provider = new WebsocketProvider('wss://demos.yjs.dev', this.$route.query.id, ydoc);
+      //this.provider = new HocuspocusProvider({ url: 'ws://127.0.0.1:1234', name: this.$route.query.id, ydoc})
+      this.editor = new Editor({
+        extensions: [
+          Blockquote,
+          HardBreak,
+          Document,
+          Paragraph,
+          Text,
+          Bold,
+          Link,
+          Italic,
+          Strike,
+          Code,
+          BulletList,
+          ListItem,
+          Heading,
+          OrderedList,
+          CodeBlock,
+          HorizontalRule,
+          Gapcursor,
+          Image,
+          Dropcursor,
+          Table.configure({
+            resizable: true,
+          }),
+          TableRow,
+          TableHeader,
+          TableCell,
+          Highlight.configure({ multicolor: true }),
+          Collaboration.configure({
+            document: ydoc,
+          }),
+          CollaborationCursor.configure({
+            provider: this.provider,
+            user: {
+              name: this.$store.state.user_truename,
+              color: this.setColor(),
+            },
+          }),
+        ],
+      });
+      //使用edit_file判断当前文档的状态:1为新文档,2为copy的新文档，0为旧文档
+      this.$axios.post('/project/edit_file', qs.stringify({ fileid: this.$route.query.id }), {
+        headers: {
+          userid: this.$store.state.userid,
+          token: this.$store.state.token,
+        }
+      })
+        .then(res => {
+          if (res.data.errno === 0) {
+            console.log(res.data);//测试一下
+            if (res.data.new === 1 && res.data.model_id !== 0) {//为新文档,应该从模板中加载内容
+              console.log('为新文档,应该从模板中加载内容');//to do
+              this.editor.commands.setContent(res.data.model);
+            } else if (res.data.new === 2) {//copy的新文档,从数据库加载内容
+              console.log('copy的新文档,从数据库加载内容');
+              this.getContentFromContent();
+            }
+            //其他情况不用做事
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch(err => {
+          this.$message.error(err);
+        });
+    },
     setColor() {
       var i = Math.floor(Math.random() * 10);
       return this.color[i];
@@ -724,78 +796,18 @@ export default {
     },
   },
   mounted() {
-    //初始化协同编辑和编辑器的相关参数
-    const ydoc = new Y.Doc();
-    // this.provider = new WebrtcProvider('tiptap-collaboration-cursor-extension', ydoc)
-    this.provider = new WebsocketProvider('wss://demos.yjs.dev', this.$route.query.id, ydoc);
-    //this.provider = new HocuspocusProvider({ url: 'ws://127.0.0.1:1234', name: this.$route.query.id, ydoc})
-    this.editor = new Editor({
-      extensions: [
-        Blockquote,
-        HardBreak,
-        Document,
-        Paragraph,
-        Text,
-        Bold,
-        Link,
-        Italic,
-        Strike,
-        Code,
-        BulletList,
-        ListItem,
-        Heading,
-        OrderedList,
-        CodeBlock,
-        HorizontalRule,
-        Gapcursor,
-        Image,
-        Dropcursor,
-        Table.configure({
-          resizable: true,
-        }),
-        TableRow,
-        TableHeader,
-        TableCell,
-        Highlight.configure({ multicolor: true }),
-        Collaboration.configure({
-          document: ydoc,
-        }),
-        CollaborationCursor.configure({
-          provider: this.provider,
-          user: {
-            name: this.$store.state.user_truename,
-            color: this.setColor(),
-          },
-        }),
-      ],
-    });
-    //使用edit_file判断当前文档的状态:1为新文档,2为copy的新文档，0为旧文档
-    this.$axios.post('/project/edit_file', qs.stringify({ fileid: this.$route.query.id }), {
-      headers: {
-        userid: this.$store.state.userid,
-        token: this.$store.state.token,
-      }
-    })
-      .then(res => {
-        if (res.data.errno === 0) {
-          console.log(res.data);//测试一下
-          if (res.data.new === 1 && res.data.model_id !== 0) {//为新文档,应该从模板中加载内容
-            console.log('为新文档,应该从模板中加载内容');//to do
-            this.editor.commands.setContent(res.data.model);
-          } else if (res.data.new === 2) {//copy的新文档,从数据库加载内容
-            console.log('copy的新文档,从数据库加载内容');
-            this.getContentFromContent();
-          }
-          //其他情况不用做事
-        } else {
-          this.$message.error(res.data.msg);
-        }
-      })
-      .catch(err => {
-        this.$message.error(err);
-      });
+    this.init();
   },
-
+  watch: {
+    $route(to, from) {
+      if (to.query.id !== from.query.id) {
+        this.editor.destroy();
+        this.provider.destroy();
+        console.log('all destroyed');
+        this.init();
+      }
+    }
+  },
   beforeDestroy() {
     this.editor.destroy();
     this.provider.destroy();
