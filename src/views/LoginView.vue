@@ -1,7 +1,13 @@
 <template>
+<!-- <div id="background"> -->
   <div class="login">
-    <!-- <div>{{this.$route.query.userid}}</div> -->
+    <!-- <font-awesome-icon icon="fa-solid fa-arrow-left" /> -->
+    <!-- <i class="fa-solid fa-arrow-left"  ></i> -->
+    <img src="../assets/back_icon.png" id="back_icon" @click="backto_homeview">
+
     <div v-if="this.$store.state.login_state == 0">
+
+
     <h1>请登录</h1>
 
     <el-input placeholder="输入邮箱" v-model="userid" clearable style="width:300px"></el-input>
@@ -20,6 +26,7 @@
       {{this.$store.state.username}}已登录
     </div>
     </div>
+<!-- </div> -->
 
 </template>
 
@@ -64,7 +71,40 @@ import qs from "qs";
           });
         }
 
+      },
+      backto_homeview(){
+        this.$router.push({path:'/'});
       }
     },
   }
 </script>
+
+<style scoped>
+  #back_icon {
+    width: 50px;
+    height: 50px;
+    /* margin: 20px; */
+    padding-left: 50px;
+    padding-top: 20px;
+    /* margin-left: 30px; */
+    border-radius: px;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+  }
+  #back_icon:hover{
+      /* background-color:rgb(255,240,245); */
+        filter:alpha(opacity=100); 
+        opacity: 0.8;
+  }
+  #background {
+    background:url("../assets/homeview_bk.jpg");
+  width:100%;
+  height:100%;
+  /* position:fixed; */
+  background-size:100% 100%;
+  opacity :0.9
+  }
+</style>

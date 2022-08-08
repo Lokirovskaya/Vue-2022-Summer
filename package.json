@@ -39,6 +39,7 @@
     "@tiptap/vue-2": "^2.0.0-beta.84",
     "axios": "^0.27.2",
     "core-js": "^3.8.3",
+    "dompurify": "^2.3.10",
     "element-ui": "^2.15.9",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",

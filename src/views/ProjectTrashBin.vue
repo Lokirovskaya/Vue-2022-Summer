@@ -1,6 +1,7 @@
 <template>
-  <div id="main">
-    <div id="title">回收站</div>
+  <!-- <div id="main"> -->
+    <div>
+    <div id="title">回收站</div> 
     <el-divider></el-divider>
 
     <el-table :data="trash_bin_projs" stripe border>
@@ -87,7 +88,7 @@
     },
   })
   .then((res) => {
-    console.log(res.data.data);
+    // console.log(res.data.data);
     if (res.data.errno === 0) {
       // this.$message.success(res.data.msg);
       console.log(res.data.data);

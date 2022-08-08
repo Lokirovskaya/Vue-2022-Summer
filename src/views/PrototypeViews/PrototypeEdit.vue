@@ -14,48 +14,66 @@
       </el-button>
     </div>
 
-    <div :style="'width:' + canvas_width + 'px;'" :key="canvas_key">
-      <div
-        id="drag-area"
-        ref="screenshotArea"
-        :style="'width:' + canvas_width + 'px;height:' + canvas_height + 'px;'"
-        @mousedown="unset_active()"
-      >
-        <VueDragResize
-          v-for="(element, i) in drag_elements"
-          :key="element.id"
-          :parentLimitation="true"
-          :x="element.x"
-          :y="element.y"
-          :z="element.z"
-          :w="element.width"
-          :h="element.height"
-          :isActive="element.active"
-          :minw="20"
-          :minh="20"
-          :snapToGrid="true"
-          :gridX="10"
-          :gridY="10"
-          @activated="set_active(i)"
-          @dragging="set_position($event, i)"
-          @resizing="set_size($event, i)"
+    <div id="work-area">
+      <div :style="'width:' + canvas_width + 'px;'" :key="canvas_key">
+        <div
+          id="drag-area"
+          ref="screenshotArea"
+          :style="
+            'width:' +
+            canvas_width +
+            'px;height:' +
+            canvas_height +
+            'px; transform: scale(' +
+            canvas_scale +
+            ');'
+          "
+          @mousedown="unset_active()"
         >
-          <div style="height: 100%; display: flex; align-items: center">
-            <div
-              v-if="element.inner_text === false"
-              :style="'white-space: nowrap; margin-right: 5px; font-size:' + element.font_size + 'px;'"
-            >
-              {{ element.text }}
+          <VueDragResize
+            v-for="(element, i) in drag_elements"
+            :key="element.id"
+            :parentLimitation="true"
+            :x="element.x"
+            :y="element.y"
+            :z="element.z"
+            :w="element.width"
+            :h="element.height"
+            :isActive="element.active"
+            :minw="20"
+            :minh="20"
+            :snapToGrid="true"
+            :gridX="10"
+            :gridY="10"
+            @activated="set_active(i)"
+            @dragging="set_position($event, i)"
+            @resizing="set_size($event, i)"
+          >
+            <div style="height: 100%; display: flex; align-items: center">
+              <div
+                v-if="element.inner_text === false"
+                :style="'white-space: nowrap; margin-right: 5px; font-size:' + element.font_size + 'px;'"
+              >
+                {{ element.text }}
+              </div>
+              <component
+                class="drag-element"
+                :is="element.tag"
+                v-bind="element.props"
+                v-model="element.self_model"
+                :style="'height: 100%; font-size:' + element.font_size + 'px;'"
+              >
+                <component
+                  v-for="(child_prop, j) in element.child_props"
+                  :key="j"
+                  :is="element.child_tag"
+                  v-bind="child_prop"
+                ></component>
+                {{ element.text }}
+              </component>
             </div>
-            <component
-              :is="element.tag"
-              class="drag-element"
-              :style="'height: 100%; font-size:' + element.font_size + 'px;'"
-            >
-              {{ element.text }}
-            </component>
-          </div>
-        </VueDragResize>
+          </VueDragResize>
+        </div>
       </div>
     </div>
 
@@ -89,47 +107,22 @@
         ></span>
       </div>
 
-      <el-divider></el-divider>
+      <!-- <el-divider></el-divider> -->
 
       <div id="info-area" v-if="activated_index >= 0">
-        <div class="title">组件信息</div>
-        <div style="text-align: left">
-          <div>
-            {{ drag_elements[activated_index].name }}
-            ({{ drag_elements[activated_index].x }}, {{ drag_elements[activated_index].y }})
-          </div>
-          <!-- <div>
-            width: {{ drag_elements[activated_index].width }} height:
-            {{ drag_elements[activated_index].height }}
-          </div> -->
-          <div>
-            显示文字：
-            <el-input v-model="drag_elements[activated_index].text"></el-input>
-          </div>
-          <div>
-            字体大小：
-            <el-input-number
-              v-model="drag_elements[activated_index].font_size"
-              :min="12"
-              :max="64"
-            ></el-input-number>
-          </div>
-          <el-button type="danger" icon="el-icon-delete" @click="delete_activated()" circle></el-button>
-          <el-button
-            type="primary"
-            icon="el-icon-top"
-            @click="drag_elements[activated_index].z++"
-            circle
-          ></el-button>
-          <el-button
-            type="primary"
-            icon="el-icon-bottom"
-            @click="drag_elements[activated_index].z--"
-            circle
-          ></el-button>
-        </div>
+        <GeneralToolBar
+          :ActiveElement="drag_elements[activated_index]"
+          @delete-clicked="delete_activated()"
+        />
+        <component
+          :is="drag_elements[activated_index].tool"
+          :ActiveElement="drag_elements[activated_index]"
+        ></component>
       </div>
     </div>
+
+    <!-- debug -->
+    <!-- <div style="width: 300px">{{ drag_elements }}</div> -->
 
     <!-- save-image-dialog -->
     <el-dialog title="下载原型为图片" :visible.sync="save_image_dialog_visible" width="40%">
@@ -157,9 +150,24 @@
   import VueDragResize from 'vue-drag-resize';
   import html2canvas from 'html2canvas';
   import Canvas2Image from '@/assets/canvas2image.js';
+
+  import toolbar_items from '@/views/PrototypeViews/ToolBarItems.js';
+  import GeneralToolBar from '@/views/PrototypeViews/ToolBars/GeneralToolBar.vue';
+  import ButtonToolBar from '@/views/PrototypeViews/ToolBars/ButtonToolBar.vue';
+  import InputToolBar from '@/views/PrototypeViews/ToolBars/InputToolBar.vue';
+  import RadioToolBar from '@/views/PrototypeViews/ToolBars/RadioToolBar.vue';
+  import SelectToolBar from '@/views/PrototypeViews/ToolBars/SelectToolBar.vue';
+
   export default {
     name: 'PrototypeView',
-    components: { VueDragResize },
+    components: {
+      VueDragResize,
+      GeneralToolBar,
+      ButtonToolBar,
+      InputToolBar,
+      RadioToolBar,
+      SelectToolBar,
+    },
 
     data() {
       return {
@@ -167,23 +175,14 @@
 
         activated_index: -1,
 
-        toolbar_items: [
-          { name: '按钮', tag: 'el-button', width: 90, height: 40, text: '按钮', inner_text: true },
-          { name: '文本', tag: 'div', width: 70, height: 20, text: '文本', inner_text: true },
-          { name: '输入框', tag: 'el-input', width: 150, height: 40, text: '', inner_text: false },
-          { name: '单选框', tag: 'el-radio', width: 70, height: 20, text: '单选框', inner_text: true },
-          { name: '多选框', tag: 'el-checkbox', width: 70, height: 20, text: '多选框', inner_text: true },
-          { name: '开关', tag: 'el-switch', width: 50, height: 30, text: '', inner_text: false },
-          { name: '滑块', tag: 'el-slider', width: 150, height: 40, text: '', inner_text: false },
-          { name: '评分', tag: 'el-rate', width: 140, height: 20, text: '', inner_text: false },
-          { name: '卡片', tag: 'el-card', width: 200, height: 200, text: '卡片', inner_text: true },
-        ],
+        toolbar_items, // import from js
 
         drag_elements: [], // 参考 add_element
 
         canvas_width: 500,
         canvas_height: 600,
         canvas_key: 0, // 为了刷新 canvas 设置的 key
+        canvas_scale: 1,
 
         save_image_dialog_visible: false,
         save_image_ext: 'png',
@@ -197,6 +196,7 @@
           id: this.id,
           name: item.name,
           tag: item.tag,
+          tool: item.tool,
           active: false,
           x: 10,
           y: 10,
@@ -206,6 +206,10 @@
           font_size: 15,
           text: item.text,
           inner_text: item.inner_text,
+          props: item.props,
+          self_model: '',
+          child_tag: item.child_tag,
+          child_props: item.child_props,
         };
         this.drag_elements.push(element);
         this.id++;
@@ -311,31 +315,30 @@
       },
 
       download_screenshot_prompt() {
+        this.unset_active();
         this.save_image_dialog_visible = true;
       },
 
-      download_screenshot() {
+      async download_screenshot() {
         if (this.save_image_filename_noext.trim() === '') {
           this.$message.error('请输入文件名');
           return;
         }
 
-        return html2canvas(this.$refs.screenshotArea, {
+        const canvas = await html2canvas(this.$refs.screenshotArea, {
           dpi: 192,
           scale: 2,
           useCORS: true,
-        }).then((canvas) => {
-          var link = document.createElement('a');
-          link.download = this.save_image_filename_noext.trim() + '.' + this.save_image_ext;
-
-          if (this.save_image_ext === 'png') {
-            link.href = Canvas2Image.convertToPNG(canvas, canvas.width, canvas.height).src;
-          } else if (this.save_image_ext === 'jpg') {
-            link.href = Canvas2Image.convertToPNG(canvas, canvas.width, canvas.height).src;
-          }
-
-          link.click();
         });
+
+        var link = document.createElement('a');
+        link.download = this.save_image_filename_noext.trim() + '.' + this.save_image_ext;
+        if (this.save_image_ext === 'png') {
+          link.href = Canvas2Image.convertToPNG(canvas, canvas.width, canvas.height).src;
+        } else if (this.save_image_ext === 'jpg') {
+          link.href = Canvas2Image.convertToPNG(canvas, canvas.width, canvas.height).src;
+        }
+        link.click();
       },
 
       get_prototype() {
@@ -352,18 +355,15 @@
               this.canvas_height = res.data.canvas_height;
               // res.data.proto_content 在后端具有默认值 '[]'
               this.drag_elements = JSON.parse(res.data.proto_content);
+              // 重新编制 id，防止 key 冲突
+              let len = this.drag_elements.length;
+              for (let i = 0; i < len; i++) {
+                this.drag_elements[i].id = i;
+              }
+              this.id = len;
             } else {
               this.$message.error(res.data.msg);
             }
-
-            console.log(this.drag_elements);
-
-            // 重新编制 id，防止 key 冲突
-            let len = this.drag_elements.length;
-            for (let i = 0; i < len; i++) {
-              this.drag_elements[i].id = i;
-            }
-            this.id = len;
           })
           .catch((err) => {
             this.$message.error(err);
@@ -406,8 +406,16 @@
     margin: 0px;
   }
 
+  #work-area {
+    height: 460px;
+    width: 700px;
+    background-color: #ddd;
+    overflow: scroll;
+    padding: 10px;
+  }
+
   #drag-area {
-    position: absolute;
+    position: relative;
     /* will set by this.canvas_width/height now */
     /* width: 100%; */
     /* height: 100%; */

@@ -52,7 +52,7 @@ const routes = [
   {
     path: '/prototype',
     name: 'prototype',
-    component: () => import('../views/PrototypeViews/PrototypeEdit.vue'),
+    component: () => import('../views/PrototypeViews/PrototypeMainView.vue'),
   },
   {
     path: '/file',

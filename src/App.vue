@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <!-- <MenuTop /> -->
     <MenuLeft v-if="this.$store.state.login_state !== 0">
       <router-view />
     </MenuLeft>
@@ -9,10 +8,8 @@
 </template>
 
 <script>
-  // import MenuTop from '@/components/MenuTop.vue';
   import MenuLeft from '@/components/MenuLeft.vue';
   export default {
-    // components: { MenuTop, MenuLeft },
     components: { MenuLeft },
   };
 </script>
@@ -34,18 +31,5 @@
     height: 100%;
     margin: 0px;
     padding: 0px;
-  }
-
-  nav {
-    padding: 30px;
-  }
-
-  nav a {
-    font-weight: bold;
-    color: #2c3e50;
-  }
-
-  nav a.router-link-exact-active {
-    color: #42b983;
   }
 </style>

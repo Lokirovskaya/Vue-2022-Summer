@@ -1,5 +1,7 @@
 <template>
+
   <div v-if="register_state===0" class="register">
+     <img src="../assets/back_icon.png" id="back_icon" @click="backto_homeview">
     <h1>欢迎注册</h1>
     <el-input placeholder="输入用户名" v-model="username" clearable style="width:300px"></el-input>
     <p>
@@ -138,8 +140,34 @@ import qs from "qs";
               this.$message.error(err);
             });
             }
+      },
+      
+      backto_homeview(){
+        this.$router.push({path:'/'});
       }
 
     }
   }
 </script>
+
+<style scoped>
+#back_icon {
+    width: 50px;
+    height: 50px;
+    /* margin: 20px; */
+    padding-left: 50px;
+    padding-top: 20px;
+    /* margin-left: 30px; */
+    border-radius: px;
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+  }
+  #back_icon:hover{
+      /* background-color:rgb(255,240,245); */
+        filter:alpha(opacity=100); 
+        opacity: 0.8;
+  }
+</style>
