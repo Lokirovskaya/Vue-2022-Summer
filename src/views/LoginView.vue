@@ -2,6 +2,8 @@
   <div class="login">
     <!-- <div>{{this.$route.query.userid}}</div> -->
     <div v-if="this.$store.state.login_state == 0">
+
+
     <h1>请登录</h1>
 
     <el-input placeholder="输入邮箱" v-model="userid" clearable style="width:300px"></el-input>
