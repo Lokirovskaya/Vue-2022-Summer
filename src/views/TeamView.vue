@@ -27,7 +27,7 @@
       <div class="all_input">
         <div class="search">
             <input v-model="keyword_input" class="search-input" type="text" placeholder="输入项目名称" >
-            <el-button class="search_button" @click="click_search()">搜索</el-button>
+            <el-button class="search_button" @click="click_search()">搜索</el-button>先实现功能，之后再美化吧（
         </div>
         <div v-if="this.keyword_input != ''">
             <ul class="item-ul">
