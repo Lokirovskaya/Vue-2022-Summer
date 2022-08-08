@@ -249,7 +249,10 @@ export default {
         label: 'Markdown'
       }, {
         value: '3',
-        label: 'Doc'
+        label: 'Word'
+      }, {
+        value: '4',
+        label: 'HTML'
       }],
     };
   },
@@ -266,14 +269,17 @@ export default {
     beforeImageUpload(file) { //检查格式和大小
       console.log('before');
       const isJPG = file.type === 'image/jpeg';
+      const isPNG = file.type === 'image/png';
       const isLt2M = file.size / 1024 / 1024 < 2;
-      if (!isJPG) {
-        this.$message.error('上传图片只能是 JPG 格式!');
+      if (!(isJPG || isPNG)) {
+        this.$message.error('上传图片只能是 JPG 或 PNG 格式!');
+        return false;
       }
       if (!isLt2M) {
         this.$message.error('上传图片大小不能超过 2MB!');
+        return false;
       }
-      return isJPG && isLt2M;
+      return true;
     },
     uploadImage(e) {
       //上传文件接受url
@@ -526,9 +532,11 @@ export default {
       } else if (this.value === '3') {
         console.log('download success!' + this.value);
         console.log('.docx start');
-        //this.exportWord();
-        this.exportHTML();
+        this.exportWord();
+        //this.exportHTML();
         this.download_menu_visible = false;
+      } else if (this.value == '4') {
+        this.exportHTML();
       }
     },
     gerarPdfDoComponente() {
@@ -677,6 +685,44 @@ export default {
         .catch(err => {
           this.$message.error(err);
         });
+    },
+    getContentFromContent() {
+      this.$axios.post('/project/getFileContent', qs.stringify({ file_id: this.$route.query.id }), {
+        headers: {
+          userid: this.$store.state.userid,
+          token: this.$store.state.token,
+        }
+      })
+        .then(res => {
+          if (res.data.errno === 0) {
+            console.log(res.data);//to do
+            this.editor.setContent(res.data.content);
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch(err => {
+          this.$message.error(err);
+        });
+    },
+    getContentFromModel(model_id) {
+      this.$axios.post('/project/get_file_model', qs.stringify({ model_id: model_id }), {// to do
+        headers: {
+          userid: this.$store.state.userid,
+          token: this.$store.state.token,
+        }
+      })
+        .then(res => {
+          if (res.data.errno === 0) {
+            console.log(res.data);//to do
+            this.editor.setContent(res.data.model);
+          } else {
+            this.$message.error(res.data.msg);
+          }
+        })
+        .catch(err => {
+          this.$message.error(err);
+        });
     }
   },
   mounted() {
@@ -725,8 +771,7 @@ export default {
         }),
       ],
     });
-    //使用edit_file判断当前文档的状态:operation为0时表示有人,为2时表示此人为第一个人进入
-
+    //使用edit_file判断当前文档的状态:1为新文档,2为copy的新文档，0为旧文档
     this.$axios.post('/project/edit_file', qs.stringify({ fileid: this.$route.query.id }), {
       headers: {
         userid: this.$store.state.userid,
@@ -736,10 +781,12 @@ export default {
       .then(res => {
         if (res.data.errno === 0) {
           console.log(res.data);//测试一下
-          if (res.data.new === 1) {//为新文档,应该从模板中加载内容
-            console.log('为新文档,应该从模板中加载内容');
+          if (res.data.new === 1 && res.data.model_id !== 0) {//为新文档,应该从模板中加载内容
+            console.log('为新文档,应该从模板中加载内容');//to do
+            this.getContentFromModel(res.data.model_id);
           } else if (res.data.new === 2) {//copy的新文档,从数据库加载内容
             console.log('copy的新文档,从数据库加载内容');
+            this.getContentFromContent();
           }
           //其他情况不用做事
         } else {
@@ -752,59 +799,6 @@ export default {
   },
 
   beforeDestroy() {
-    //edit_file
-    /*
-    this.$axios.post('/project/edit_file', qs.stringify({ userid: this.$store.state.userid, fileid: this.$route.query.id, status: 0 }), {
-        headers: {
-            userid: this.$store.state.userid,
-            token: this.$store.state.token,
-        }
-    })
-        .then(res => {
-            if (res.data.errno === 0) {
-                console.log(res);//测试一下
-                //this.$message.success('重命名成功' + this.file_rename_id);
-                if (res.data.operation == 1) { //说明是最后一个离开的,此时要将文档内容保存到后端
-                    var date = new Date();
-                    var year = date.getFullYear();
-                    var month = date.getMonth() + 1;
-                    var day = date.getDate();
-                    var hour = date.getHours();
-                    var minute = date.getMinutes();
-                    var second = date.getSeconds();
-                    month = month < 10 ? '0' + month : month;
-                    day = day < 10 ? '0' + day : day;
-                    hour = hour < 10 ? '0' + hour : hour;
-                    minute = minute < 10 ? '0' + minute : minute;
-                    second = second < 10 ? '0' + second : second;
-                    var time_str = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
-                    this.$axios.post('/project/modifyFile', qs.stringify({ file_id: this.$route.query.id, content: this.editor.getHTML(), modify_time: time_str }), {
-                        headers: {
-                            userid: this.$store.state.userid,
-                            token: this.$store.state.token,
-                        }
-                    })
-                        .then(res => {
-                            if (res.data.errno === 0) {
-                                console.log(res.data);//测试一下
-                                console.log('修改文档内容成功');
-                                this.provider.disconnect();
-                                //this.$message.success('重命名成功' + this.file_rename_id);
-                            } else {
-                                this.$message.error(res.data.msg);
-                            }
-                        })
-                        .catch(err => {
-                            this.$message.error(err);
-                        });
-                }
-            } else {
-                this.$message.error(res.data.msg);
-            }
-        })
-        .catch(err => {
-            this.$message.error(err);
-        }); */
     this.editor.destroy();
     this.provider.destroy();
     console.log('all destroyed');

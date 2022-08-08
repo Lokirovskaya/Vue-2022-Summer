@@ -81,20 +81,26 @@ export default {
       file_list: [], //文档列表
       value: '',
       options: [{
-        value: '选项1',
-        label: '黄金糕'
+        value: 1,
+        label: '会议纪要模板'
       }, {
-        value: '选项2',
-        label: '双皮奶'
+        value: 2,
+        label: '架构设计说明书模板'
       }, {
-        value: '选项3',
-        label: '蚵仔煎'
+        value: 3,
+        label: '需求规格说明书模板'
       }, {
-        value: '选项4',
-        label: '龙须面'
+        value: 4,
+        label: '项目管理看板'
       }, {
-        value: '选项5',
-        label: '北京烤鸭'
+        value: 5,
+        label: '项目计划书模板'
+      }, {
+        value: 6,
+        label: '项目周报模板'
+      }, {
+        value: 7,
+        label: '需求调研报告模板'
       }],
     }
   },
@@ -175,9 +181,9 @@ export default {
       if (this.new_file_name === '') {
         this.$message.error('文档名不能为空');
       } else {
-        let date = new Date();
-        let time = date.toLocaleString();
-        this.$axios.post('/project/createFile', qs.stringify({ file_name: this.new_file_name, create_time: time, proj_id: this.$route.query.id, teamid: this.$route.query.teamid, judge: 0, model: this.value, folder_id: 114514 }), {// to change teamid
+        let time = this.get_now_time;
+        console.log(this.value);
+        this.$axios.post('/project/createFile', qs.stringify({ file_name: this.new_file_name, create_time: time, proj_id: this.$route.query.id, teamid: this.$route.query.teamid, judge: 0, model: this.value === ''?0:this.value, folder_id: 114514 }), {// to change teamid
           headers: {
             userid: this.$store.state.userid,
             token: this.$store.state.token,

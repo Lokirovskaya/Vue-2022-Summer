@@ -38,7 +38,7 @@
 
     methods: {
       tab_change() {
-        this.$router.push({ query: { ...this.$route.query, tab: this.current_tab_name } });
+        this.$router.push({ query: { ...this.$route.query, tab: this.current_tab_name, teamid: this.proj_team_id } });
       },
 
       get_proj_info() {
