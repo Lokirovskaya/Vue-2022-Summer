@@ -5,32 +5,82 @@
     <el-tabs>
       <el-tab-pane label="团队信息">
         <el-divider>团队项目</el-divider>
+
+  <div class="sort_and_search">
+  <div style="display:flex;">
+  <el-dropdown trigger="click">
+  <span class="el-dropdown-link">
+    选择排序方式<i class="el-icon-arrow-down el-icon--right"></i>
+  </span>
+  <el-dropdown-menu slot="dropdown">
+    <el-dropdown-item><div @click="sort_proj('创建时间从早到晚')">创建时间从早到晚</div></el-dropdown-item>
+    <el-dropdown-item><div @click="sort_proj('创建时间从晚到早')">创建时间从晚到早</div></el-dropdown-item>
+    <el-dropdown-item><div @click="sort_proj('名称字典序正序')">名称字典序正序</div></el-dropdown-item>
+    <el-dropdown-item><div @click="sort_proj('名称字典序倒序')">名称字典序倒序</div></el-dropdown-item>
+    <el-dropdown-item><div @click="sort_proj('开始时间从早到晚')">开始时间从早到晚</div></el-dropdown-item>
+    <el-dropdown-item><div @click="sort_proj('开始时间从晚到早')">开始时间从晚到早</div></el-dropdown-item>
+  </el-dropdown-menu>
+</el-dropdown>
+  </div>
+
+
+      <div class="all_input">
+        <div class="search">
+            <input v-model="keyword_input" class="search-input" type="text" placeholder="输入项目名称" >
+            <el-button class="search_button" @click="click_search()">搜索</el-button>
+        </div>
+        <div v-if="this.keyword_input != ''">
+            <ul class="item-ul">
+                <li class="search-item" v-for="item of list" :key="item.projId" ><div @click="complete_input(item.projName)">{{ item.projName }}</div></li>
+            </ul>
+        </div>
+    </div>
+    <br>
+
+  </div>
+
         <div id="projs">
           <div v-for="(proj, i) in proj_data" :key="i" class="one-proj">
-            <div style="height: 60%">
+            <div v-if="is_searchORorder === 0" style="height: 60%">
               <!-- <div style="background-color: gray;"></div> -->
               <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
                 <img style="width: 100%; height: 100%; border-radius: 20px" src="@/assets/logo.png" />
               </router-link>
             </div>
 
-            <div style="height: 30%; margin-left: 10px">
+           <div v-else style="height: 60%">
+              <router-link :to="{ path: '/project', query: { id: proj.projId } }">
+                <img style="width: 100%; height: 100%; border-radius: 20px" src="@/assets/logo.png" />
+              </router-link>
+            </div>
+
+            <div v-if="is_searchORorder === 0" style="height: 30%; margin-left: 10px">
               <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
                 <el-link class="proj-title">{{ proj.proj_name }}</el-link>
               </router-link>
             </div>
+            <div v-else style="height: 30%; margin-left: 10px">
+                  <router-link :to="{ path: '/project', query: { id: proj.projId } }">
+                <el-link class="proj-title">{{ proj.projName }}</el-link>
+              </router-link>
+            </div>
 
             <div style="height: 30%; margin-left: 10px">
-              <span>{{ proj.proj_info }}</span>
+              <span v-if="is_searchORorder === 0">{{ proj.proj_info }}</span>
               <span style="text-align: right; float: right; margin-right: 10px">
                 <el-dropdown>
                   <i class="el-icon-more" style="font-size: 18px"></i>
                   <el-dropdown-menu slot="dropdown">
                     <el-dropdown-item>
-                      <div @click="edit_proj_prompt(proj)">编辑项目</div>
+                      <div v-if="is_searchORorder === 0" @click="copy_proj(proj.proj_id)">复制项目</div>
+                      <div v-else @click="copy_proj(proj.projId)">复制项目</div>
+                    </el-dropdown-item>
+                    <el-dropdown-item>
+                      <div @click="edit_proj_prompt(proj)">修改信息</div>
                     </el-dropdown-item>
                     <el-dropdown-item style="color: red">
-                      <div @click="delete_proj_prompt(proj.proj_id)">删除项目</div>
+                      <div v-if="is_searchORorder === 0" @click="delete_proj_prompt(proj.proj_id)">删除项目</div>
+                      <div v-else @click="delete_proj_prompt(proj.projId)">删除项目</div>
                     </el-dropdown-item>
                   </el-dropdown-menu>
                 </el-dropdown>
@@ -160,6 +210,12 @@
 
         proj_data: [], // proj_id, proj_name, proj_photo
         member_data: [], // member_id, member_name, member_photo
+
+        list:[],
+        timer: '',
+        keyword_input:'',
+
+        is_searchORorder:0,
       };
     },
 
@@ -359,6 +415,133 @@
             this.$message.error(err);
           });
       },
+
+      copy_proj(proj_id) {
+        let copy_ifo = {
+          proj_id:proj_id,
+          copy_time:this.get_now_time(),
+        }
+        console.log('id:'+copy_ifo.proj_id+'\ntime:'+copy_ifo.copy_time);
+        this.$axios
+  .post('/project/copy_project', qs.stringify(copy_ifo), {
+    headers: {
+      userid: this.$store.state.userid,
+      token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      this.$router.go(0);
+      this.$message.success(res.data.msg);
+    } else {
+      this.$message.error(res.data.msg);
+    }
+    
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+    },
+
+    refresh() {
+      this.$router.go(0);
+    },
+
+    sort_proj(sort_type) {
+      let sort_ifo = {
+        teamid:this.$route.query.id,
+        according:sort_type,
+      }
+        this.$axios.post('/project/project_order', qs.stringify(sort_ifo), {
+    headers: {
+      userid: this.$store.state.userid,
+      token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      // this.$message.success('...');
+      this.proj_data = res.data.data;
+      this.is_searchORorder = 1;
+    } else {
+      this.$message.error(res.data.msg);
+    }
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+    },
+
+    complete_input(value) {
+        console.log(value);
+        this.keyword_input = value;
+    },
+
+    monitor_input() {
+      // if (this.keyword_input === '') console.log('nothing');
+
+        console.log(this.keyword_input);
+        let search_ifo = {
+          projName:this.keyword_input,
+          teamid:this.team_id,
+        }
+        console.log('name:'+search_ifo.projName+'teamid:'+search_ifo.teamid);
+        this.$axios
+  .post('project/search_team_project', qs.stringify(search_ifo), {
+    headers: {
+      userid: this.$store.state.userid,
+      token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      // this.$message.success('...');
+      this.list = res.data.data;
+      console.log(res.data.data);
+      // console.log(this.list);
+    } else {
+      this.$message.error(res.data.msg);
+    }
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+    },
+
+    click_search(){
+        console.log('search');
+        let search_ifo = {
+          projName:this.keyword_input,
+          teamid:this.team_id,
+        }
+        console.log('name:'+search_ifo.projName+'teamid:'+search_ifo.teamid);
+        this.$axios
+  .post('project/search_team_project', qs.stringify(search_ifo), {
+    headers: {
+      userid: this.$store.state.userid,
+      token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      // this.$message.success('...');
+      this.proj_data = res.data.data;
+      this.is_searchORorder = 1;
+      console.log(res.data.data);
+      // console.log(this.list);
+    } else {
+      this.$message.error(res.data.msg);
+    }
+  })
+
+    },
+
+    },
+    mounted() {
+        this.timer = setInterval(this.monitor_input, 1000);
+    },
+    beforeDestroy() {
+      clearInterval(this.timer);
     },
 
     created() {
@@ -373,6 +556,7 @@
         }
       },
     },
+
   };
 </script>
 
@@ -478,4 +662,79 @@
   .router-link-active {
     text-decoration: none;
   }
+
+  .el-dropdown-link {
+    display: flex;
+    cursor: pointer;
+    color: #409EFF;
+    margin: 10px;
+  }
+  .el-icon-arrow-down {
+    font-size: 12px;
+  }
+
+        .search-input {
+          display: flex;
+            width: 100px;
+            height: 30px;
+            color: #666;
+            margin: 10px;
+           /* margin-bottom: 10px; */
+           /* margin-top: -25px; */
+           /* margin-left: 140px; */
+        }
+    .search-content {
+        z-index: 1;
+        overflow: hidden;
+        position: absolute;
+        top: 1.58rem;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #eee;
+    }
+      .item-ul {
+        float: top;
+        display: flex;
+        flex-direction:column;
+        padding-left: 1px;
+        margin-left: 10px;
+        margin-top: -14px;
+        border: 1px solid black;
+        width: 100px;
+        /* left: ; */
+      }
+        .search-item {
+          /* 
+            background: #fff;
+            color: #666;
+            list-style: none;
+            border: 1px solid #f4f4f4; */
+            display: flex;
+            list-style: none;
+            width: 100px;
+            height: 30px;
+            color: #666;
+           
+           /* margin: ; */
+           /* border: 1px solid #f4f4f4; */
+        }
+
+        .search {
+          display: flex;
+          flex-direction: row;
+          flex-wrap: wrap;
+          /* margin: 10px; */
+           /* border: 1px solid #f4f4f4; */
+        }
+
+        .search_button{
+          display: flex;
+          margin: 10px;
+
+        }
+
+        .sort_and_search {
+          display: flex;
+        }
 </style>

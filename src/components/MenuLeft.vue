@@ -4,7 +4,7 @@
       <el-menu background-color="#ECF5FF" text-color="#000" active-text-color="#7AC29A" :collapse="true">
         <el-submenu index="1">
           <template slot="title">
-            <div style="width: 100%; text-align: right; bod">
+            <div style="width: 100%; text-align: right; bod" >
               <img :src="'http://stcmp.shlprn.cn' + this.$store.state.user_photo" class="avatar" />
             </div>
           </template>
