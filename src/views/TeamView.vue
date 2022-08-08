@@ -480,12 +480,12 @@
     monitor_input() {
       // if (this.keyword_input === '') console.log('nothing');
 
-        console.log(this.keyword_input);
+        // console.log(this.keyword_input);
         let search_ifo = {
           projName:this.keyword_input,
           teamid:this.team_id,
         }
-        console.log('name:'+search_ifo.projName+'teamid:'+search_ifo.teamid);
+        // console.log('name:'+search_ifo.projName+'teamid:'+search_ifo.teamid);
         this.$axios
   .post('project/search_team_project', qs.stringify(search_ifo), {
     headers: {
@@ -497,7 +497,7 @@
     if (res.data.errno === 0) {
       // this.$message.success('...');
       this.list = res.data.data;
-      console.log(res.data.data);
+      // console.log(res.data.data);
       // console.log(this.list);
     } else {
       this.$message.error(res.data.msg);
