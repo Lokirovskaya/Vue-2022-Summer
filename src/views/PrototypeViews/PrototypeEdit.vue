@@ -19,13 +19,7 @@
         <div
           id="drag-area"
           ref="screenshotArea"
-          :style="
-            'width:' +
-            canvas_width +
-            'px;height:' +
-            canvas_height +
-            'px;'
-          "
+          :style="'width:' + canvas_width + 'px;height:' + canvas_height + 'px;'"
           @mousedown="unset_active()"
         >
           <VueDragResize
@@ -56,7 +50,7 @@
               </div>
 
               <component
-                class="drag-element"
+                :class="'drag-element ' + element.advanced_class"
                 :is="element.tag"
                 v-bind="element.props"
                 v-model="element.self_model"
@@ -156,6 +150,7 @@
   import GeneralToolBar from '@/views/PrototypeViews/ToolBars/GeneralToolBar.vue';
   import ButtonToolBar from '@/views/PrototypeViews/ToolBars/ButtonToolBar.vue';
   import InputToolBar from '@/views/PrototypeViews/ToolBars/InputToolBar.vue';
+  import IconToolBar from '@/views/PrototypeViews/ToolBars/IconToolBar.vue';
   import RadioToolBar from '@/views/PrototypeViews/ToolBars/RadioToolBar.vue';
   import SelectToolBar from '@/views/PrototypeViews/ToolBars/SelectToolBar.vue';
   import CardToolBar from '@/views/PrototypeViews/ToolBars/CardToolBar.vue';
@@ -168,6 +163,7 @@
       GeneralToolBar,
       ButtonToolBar,
       InputToolBar,
+      IconToolBar,
       RadioToolBar,
       SelectToolBar,
       CardToolBar,
@@ -207,14 +203,15 @@
           z: 500,
           width: item.width,
           height: item.height,
-          font_size: 15,
+          font_size: item.font_size,
           text: item.text,
           inner_text: item.inner_text,
-          props: [].concat(item.props),
+          props: { ...item.props },
           self_model: '',
           child_tag: item.child_tag,
           child_props: [].concat(item.child_props),
-          advanced_style: '',
+          advanced_style: '', // for card
+          advanced_class: item.advanced_class, // for icon
         };
         this.drag_elements.push(element);
         this.id++;
