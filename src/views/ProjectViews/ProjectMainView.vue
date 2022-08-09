@@ -10,7 +10,7 @@
     </div>
     <el-tabs v-model="current_tab_name" @tab-click="tab_change">
       <el-tab-pane label="项目信息" name="info"><ProjectInfoView /></el-tab-pane>
-      <el-tab-pane label="原型设计" name="prototype"><PrototypeListView /></el-tab-pane>
+      <el-tab-pane label="原型设计" name="prototype"><PrototypeMainView /></el-tab-pane>
       <el-tab-pane label="UML图" name="uml">todo</el-tab-pane>
       <el-tab-pane label="共享文档" name="file"><FileView /></el-tab-pane>
     </el-tabs>
@@ -21,12 +21,12 @@
   import qs from 'qs';
 
   import ProjectInfoView from '@/views/ProjectViews/ProjectInfoView.vue';
-  import PrototypeListView from '@/views/ProjectViews/PrototypeListView.vue';
+  import PrototypeMainView from '@/views/ProjectViews/PrototypeMainView.vue';
   import FileView from '@/views/ProjectViews/FileView.vue';
 
   export default {
     name: 'ProjectView',
-    components: { ProjectInfoView, PrototypeListView, FileView },
+    components: { ProjectInfoView, PrototypeMainView, FileView },
 
     data() {
       return {

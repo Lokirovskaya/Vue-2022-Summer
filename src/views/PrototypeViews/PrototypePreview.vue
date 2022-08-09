@@ -67,17 +67,16 @@
 
     data() {
       return {
-        drag_elements: [],
-
-        canvas_width: 500,
-        canvas_height: 600,
+        // [{proto_id, proto_name, canvas_width, canvas_height, protos_content}, ...]
+        all_proto_content: [],
+        drag_element: [],
       };
     },
 
     methods: {
       get_prototype() {
         this.$axios
-          .post('/project/get_proto', qs.stringify({ proto_id: this.$route.query.id }), {
+          .post('/project/view_proto_preview', qs.stringify({ proj_id: this.$route.query.id }), {
             headers: {
               userid: this.$store.state.userid,
               token: this.$store.state.token,
@@ -85,17 +84,8 @@
           })
           .then((res) => {
             if (res.data.errno === 0) {
-              this.canvas_width = res.data.canvas_width;
-              this.canvas_height = res.data.canvas_height;
-              // res.data.proto_content 在后端具有默认值 '[]'
-              this.drag_elements = JSON.parse(res.data.proto_content);
-              // 重新编制 id，防止 key 冲突
-              let len = this.drag_elements.length;
-              for (let i = 0; i < len; i++) {
-                this.drag_elements[i].id = i;
-              }
-              this.id = len;
-              console.log(this.drag_elements);
+              this.all_proto_content = res.data.all_proto_content;
+              console.log(this.all_proto_content)
             } else {
               this.$message.error(res.data.msg);
             }

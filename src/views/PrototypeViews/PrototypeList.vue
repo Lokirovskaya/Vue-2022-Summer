@@ -1,32 +1,34 @@
 <template>
   <div id="main">
-    <div id="left">
-      <div class="title">从模板新建</div>
+    <!-- <div id="left">
+      <div class="title">从模板新建页面</div>
       <div id="template-prototypes">
         <div class="one-template-prototype"></div>
         <div class="one-template-prototype"></div>
         <div class="one-template-prototype"></div>
       </div>
-    </div>
+    </div> -->
 
     <div id="right">
-      <div class="title">项目原型</div>
-      <el-divider></el-divider>
+      <el-divider>原型页面</el-divider>
 
       <div id="prototypes">
         <div class="one-prototype" v-for="(proto, i) in prototype_list" :key="i">
           <div style="height: 70%">
             <!-- <div style="background-color: gray;"></div> -->
-            <router-link :to="{ path: '/prototype', query: { id: proto.proto_id } }">
-              <img style="width: 100%; height: 100%; border-radius: s" src="@/assets/logo.png" />
-            </router-link>
+            <div
+              @click="prototype_click(proto.proto_id)"
+              style="width: 100%; height: 50px; border-radius: 10px"
+            >
+              <img src="@/assets/logo.png" />
+            </div>
           </div>
 
           <div style="height: 30%; margin-left: 10px">
             <span>
-              <router-link :to="{ path: '/prototype', query: { id: proto.proto_id } }">
+              <div @click="prototype_click(proto.proto_id)">
                 <el-link class="proto-title">{{ proto.proto_name }}</el-link>
-              </router-link>
+              </div>
             </span>
 
             <span style="text-align: right; float: right; margin-right: 10px; margin-top: 10px">
@@ -50,6 +52,23 @@
             <i class="el-icon-plus" style="font-size: 50px"></i>
             <div style="font-size: 18px; color: gray">新建原型</div>
           </div>
+        </div>
+      </div>
+
+      <el-divider>原型预览</el-divider>
+
+      <div id="preview">
+        <div v-if="preview_status === 0">
+          当前项目无原型预览
+          <el-button type="primary" @click="open_preview_status()">创建预览</el-button>
+        </div>
+        <div v-else-if="preview_status === 1">
+          当前项目原型预览已关闭，点击重新开放
+          <el-button type="success" @click="open_preview_status()">开放预览</el-button>
+        </div>
+        <div v-else-if="preview_status === 2">
+          当前项目原型预览已开放，预览网址
+          <el-button type="warning" @click="close_preview_status()">关闭预览</el-button>
         </div>
       </div>
     </div>
@@ -88,6 +107,7 @@
   import qs from 'qs';
   export default {
     name: 'PrototypeListView',
+    props: ['projid'],
     data() {
       return {
         new_prototype_dialog_visible: false, //控制新建原型图对话框的显示
@@ -96,13 +116,20 @@
         prototype_rename_id: 0, //重命名原型图的id
         prototype_rename: '',
         prototype_list: [], //原型图列表
+        preview_status: -1, // 0 无, 1 关闭, 2 打开
       };
     },
     methods: {
+      // 通知父控件
+      prototype_click(prototype_id) {
+        this.$emit('proto-change', prototype_id);
+      },
+
       edit_prototype(prototype_id) {
         console.log(prototype_id);
         this.$router.push({ path: '/prototype', query: { id: prototype_id } }); //跳转到该文档的编辑界面
       },
+
       rename_prototype() {
         console.log(this.prototype_rename_id);
         if (this.prototype_rename === '') {
@@ -140,6 +167,7 @@
             });
         }
       },
+
       delete_prototype(prototype_id) {
         this.$confirm('是否删除原型？', '删除原型', {
           confirmButtonText: '确定',
@@ -176,6 +204,7 @@
           //this.$message.success('成功删除文档' + file_id);
         });
       },
+
       create_prototype() {
         if (this.new_prototype_name === '') {
           this.$message.error('原型名不能为空');
@@ -183,7 +212,7 @@
           this.$axios
             .post(
               '/project/create_proto',
-              qs.stringify({ proj_id: this.$route.query.id, proto_name: this.new_prototype_name }),
+              qs.stringify({ proj_id: this.projid, proto_name: this.new_prototype_name }),
               {
                 headers: {
                   userid: this.$store.state.userid,
@@ -216,27 +245,82 @@
             });
         }
       },
+
+      get_prototype_list() {
+        this.$axios
+          .post('/project/proj_proto', qs.stringify({ proj_id: this.projid }), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              // console.log(res.data); //测试一下
+              //this.$message.success('重命名成功' + this.file_rename_id);
+              this.prototype_list = res.data.protos_info; //争取把源数据(文档名)也修改了
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
+
+      get_preview_status() {
+        this.$axios
+          .post('/project/view_preview_status', qs.stringify({ proj_id: this.projid }), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.preview_status = res.data.preview_status;
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
+
+      open_preview_status() {
+        this.change_preview_status(true);
+      },
+
+      close_preview_status() {
+        this.change_preview_status(false);
+      },
+
+      change_preview_status(open) {
+        let url = open ? '/project/open_proto_preview' : '/project/close_proto_preview';
+        this.$axios
+          .post(url, qs.stringify({ proj_id: this.projid }), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.preview_status = res.data.preview_status;
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
     },
-    mounted() {
-      this.$axios
-        .post('/project/proj_proto', qs.stringify({ proj_id: this.$route.query.id }), {
-          headers: {
-            userid: this.$store.state.userid,
-            token: this.$store.state.token,
-          },
-        })
-        .then((res) => {
-          if (res.data.errno === 0) {
-            console.log(res.data); //测试一下
-            //this.$message.success('重命名成功' + this.file_rename_id);
-            this.prototype_list = res.data.protos_info; //争取把源数据(文档名)也修改了
-          } else {
-            this.$message.error(res.data.msg);
-          }
-        })
-        .catch((err) => {
-          this.$message.error(err);
-        });
+
+    created() {
+      this.get_prototype_list();
+      this.get_preview_status();
     },
   };
 </script>
@@ -318,6 +402,12 @@
     text-align: left;
     display: flex;
     flex-direction: column;
+  }
+
+  #preview {
+    width: 100%;
+    text-align: left;
+    padding-left: 25px;
   }
 
   a,
