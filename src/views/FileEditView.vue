@@ -562,13 +562,14 @@ export default {
         turndown.addRule('pre', {
           filter: ['pre'],
           replacement: function (content) {
+            content = '``' + content + '``'
             return content
           }
         })
         turndown.addRule('code', {
           filter: ['code'],
           replacement: function (content) {
-            content = '```\n' + content + '\n```'
+            content = '`\n' + content + '\n`'
             return content
           }
         })
