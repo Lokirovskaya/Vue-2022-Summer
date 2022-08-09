@@ -25,14 +25,14 @@
               </router-link>
             </el-menu-item>
 
-            <el-menu-item>
+            <!-- <el-menu-item>
               <router-link :to="{ path: '/doccenter' }">
                 <el-link :underline="false">
                   <span class="el-icon-postcard"></span>
                   <span>文档中心</span>
                 </el-link>
               </router-link>
-            </el-menu-item>
+            </el-menu-item> -->
 
             <el-menu-item>
               <div @click="logout()">

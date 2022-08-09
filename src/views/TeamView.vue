@@ -129,6 +129,21 @@
           </router-link>
         </div>
       </el-tab-pane>
+
+      <el-tab-pane label="成员管理">
+        
+      </el-tab-pane>
+
+      <el-tab-pane label="项目回收站">
+        
+      </el-tab-pane>
+
+      <el-tab-pane label="文档中心">
+        <router-link :to="{ path: '/doccenter', query: { id: team_id } }">
+            <el-button type="primary">文档中心</el-button>
+          </router-link>
+      </el-tab-pane>
+
     </el-tabs>
 
     <!-- new proj prompt dialog -->
@@ -546,6 +561,7 @@
 
     created() {
       this.get_team_info();
+      console.log(this.get_now_time());
     },
 
     watch: {

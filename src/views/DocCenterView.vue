@@ -11,13 +11,14 @@
   >
   <span
   slot-scope="{ node , data}"
-  @mouseenter="mouseenter(data)"
-                @mouseleave="mouseleave(data)"
-  
   >
+
 {{ node.label }} 
 <!-- <el-button @click="show(node)">click</el-button> -->
-<i class="el-icon-edit" @click="open_edit(data)"></i>
+&nbsp;
+<i class="el-icon-edit" @click="start_rename(data)"></i>&nbsp;
+<i class="el-icon-delete" @click="start_delete(data)"></i>&nbsp;
+<i class="el-icon-folder-add" @click="start_create(data)"></i>
 <!-- <el-button @click="handlebutton(data)">click</el-button> -->
       <!-- <span></span> -->
   </span>
@@ -27,11 +28,35 @@
 <el-dialog title="重命名" :visible.sync="rename_dialogVisible" width="40%">
       <div>
           <!-- <el-form-item label="项目名称" :label-width="500" required> -->
-          <el-input v-model="input_file_name" class="rename_input"></el-input>
+          <el-input placeholder="输入文档名" v-model="input_file_name_rename" class="rename_input"></el-input>
         <!-- </el-form-item> -->
 
-        <el-button @click="edit_proj_dialog_visible = false">取消</el-button>
-        <el-button type="primary" @click="edit_proj()">确定</el-button>
+        <el-button @click="rename_dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="rename_file()">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="确认删除" :visible.sync="delete_dialogVisible" width="40%">
+      <div>
+          <!-- <el-form-item label="项目名称" :label-width="500" required> -->
+          <!-- <el-input v-model="input_file_name_rename" class="rename_input"></el-input> -->
+        <!-- </el-form-item> -->
+
+        <el-button @click="delete_dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="delete_file()">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="新建" :visible.sync="create_dialogVisible" width="40%">
+      <div>
+          <el-radio v-model="radio" label="1">新建文档</el-radio>
+            <el-radio v-model="radio" label="2">新建文件夹</el-radio>
+          <!-- <el-form-item label="项目名称" :label-width="500" required> -->
+          <el-input placeholder="输入文档名" v-model="input_file_name_create" class="create_input"></el-input>
+        <!-- </el-form-item> -->
+
+        <el-button @click="create_dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="create_file()">确定</el-button>
       </div>
     </el-dialog>
 
@@ -86,9 +111,13 @@ export default {
         },
 
         rename_dialogVisible:false,
-        add_dialogVisible:false,
+        delete_dialogVisible:false,
+        create_dialogVisible:false,
 
-        input_file_name:'',
+        input_file_name_rename:'',
+        input_file_name_create:'',
+
+        radio:'1',
     };
   },
 
@@ -101,34 +130,41 @@ export default {
           alert('node_id:'+node.id+' node_lable:'+node.label);
       },
       handleclick(dropNode) {
-        console.log('tree drag enter: '+dropNode.id+' label:'+dropNode.label);
+        // console.log('tree drag enter: '+dropNode.id+' label:'+dropNode.label);
+        console.log('currLevel:'+dropNode.currLevel);
       },
       handlebutton(dropNode) {
         console.log('BUTTON:tree drag enter: '+dropNode.id+' label:'+dropNode.label);
       },
 
-          mouseenter(data) {
-      this.$set(data, "show", true);
-    },
-    mouseleave(data) {
-      this.$set(data, "show", false);
-    },
-
-    open_edit(file){
+    start_rename(file){
         console.log(file.id);
         this.rename_dialogVisible = true;
-        this.input_file_name = file.label;
+        this.input_file_name_rename = file.label;
     },
 
+    rename_file(){
+        this.rename_dialogVisible = false
+    },
 
-    // create_folder(folder_name){
+    start_delete(file){
+        console.log(file.id);
+        this.delete_dialogVisible = true;
+    },
 
-    // },
+    delete_file(){
+        this.delete_dialogVisible = false
+    },
 
-    rename_folder(){
-        
-    }
-
+    start_create(file){
+        console.log(file.id);
+        this.create_dialogVisible = true;
+    },
+    
+    create_file(){
+        this.create_dialogVisible = false;
+        console.log(this.input_file_name_create);
+    },
 
     },
 
@@ -137,8 +173,19 @@ export default {
 </script>
 
 <style scoped>
+.create_input{
+    display: flex;
+    margin: 20px;
+    /* justify-content:center; */
+    flex-direction:column;
+    width: 500px;
+}
 .rename_input{
     display: flex;
-
+    margin-bottom: 20px;
+    /* flex-direction:column;
+    justify-content: center;
+    align-items: center; */
+    width: 500px;
 }
 </style>
