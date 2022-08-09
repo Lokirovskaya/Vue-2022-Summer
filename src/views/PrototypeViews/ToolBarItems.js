@@ -33,7 +33,7 @@ const toolbar_items = [
     height: 40,
     font_size: 30,
     text: '',
-    inner_text: false,
+    inner_text: true,
     props: {},
     child_tag: '',
     child_props: [],

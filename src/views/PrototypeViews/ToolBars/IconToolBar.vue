@@ -3,12 +3,17 @@
   <div style="text-align: left">
     <span>选择图标：</span>
     <span style="width: 200px">
-      <el-radio-group v-model="ActiveElement.advanced_class"> 
-        <el-radio-button v-for="(icon, i) in all_icons" :key="i" :label="icon">
-          <div :class="icon" style="font-size: 20px;"></div>
-          </el-radio-button>
-      </el-radio-group>
+      <el-button type="primary" @click="choose_icon_visible = true"> 点击选择 </el-button>
     </span>
+
+    <!-- choose icon prompt -->
+    <el-dialog title="选择图标" width="47%" :visible.sync="choose_icon_visible">
+      <el-radio-group v-model="ActiveElement.advanced_class" @change="choose_icon_visible = false">
+        <el-radio-button v-for="(icon, i) in all_icons" :key="i" :label="icon">
+          <div :class="icon" style="font-size: 20px"></div>
+        </el-radio-button>
+      </el-radio-group>
+    </el-dialog>
   </div>
 </template>
 
@@ -17,15 +22,9 @@
     name: 'IconToolBar',
     props: ['ActiveElement'],
 
-    created() {
-      if (this.ActiveElement.advanced_class === '') {
-        // eslint-disable-next-line vue/no-mutating-props
-        this.ActiveElement.advanced_class = 'el-icon-picture-outline-round';
-      }
-    },
-
     data() {
       return {
+        choose_icon_visible: false,
         all_icons: [
           'el-icon-delete',
           'el-icon-setting',
@@ -59,7 +58,6 @@
           'el-icon-sort-up',
           'el-icon-sort-down',
           'el-icon-rank',
-          'el-icon-loading',
           'el-icon-view',
           'el-icon-c-scale-to-original',
           'el-icon-date',
@@ -164,7 +162,6 @@
           'el-icon-medal-1',
           'el-icon-medal',
           'el-icon-trophy',
-          'el-icon-trophy-1',
           'el-icon-first-aid-kit',
           'el-icon-discover',
           'el-icon-place',
