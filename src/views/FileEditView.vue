@@ -601,6 +601,7 @@ export default {
         //this.html = this.editor.getHTML()
         //this.$nextTick(this.gerarPdfDoComponente)
         this.exportPDF();
+        //this.testDownload();
         this.download_menu_visible = false;
       } else if (this.value === '3') {
         console.log('download success!' + this.value);
@@ -700,31 +701,20 @@ export default {
       minute = minute < 10 ? '0' + minute : minute;
       second = second < 10 ? '0' + second : second;
       this.db_file_name = year + '_' + month + '_' + day + '_' + hour + '_' + minute + '_' + second + '_' + this.$store.state.userid + '_' + this.$route.query.id + '.pdf';
-      this.$axios.post('/project/get_pdf', qs.stringify({ file_id: this.$route.query.id, file_name: this.db_file_name }), { responseType: 'blob' }, {
-        headers: {
-          userid: this.$store.state.userid,
-          token: this.$store.state.token,
-        }
-      })
-        .then(res => {
-          if (res.type == "application/json") {
-            let reader = new FileReader();
-            reader.onload = e => this.$alert(JSON.parse(e.target.result).xxxx);   //xxxx为字段名
-            reader.readerAsText(res);
-          } else {
-            console.log(res);//测试一下
-            let blob = new Blob([res.FileResponse]);
-            const url = window.URL || window.webkitURL || window.moxURL;
-            const link = document.createElement('a');
-            link.href = url.createObjectURL(blob);
-            link.download = name;
-            link.click();
-            url.revokeObjectURL(link.href);
-            link.remove();
-            console.log('下载PDF成功!');
-            this.removePDF();
-          }
-
+      this.$axios.post('/project/get_pdf', qs.stringify({ file_id: this.$route.query.id, file_name: this.db_file_name }), { responseType: 'blob' })
+        .then((res) => {
+          //正常导出流程
+          console.log(res);//测试一下
+          let blob = new Blob([res.data]);
+          const url = window.URL || window.webkitURL || window.moxURL;
+          const link = document.createElement('a');
+          link.href = url.createObjectURL(blob);
+          link.download = name;
+          link.click();
+          url.revokeObjectURL(link.href);
+          link.remove();
+          console.log('下载PDF成功!');
+          this.removePDF();
         })
         .catch(err => {
           this.$message.error(err);
@@ -794,6 +784,36 @@ export default {
           this.$message.error(err);
         });
     },
+    testDownload() {
+      this.$axios.post('/project/downloadFile', qs.stringify({ name1: '2022_08_09_10_08_26_4_38.pdf', name2: 'qianduantest.pdf' }), { responseType: 'blob' })
+        .then((res) => {
+          /*
+          console.log(res);
+          const link = document.createElement('a');
+          let blob = new Blob([res.data]);
+          link.style.display = 'none';
+          const url = window.URL || window.webkitURL || window.moxURL;
+          link.href = url.createObjectURL(blob);
+          link.setAttribute('download', this.resource);
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          url.revokeObjectURL(link.href);*/
+          console.log(res);//测试一下
+          let blob = new Blob([res.data]);
+          const url = window.URL || window.webkitURL || window.moxURL;
+          const link = document.createElement('a');
+          link.href = url.createObjectURL(blob);
+          link.download = 'qianduantest.pdf';
+          link.click();
+          url.revokeObjectURL(link.href);
+          link.remove();
+          console.log('下载PDF成功!');
+        })
+        .catch(err => {
+          this.$message.error(err);
+        });
+    }
   },
   mounted() {
     this.init();
