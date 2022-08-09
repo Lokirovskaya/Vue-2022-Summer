@@ -1,17 +1,17 @@
 <template>
-  <div id="main">
-    <el-tabs v-model="current_proto_id" tab-position="left">
-      <el-tab-pane name="-1">
+  
+    <el-tabs id="main" v-model="current_proto_id" tab-position="left">
+      <el-tab-pane name="proto_list">
         <span slot="label"><b>组织页面</b></span>
         <PrototypeList :projid="this.$route.query.id" @proto-change="handle_proto_change" />
       </el-tab-pane>
 
-      <el-tab-pane v-for="(proto, i) in proto_list" :key="i" :name="proto.proto_id">
+      <el-tab-pane v-for="(proto, i) in proto_list" :key="i" :name="proto.proto_id + ''">
         <span slot="label"> <span class="el-icon-document"></span> {{ proto.proto_name }} </span>
-        <PrototypeEdit :protoid="current_proto_id" :key="current_proto_id" />
+        <PrototypeEdit :protoid="proto.proto_id" />
       </el-tab-pane>
     </el-tabs>
-  </div>
+  
 </template>
 
 <script>
@@ -26,7 +26,7 @@
     data() {
       return {
         proto_list: [],
-        current_proto_id: -1, // -1 表示组织页面界面
+        current_proto_id: 'proto_list',
       };
     },
 
@@ -36,7 +36,7 @@
       },
 
       handle_proto_change(proto_id) {
-        this.current_proto_id = proto_id;
+        this.current_proto_id = proto_id + '';
       },
 
       get_proto_list() {
@@ -70,17 +70,6 @@
   #main {
     width: 100%;
     height: 100%;
-    display: flex;
-  }
-
-  #left {
-    width: 100px;
-    height: 100%;
-    text-align: left;
-  }
-
-  #right {
-    width: 100%;
   }
 
   a,

@@ -1,45 +1,29 @@
 <template>
   <div id="main">
-    <!-- <div id="left">
-      <div class="title">从模板新建页面</div>
-      <div id="template-prototypes">
-        <div class="one-template-prototype"></div>
-        <div class="one-template-prototype"></div>
-        <div class="one-template-prototype"></div>
-      </div>
-    </div> -->
-
     <div id="right">
       <el-divider>原型页面</el-divider>
 
       <div id="prototypes">
         <div class="one-prototype" v-for="(proto, i) in prototype_list" :key="i">
           <div style="height: 70%">
-            <!-- <div style="background-color: gray;"></div> -->
-            <div
-              @click="prototype_click(proto.proto_id)"
-              style="width: 100%; height: 50px; border-radius: 10px"
-            >
-              <img src="@/assets/logo.png" />
+            <div @click="prototype_click(proto.proto_id)">
+              <img :src="proto.proto_photo" style="width: 100%; height: 90px; border-radius: 20px" />
             </div>
           </div>
 
           <div style="height: 30%; margin-left: 10px">
             <span>
-              <div @click="prototype_click(proto.proto_id)">
+              <span @click="prototype_click(proto.proto_id)">
                 <el-link class="proto-title">{{ proto.proto_name }}</el-link>
-              </div>
+              </span>
             </span>
 
             <span style="text-align: right; float: right; margin-right: 10px; margin-top: 10px">
               <el-dropdown>
                 <i class="el-icon-more" style="font-size: 18px"></i>
                 <el-dropdown-menu slot="dropdown">
-                  <el-dropdown-item>
-                    <div @click="edit_prototype(proto.proto_id)">编辑原型</div>
-                  </el-dropdown-item>
                   <el-dropdown-item style="color: red">
-                    <div @click="delete_prototype(proto.proto_id)">删除原型</div>
+                    <div @click="delete_prototype(proto.proto_id)">删除页面</div>
                   </el-dropdown-item>
                 </el-dropdown-menu>
               </el-dropdown>
@@ -50,7 +34,7 @@
         <div class="new-prototype">
           <div @click="new_prototype_dialog_visible = true">
             <i class="el-icon-plus" style="font-size: 50px"></i>
-            <div style="font-size: 18px; color: gray">新建原型</div>
+            <div style="font-size: 18px; color: gray">新建页面</div>
           </div>
         </div>
       </div>
@@ -67,26 +51,75 @@
           <el-button type="success" @click="open_preview_status()">开放预览</el-button>
         </div>
         <div v-else-if="preview_status === 2">
-          当前项目原型预览已开放，预览网址
-
-          <el-button type="warning" @click="close_preview_status()">关闭预览</el-button>
+          当前项目原型预览已开放：
           <router-link :to="{ path: '/protopreview', query: { id: projid } }">
-            <el-link>点击</el-link>
+            <el-link>点击此处跳转到预览</el-link>
           </router-link>
+          <el-button type="warning" @click="close_preview_status()">关闭预览</el-button>
         </div>
       </div>
     </div>
 
     <!-- new proj prompt dialog -->
-    <el-dialog title="新建原型" :visible.sync="new_prototype_dialog_visible" width="40%">
+    <el-dialog title="新建页面" :visible.sync="new_prototype_dialog_visible" width="45%">
+      <div class="title">新页面名称</div>
+      <br />
+
       <div style="margin-left: 10%; margin-right: 10%">
         <el-input
-          placeholder="请输入新建原型名"
+          placeholder="请输入新建页面名"
           prefix-icon="el-icon-notebook-2"
           v-model="new_prototype_name"
         >
         </el-input>
       </div>
+
+      <el-divider></el-divider>
+
+      <div class="title">从模板新建页面</div>
+      <br />
+      <el-tabs type="border-card">
+        <el-tab-pane label="手机">
+          <el-radio-group
+            v-model="template_radio_model"
+            class="template-prototypes"
+            @change="set_template('phone', $event)"
+          >
+            <el-radio v-for="(template, i) in prototype_template_phone.templates" :key="i" :label="i">
+              <div class="one-template-prototype">
+                {{ template.name }}
+              </div>
+            </el-radio>
+          </el-radio-group>
+        </el-tab-pane>
+
+        <el-tab-pane label="平板">
+          还没做
+          <div class="template-prototypes">
+            <div
+              class="one-template-prototype"
+              v-for="(template, i) in prototype_template_phone.templates"
+              :key="i"
+            >
+              {{ template.name }}
+            </div>
+          </div>
+        </el-tab-pane>
+
+        <el-tab-pane label="电脑">
+          还没做
+          <div class="template-prototypes">
+            <div
+              class="one-template-prototype"
+              v-for="(template, i) in prototype_template_phone.templates"
+              :key="i"
+            >
+              {{ template.name }}
+            </div>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+
       <div slot="footer">
         <el-button @click="new_prototype_dialog_visible = false">取消</el-button>
         <el-button type="primary" @click="create_prototype">确定</el-button>
@@ -94,7 +127,7 @@
     </el-dialog>
 
     <!--rename prototype prompt dialog -->
-    <el-dialog title="重命名原型" :visible.sync="prototype_rename_dialog_visible" width="40%">
+    <el-dialog title="重命名页面" :visible.sync="prototype_rename_dialog_visible" width="40%">
       <div style="margin-left: 10%; margin-right: 10%">
         <el-input placeholder="请输入新名字" prefix-icon="el-icon-notebook-2" v-model="prototype_rename">
         </el-input>
@@ -109,6 +142,13 @@
 
 <script>
   import qs from 'qs';
+
+  import {
+    prototype_template_phone,
+    prototype_template_pad,
+    prototype_template_pc,
+  } from '@/views/PrototypeViews/PrototypeTemplate.js';
+
   export default {
     name: 'PrototypeListView',
     props: ['projid'],
@@ -121,6 +161,18 @@
         prototype_rename: '',
         prototype_list: [], //原型图列表
         preview_status: -1, // 0 无, 1 关闭, 2 打开
+
+        // imported from js
+        prototype_template_phone,
+        prototype_template_pad,
+        prototype_template_pc,
+
+        current_template: {
+          canvas_width: 500,
+          canvas_height: 500,
+          content: '[]',
+        },
+        template_radio_model: null,
       };
     },
     methods: {
@@ -129,9 +181,19 @@
         this.$emit('proto-change', prototype_id);
       },
 
-      edit_prototype(prototype_id) {
-        console.log(prototype_id);
-        this.$router.push({ path: '/prototype', query: { id: prototype_id } }); //跳转到该文档的编辑界面
+      set_template(type, index) {
+        let template_type;
+        if (type === 'phone') {
+          template_type = prototype_template_phone;
+        } else if (type === 'pad') {
+          template_type = prototype_template_pad;
+        } else if (type === 'pc') {
+          template_type = prototype_template_pc;
+        }
+
+        this.current_template.canvas_width = template_type.canvas_width;
+        this.current_template.canvas_height = template_type.canvas_height;
+        this.current_template.content = template_type.templates[index].content;
       },
 
       rename_prototype() {
@@ -187,8 +249,6 @@
             })
             .then((res) => {
               if (res.data.errno === 0) {
-                console.log(res.data); //测试一下
-                //this.$message.success('重命名成功' + this.prototype_rename_id);
                 var i = 0;
                 for (var item of this.prototype_list) {
                   if (item.proto_id === prototype_id) {
@@ -213,17 +273,21 @@
         if (this.new_prototype_name === '') {
           this.$message.error('原型名不能为空');
         } else {
+          let post_data = {
+            proj_id: this.projid,
+            proto_name: this.new_prototype_name,
+            canvas_width: this.current_template.canvas_width,
+            canvas_height: this.current_template.canvas_height,
+            proto_content: this.current_template.content,
+          };
+
           this.$axios
-            .post(
-              '/project/create_proto',
-              qs.stringify({ proj_id: this.projid, proto_name: this.new_prototype_name }),
-              {
-                headers: {
-                  userid: this.$store.state.userid,
-                  token: this.$store.state.token,
-                },
-              }
-            )
+            .post('/project/create_proto', qs.stringify(post_data), {
+              headers: {
+                userid: this.$store.state.userid,
+                token: this.$store.state.token,
+              },
+            })
             .then((res) => {
               if (res.data.errno === 0) {
                 console.log(res.data); //测试一下
@@ -334,6 +398,7 @@
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
   }
 
   #left {
@@ -391,10 +456,11 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04);
   }
 
-  #template-prototypes {
+  .template-prototypes {
     overflow-y: auto;
     height: 100%;
     padding: 15px;
+    display: flex;
   }
 
   .one-template-prototype {
@@ -404,8 +470,6 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04);
     border-radius: 20px;
     text-align: left;
-    display: flex;
-    flex-direction: column;
   }
 
   #preview {
