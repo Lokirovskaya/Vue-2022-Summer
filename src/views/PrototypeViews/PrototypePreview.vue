@@ -14,8 +14,7 @@
               <VueDragResize
                 v-for="element in proto.protos_content"
                 :key="element.id"
-                :isDraggable="false"
-                :isResizable="false"
+
                 :preventActiveBehavior="true"
                 :x="element.x"
                 :y="element.y"
@@ -35,7 +34,7 @@
                     :is="element.tag"
                     v-bind="element.props"
                     v-model="element.self_model"
-                    :style="'height: 100%; font-size:' + element.font_size + 'px;'"
+                    :style="'width: 100%; height: 100%; font-size:' + element.font_size + 'px;' + element.advanced_style"
                   >
                     <component
                       v-for="(child_prop, j) in element.child_props"

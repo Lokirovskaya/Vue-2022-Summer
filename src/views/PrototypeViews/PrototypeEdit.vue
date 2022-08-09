@@ -14,20 +14,12 @@
       </el-button>
     </div>
 
-    <div id="work-area">
+    <div id="work-area" @click="update_canvas_size()">
       <div :style="'width:' + canvas_width + 'px;'" :key="canvas_key">
         <div
           id="drag-area"
           ref="screenshotArea"
-          :style="
-            'width:' +
-            canvas_width +
-            'px;height:' +
-            canvas_height +
-            'px; transform: scale(' +
-            canvas_scale +
-            ');'
-          "
+          :style="'width:' + canvas_width + 'px;height:' + canvas_height + 'px;'"
           @mousedown="unset_active()"
         >
           <VueDragResize
@@ -56,12 +48,13 @@
               >
                 {{ element.text }}
               </div>
+
               <component
-                class="drag-element"
+                :class="'drag-element ' + element.advanced_class"
                 :is="element.tag"
                 v-bind="element.props"
                 v-model="element.self_model"
-                :style="'height: 100%; font-size:' + element.font_size + 'px;'"
+                :style="'height: 100%; font-size:' + element.font_size + 'px;' + element.advanced_style"
               >
                 <component
                   v-for="(child_prop, j) in element.child_props"
@@ -119,6 +112,8 @@
           :ActiveElement="drag_elements[activated_index]"
         ></component>
       </div>
+
+      {{ drag_elements }}
     </div>
 
     <!-- debug -->
@@ -155,8 +150,10 @@
   import GeneralToolBar from '@/views/PrototypeViews/ToolBars/GeneralToolBar.vue';
   import ButtonToolBar from '@/views/PrototypeViews/ToolBars/ButtonToolBar.vue';
   import InputToolBar from '@/views/PrototypeViews/ToolBars/InputToolBar.vue';
+  import IconToolBar from '@/views/PrototypeViews/ToolBars/IconToolBar.vue';
   import RadioToolBar from '@/views/PrototypeViews/ToolBars/RadioToolBar.vue';
   import SelectToolBar from '@/views/PrototypeViews/ToolBars/SelectToolBar.vue';
+  import CardToolBar from '@/views/PrototypeViews/ToolBars/CardToolBar.vue';
 
   export default {
     name: 'PrototypeView',
@@ -166,8 +163,10 @@
       GeneralToolBar,
       ButtonToolBar,
       InputToolBar,
+      IconToolBar,
       RadioToolBar,
       SelectToolBar,
+      CardToolBar,
     },
 
     data() {
@@ -204,13 +203,15 @@
           z: 500,
           width: item.width,
           height: item.height,
-          font_size: 15,
+          font_size: item.font_size,
           text: item.text,
           inner_text: item.inner_text,
-          props: item.props,
+          props: { ...item.props },
           self_model: '',
           child_tag: item.child_tag,
-          child_props: item.child_props,
+          child_props: [].concat(item.child_props),
+          advanced_style: '', // for card
+          advanced_class: item.advanced_class, // for icon
         };
         this.drag_elements.push(element);
         this.id++;
@@ -234,8 +235,8 @@
       },
 
       set_position(new_element, index) {
-        this.drag_elements[index].x = new_element.left;
-        this.drag_elements[index].y = new_element.top;
+        if (new_element.left >= 0) this.drag_elements[index].x = new_element.left;
+        if (new_element.top >= 0) this.drag_elements[index].y = new_element.top;
       },
 
       set_size(new_element, index) {
@@ -418,8 +419,8 @@
   #drag-area {
     position: relative;
     /* will set by this.canvas_width/height now */
-    /* width: 100%; */
-    /* height: 100%; */
+    width: 100%;
+    height: 100%;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
     background-color: white;
   }
