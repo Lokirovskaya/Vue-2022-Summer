@@ -1,59 +1,57 @@
 <template>
   <div id="main">
-    <div>
-      <div id="preview-area" :style="'width:' + canvas_width + 'px;'">
-        <div
-          id="drag-area"
-          ref="screenshotArea"
-          :style="'width:' + canvas_width + 'px;height:' + canvas_height + 'px;'"
-          @mousedown="unset_active()"
-        >
-          <VueDragResize
-            v-for="(element, i) in drag_elements"
-            :key="element.id"
-            :parentLimitation="true"
-            :x="element.x"
-            :y="element.y"
-            :z="element.z"
-            :w="element.width"
-            :h="element.height"
-            :isActive="element.active"
-            :minw="20"
-            :minh="20"
-            :snapToGrid="true"
-            :gridX="10"
-            :gridY="10"
-            @activated="set_active(i)"
-            @dragging="set_position($event, i)"
-            @resizing="set_size($event, i)"
-          >
-            <div style="height: 100%; display: flex; align-items: center">
-              <div
-                v-if="element.inner_text === false"
-                :style="'white-space: nowrap; margin-right: 5px; font-size:' + element.font_size + 'px;'"
+    <el-tabs type="border-card" style="width: 100%">
+      <el-tab-pane v-for="(proto, i) in all_proto_content" :key="i" :name="proto.proto_id + ''">
+        <span slot="label"> <span class="el-icon-document"></span> {{ proto.proto_name }} </span>
+
+        <div>
+          <div id="preview-area" :style="'width:' + proto.canvas_width + 'px;'">
+            <div
+              id="drag-area"
+              ref="screenshotArea"
+              :style="'width:' + proto.canvas_width + 'px;height:' + proto.canvas_height + 'px;'"
+            >
+              <VueDragResize
+                v-for="element in proto.protos_content"
+                :key="element.id"
+                :isDraggable="false"
+                :isResizable="false"
+                :preventActiveBehavior="true"
+                :x="element.x"
+                :y="element.y"
+                :z="element.z"
+                :w="element.width"
+                :h="element.height"
+                :isActive="false"
               >
-                {{ element.text }}
-              </div>
-              <component
-                class="drag-element"
-                :is="element.tag"
-                v-bind="element.props"
-                v-model="element.self_model"
-                :style="'height: 100%; font-size:' + element.font_size + 'px;'"
-              >
-                <component
-                  v-for="(child_prop, j) in element.child_props"
-                  :key="j"
-                  :is="element.child_tag"
-                  v-bind="child_prop"
-                ></component>
-                {{ element.text }}
-              </component>
+                <div style="height: 100%; display: flex; align-items: center">
+                  <div
+                    v-if="element.inner_text === false"
+                    :style="'white-space: nowrap; margin-right: 5px; font-size:' + element.font_size + 'px;'"
+                  >
+                    {{ element.text }}
+                  </div>
+                  <component
+                    :is="element.tag"
+                    v-bind="element.props"
+                    v-model="element.self_model"
+                    :style="'height: 100%; font-size:' + element.font_size + 'px;'"
+                  >
+                    <component
+                      v-for="(child_prop, j) in element.child_props"
+                      :key="j"
+                      :is="element.child_tag"
+                      v-bind="child_prop"
+                    ></component>
+                    {{ element.text }}
+                  </component>
+                </div>
+              </VueDragResize>
             </div>
-          </VueDragResize>
+          </div>
         </div>
-      </div>
-    </div>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -69,7 +67,6 @@
       return {
         // [{proto_id, proto_name, canvas_width, canvas_height, protos_content}, ...]
         all_proto_content: [],
-        drag_element: [],
       };
     },
 
@@ -85,7 +82,13 @@
           .then((res) => {
             if (res.data.errno === 0) {
               this.all_proto_content = res.data.all_proto_content;
-              console.log(this.all_proto_content)
+              let len = this.all_proto_content.length;
+              for (let i = 0; i < len; i++) {
+                // 弱类型就是方便
+                this.all_proto_content[i].protos_content = JSON.parse(
+                  this.all_proto_content[i].protos_content
+                );
+              }
             } else {
               this.$message.error(res.data.msg);
             }
@@ -114,14 +117,26 @@
 <style scoped>
   #main {
     width: 100%;
-    height: 100%;
+    min-height: 100%;
     display: flex;
-    flex-direction: column;
     align-items: center;
   }
 
   #preview-area {
     position: relative;
+
     box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04);
+  }
+
+  #left {
+    width: 100px;
+    height: 100%;
+    text-align: left;
+    box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.12), 8px 8px 8px rgba(0, 0, 0, 0.04);
+  }
+
+  #right {
+    width: 100%;
+    height: 100%;
   }
 </style>

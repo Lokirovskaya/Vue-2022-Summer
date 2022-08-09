@@ -68,7 +68,11 @@
         </div>
         <div v-else-if="preview_status === 2">
           当前项目原型预览已开放，预览网址
+
           <el-button type="warning" @click="close_preview_status()">关闭预览</el-button>
+          <router-link :to="{ path: '/protopreview', query: { id: projid } }">
+            <el-link>点击</el-link>
+          </router-link>
         </div>
       </div>
     </div>

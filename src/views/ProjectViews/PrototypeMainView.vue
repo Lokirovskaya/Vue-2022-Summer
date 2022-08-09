@@ -1,23 +1,16 @@
 <template>
   <div id="main">
-    <el-menu id="left" @select="handle_select">
-      <el-menu-item index="-1">
-        <el-link :underline="false">组织页面</el-link>
-      </el-menu-item>
+    <el-tabs v-model="current_proto_id" tab-position="left">
+      <el-tab-pane name="-1">
+        <span slot="label"><b>组织页面</b></span>
+        <PrototypeList :projid="this.$route.query.id" @proto-change="handle_proto_change" />
+      </el-tab-pane>
 
-      <el-menu-item v-for="(proto, i) in proto_list" :key="i" :index="proto.proto_id">
-        {{ proto.proto_name }}
-      </el-menu-item>
-    </el-menu>
-
-    <div id="right">
-      <PrototypeList
-        v-if="current_proto_id < 0"
-        :projid="this.$route.query.id"
-        @proto-change="handle_proto_change"
-      />
-      <PrototypeEdit v-else :protoid="current_proto_id" :key="current_proto_id" />
-    </div>
+      <el-tab-pane v-for="(proto, i) in proto_list" :key="i" :name="proto.proto_id">
+        <span slot="label"> <span class="el-icon-document"></span> {{ proto.proto_name }} </span>
+        <PrototypeEdit :protoid="current_proto_id" :key="current_proto_id" />
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 
@@ -81,7 +74,7 @@
   }
 
   #left {
-    width: 150px;
+    width: 100px;
     height: 100%;
     text-align: left;
   }

@@ -404,7 +404,7 @@
     border-radius: 0px;
     text-align: left;
     font-size: 16px;
-    margin: 0px;
+    margin-left: 5px;
   }
 
   #work-area {
