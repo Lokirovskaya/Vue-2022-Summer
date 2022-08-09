@@ -1,6 +1,6 @@
 export const prototype_template_phone = {
-  canvas_width: 500,
-  canvas_height: 800,
+  canvas_width: 400,
+  canvas_height: 600,
   templates: [
     {
       name: '购物网站',
