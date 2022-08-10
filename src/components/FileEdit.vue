@@ -1,7 +1,7 @@
 <template>
 
   <div id="FileEdit">
-
+    
     <div class="editor" v-if="editor">
       <!-- <DocCenter></DocCenter> -->
       <div class="editor__header">
@@ -148,15 +148,13 @@
         <div class="divider"></div>
         <!--undo-->
         <el-tooltip class="item" effect="dark" content="撤销" placement="bottom">
-          <el-button class="menu-item" type="info" @click="editor.chain().focus().undo().run()"
-            :disabled="!editor.can().undo()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().undo().run()" :disabled="!editor.can().undo()">
             <i class="iconfont">&#xe739;</i>
           </el-button>
         </el-tooltip>
         <!--redo-->
         <el-tooltip class="item" effect="dark" content="重做" placement="bottom">
-          <el-button class="menu-item" type="info" @click="editor.chain().focus().redo().run()"
-            :disabled="!editor.can().redo()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().redo()">
             <i class="iconfont">&#xe652;</i>
           </el-button>
         </el-tooltip>
@@ -264,10 +262,10 @@ export default {
       }],
     };
   },
-  props: {
-    file_id: { type: Number, default: 0 },
-    file_name: { type: String, required: true },
-  },
+props:{
+      file_id: {},
+      file_name: { type: String, required: true },
+    },
   methods: {
     init() {
       //初始化协同编辑和编辑器的相关参数
@@ -787,7 +785,7 @@ export default {
 }
 
 .editor {
-
+  
   display: flex;
   flex-direction: column;
   /* max-height: 45.2rem;*/
@@ -831,9 +829,6 @@ export default {
   border-right: 3px solid #0D0D0D;
   border-right-width: 3px;
   border-right-color: rgb(13, 13, 13);
-  position: fixed;
-  width: fill;
-  z-index: 1000;
   background-color: #F5F5F5;
 }
 
@@ -843,8 +838,9 @@ export default {
   padding-right: 1rem;
   padding-bottom: 1.25rem;
   padding-left: 1rem;
-  max-height: 40em;
+  max-height: 30rem;
   text-align: left;
+  width: 100%;
   flex: 1 1 auto;
   flex-grow: 1;
   flex-shrink: 1;
@@ -969,8 +965,7 @@ export default {
   margin-left: 0.5rem;
   margin-right: 0.75rem;
 }
-
-.ProseMirror {
+.ProseMirror{
   background-color: white;
   padding-left: 3rem;
   padding-right: 3rem;
@@ -982,7 +977,6 @@ export default {
   margin-bottom: 3rem;
   min-height: 30rem;
 }
-
 .ProseMirror code {
   font-size: .9rem;
   padding: 0.25em;
