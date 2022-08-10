@@ -5,39 +5,46 @@
     <div class="editor" v-if="editor">
       <!-- <DocCenter></DocCenter> -->
       <div class="editor__header">
+        <!--返回上级界面-->
+        <el-tooltip class="item" effect="dark" content="返回" placement="bottom">
+          <el-button class="menu-item" type="info" @click="goBack"
+            :class="{ 'is-active': editor.isActive('bold') }">
+            <i class="iconfont">&#xe755;</i>
+          </el-button>
+        </el-tooltip>
         <b>{{ this.$route.query.name }}</b>
         <div class="divider"></div>
         <!--粗体-->
         <el-tooltip class="item" effect="dark" content="粗体" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleBold().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleBold().run()"
             :class="{ 'is-active': editor.isActive('bold') }">
             <i class="iconfont">&#xe7f7;</i>
           </el-button>
         </el-tooltip>
         <!--斜体-->
         <el-tooltip class="item" effect="dark" content="斜体" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleItalic().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleItalic().run()"
             :class="{ 'is-active': editor.isActive('italic') }">
             <i class="iconfont">&#xe7fb;</i>
           </el-button>
         </el-tooltip>
         <!--Strike-->
         <el-tooltip class="item" effect="dark" content="划掉" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleStrike().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleStrike().run()"
             :class="{ 'is-active': editor.isActive('strike') }">
             <i class="iconfont">&#xe7f9;</i>
           </el-button>
         </el-tooltip>
         <!--code-->
         <el-tooltip class="item" effect="dark" content="代码" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleCode().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleCode().run()"
             :class="{ 'is-active': editor.isActive('code') }">
             <i class="iconfont">&#xe638;</i>
           </el-button>
         </el-tooltip>
         <!--Highlight-->
         <el-tooltip class="item" effect="dark" content="高亮" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleHighlight().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleHighlight().run()"
             :class="{ 'is-active': editor.isActive('highlight') }">
             <i class="iconfont">&#xe68c;</i>
           </el-button>
@@ -45,28 +52,28 @@
         <div class="divider"></div>
         <!--H1-->
         <el-tooltip class="item" effect="dark" content="标题1" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
             :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
             <i class="iconfont">&#xe61a;</i>
           </el-button>
         </el-tooltip>
         <!--H2-->
         <el-tooltip class="item" effect="dark" content="标题2" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
             :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
             <i class="iconfont">&#xe61d;</i>
           </el-button>
         </el-tooltip>
         <!--Bulletlist-->
         <el-tooltip class="item" effect="dark" content="无序列表" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleBulletList().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleBulletList().run()"
             :class="{ 'is-active': editor.isActive('bulletList') }">
             <i class="iconfont">&#xe62a;</i>
           </el-button>
         </el-tooltip>
         <!--OrderdList-->
         <el-tooltip class="item" effect="dark" content="有序列表" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleOrderedList().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleOrderedList().run()"
             :class="{ 'is-active': editor.isActive('orderedList') }">
             <i class="iconfont">&#xebcd;</i>
           </el-button>
@@ -74,7 +81,7 @@
         <!--TaskList-->
         <!--codeblock-->
         <el-tooltip class="item" effect="dark" content="代码块" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleCodeBlock().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleCodeBlock().run()"
             :class="{ 'is-active': editor.isActive('codeBlock') }">
             <i class="iconfont">&#xe636;</i>
           </el-button>
@@ -82,20 +89,20 @@
         <div class="divider"></div>
         <!--blockquote-->
         <el-tooltip class="item" effect="dark" content="引用" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleBlockquote().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleBlockquote().run()"
             :class="{ 'is-active': editor.isActive('blockquote') }">
             <i class="iconfont">&#xe608;</i>
           </el-button>
         </el-tooltip>
         <!--HorizontalRule-->
         <el-tooltip class="item" effect="dark" content="分割线" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().setHorizontalRule().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().setHorizontalRule().run()">
             <i class="iconfont">&#xe61b;</i>
           </el-button>
         </el-tooltip>
         <!--Link-->
         <el-tooltip class="item" effect="dark" content="添加链接" placement="bottom">
-          <el-button class="menu-item" @click="setLink" :class="{ 'is-active': editor.isActive('link') }">
+          <el-button class="menu-item" type="info" @click="setLink" :class="{ 'is-active': editor.isActive('link') }">
             <i class="iconfont">&#xe756;</i>
           </el-button>
         </el-tooltip>
@@ -110,63 +117,63 @@
         <div class="divider"></div>
         <!--CreateTable-->
         <el-tooltip class="item" effect="dark" content="插入表格" placement="bottom">
-          <el-button class="menu-item"
+          <el-button class="menu-item" type="info"
             @click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()">
             <i class="iconfont">&#xe83c;</i>
           </el-button>
         </el-tooltip>
         <!--Deletetable-->
         <el-tooltip class="item" effect="dark" content="删除表格" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().deleteTable().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().deleteTable().run()">
             <i class="iconfont">&#xe600;</i>
           </el-button>
         </el-tooltip>
         <!--InsertColumn-->
         <el-tooltip class="item" effect="dark" content="插入列" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().addColumnAfter().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().addColumnAfter().run()">
             <i class="iconfont">&#xe938;</i>
           </el-button>
         </el-tooltip>
         <!--DeleteColumn-->
         <el-tooltip class="item" effect="dark" content="删除列" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().deleteColumn().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().deleteColumn().run()">
             <i class="iconfont">&#xe6f2;</i>
           </el-button>
         </el-tooltip>
         <!--InsertRow-->
         <el-tooltip class="item" effect="dark" content="插入行" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().addRowAfter().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().addRowAfter().run()">
             <i class="iconfont">&#xe940;</i>
           </el-button>
         </el-tooltip>
         <!--DeleteRow-->
         <el-tooltip class="item" effect="dark" content="删除行" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().deleteRow().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().deleteRow().run()">
             <i class="iconfont">&#xe770;</i>
           </el-button>
         </el-tooltip>
         <div class="divider"></div>
         <!--undo-->
         <el-tooltip class="item" effect="dark" content="撤销" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().undo().run()" :disabled="!editor.can().undo()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().undo().run()" :disabled="!editor.can().undo()">
             <i class="iconfont">&#xe739;</i>
           </el-button>
         </el-tooltip>
         <!--redo-->
         <el-tooltip class="item" effect="dark" content="重做" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().redo()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().redo()">
             <i class="iconfont">&#xe652;</i>
           </el-button>
         </el-tooltip>
         <!--save-->
         <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
-          <el-button class="menu-item" @click="Save">
+          <el-button class="menu-item" type="info" @click="Save">
             <i class="iconfont">&#xe7d9;</i>
           </el-button>
         </el-tooltip>
         <!--download-->
         <el-tooltip class="item" effect="dark" content="下载" placement="bottom">
-          <el-button class="menu-item" @click="download_menu_visible = true">
+          <el-button class="menu-item" type="info" @click="download_menu_visible = true">
             <i class="iconfont">&#xe7da;</i>
           </el-button>
         </el-tooltip>
@@ -221,8 +228,6 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import Link from '@tiptap/extension-link'
 import TurndownService from 'turndown'
-import JsPDF from "jspdf"//PDF
-import * as html2canvas from 'html2canvas'//PDF
 
 
 import * as Y from 'yjs'
@@ -265,10 +270,6 @@ export default {
   },
 
   methods: {
-    test() {
-      console.log(this.editor.getText());
-      console.log(this.editor.getHTML());
-    },
     init() {
       //初始化协同编辑和编辑器的相关参数
       const ydoc = new Y.Doc();
@@ -340,6 +341,13 @@ export default {
         .catch(err => {
           this.$message.error(err);
         });
+    },
+    goBack() {
+      if(this.$route.query.isTeamFile == 0){//项目文档
+        this.$router.push({ path: '/project', query: {id: this.$route.query.projid, tab: 'file', teamid: this.$route.query.teamid}});
+      }else{
+        this.$router.push({ path: '/team', query: {id: this.$route.query.teamid}});
+      }
     },
     setColor() {
       var i = Math.floor(Math.random() * 10);
@@ -593,7 +601,7 @@ export default {
         })
         //console.log(this.editor.getHTML());
         const file_name = this.$route.query.name + '.md';
-        console.log(this.editor.getHTML()); // todo
+        //console.log(this.editor.getHTML()); // todo
         const data = turndown.turndown(this.editor.getHTML());
         const blob = new Blob([data], { type: "text/plain" });
         const a = document.createElement("a");
@@ -604,68 +612,22 @@ export default {
         a.remove();
         this.download_menu_visible = false;
       } else if (this.value === '1') {//PDF
-        console.log('download success!' + this.value);
+        //console.log('download success!' + this.value);
         //this.html = this.editor.getHTML()
         //this.$nextTick(this.gerarPdfDoComponente)
+        this.Save();
         this.exportPDF();
         //this.testDownload();
         this.download_menu_visible = false;
       } else if (this.value === '3') {
-        console.log('download success!' + this.value);
-        console.log('.docx start');
+        //console.log('download success!' + this.value);
+        //console.log('.docx start');
         this.exportWord();
         //this.exportHTML();
         this.download_menu_visible = false;
       } else if (this.value == '4') {
         this.exportHTML();
       }
-    },
-    gerarPdfDoComponente() {
-      //var content = document.querySelector('#pdfDom');
-      /*
-      var pdfDom = document.querySelector('#pdfDom')
-      var width = pdfDom.offsetWidth; //dom宽
-      var height = pdfDom.offsetHeight; //dom高
-      var scale = 2; //放大倍数
-      var opts = {
-        dpi: window.devicePixelRatio * 2,
-        scale: scale,//添加的scale参数
-        width: width,
-        height: height,
-        useCORS: true, // 如果截图的内容里有图片,可能会有跨域的情况,加上这个参数,解决文件跨域问题
-        allowTaint: true
-      };
-      var canvas = document.createElement("canvas")//创建一个canvas节点
-      canvas.width = width * 2;
-      canvas.height = height * 2;
-      canvas.style.width = width + 'px';
-      canvas.style.height = height + 'px';
-      var context = canvas.getContext("2d")
-      context.scale(2, 2) // 增强图片清晰度*/
-      html2canvas(document.querySelector('#pdfDom')).then(canvas => {
-        let contentWidth = canvas.width
-        let contentHeight = canvas.height
-        let pageHeight = contentWidth / 592.28 * 841.89
-        let leftHeight = contentHeight
-        let position = 0
-        let imgWidth = 595.28
-        let imgHeight = 592.28 / contentWidth * contentHeight
-        let pageData = canvas.toDataURL('image/jpeg', 1.0)
-        let PDF = new JsPDF('', 'pt', 'a4');
-        if (leftHeight < pageHeight) {
-          PDF.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight)
-        } else {
-          while (leftHeight > 0) {
-            PDF.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
-            leftHeight -= pageHeight
-            position -= 841.89
-            if (leftHeight > 0) {
-              PDF.addPage()
-            }
-          }
-        }
-        PDF.save(this.$route.query.name + '.pdf')
-      })
     },
     exportWord() {
       const name = this.$route.query.name + '.doc'
@@ -791,36 +753,6 @@ export default {
           this.$message.error(err);
         });
     },
-    testDownload() {
-      this.$axios.post('/project/downloadFile', qs.stringify({ name1: '2022_08_09_10_08_26_4_38.pdf', name2: 'qianduantest.pdf' }), { responseType: 'blob' })
-        .then((res) => {
-          /*
-          console.log(res);
-          const link = document.createElement('a');
-          let blob = new Blob([res.data]);
-          link.style.display = 'none';
-          const url = window.URL || window.webkitURL || window.moxURL;
-          link.href = url.createObjectURL(blob);
-          link.setAttribute('download', this.resource);
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          url.revokeObjectURL(link.href);*/
-          console.log(res);//测试一下
-          let blob = new Blob([res.data]);
-          const url = window.URL || window.webkitURL || window.moxURL;
-          const link = document.createElement('a');
-          link.href = url.createObjectURL(blob);
-          link.download = 'qianduantest.pdf';
-          link.click();
-          url.revokeObjectURL(link.href);
-          link.remove();
-          console.log('下载PDF成功!');
-        })
-        .catch(err => {
-          this.$message.error(err);
-        });
-    }
   },
   mounted() {
     this.init();
@@ -882,8 +814,6 @@ export default {
   border-image-width: initial;
   border-image-outset: initial;
   border-image-repeat: initial;
-  border-bottom-right-radius: 0.75rem;
-  border-bottom-left-radius: 0.75rem;
 }
 
 .editor__header {
@@ -911,7 +841,7 @@ export default {
   position: fixed;
   width: fill;
   z-index: 1000;
-  background-color: white;
+  background-color: #F5F5F5;
 }
 
 .editor__content {
@@ -929,6 +859,7 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  background-color: #F5F5F5;
 }
 
 .editor__footer {
@@ -1045,7 +976,18 @@ export default {
   margin-left: 0.5rem;
   margin-right: 0.75rem;
 }
-
+.ProseMirror{
+  background-color: white;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin-left: 3rem;
+  margin-right: 5rem;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  min-height: 80rem;
+}
 .ProseMirror code {
   font-size: .9rem;
   padding: 0.25em;

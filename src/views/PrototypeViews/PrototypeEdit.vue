@@ -19,7 +19,15 @@
         <div
           id="drag-area"
           ref="screenshotArea"
-          :style="'width:' + canvas_width + 'px;height:' + canvas_height + 'px;'"
+          :style="
+            'width:' +
+            canvas_width +
+            'px;height:' +
+            canvas_height +
+            'px; transform: scale(' +
+            canvas_scale_list[canvas_scale_index] +
+            '); transform-origin: 0px 0px;'
+          "
           @mousedown="unset_active()"
         >
           <VueDragResize
@@ -74,6 +82,10 @@
       <div id="button-area" style="text-align: left">
         <el-button type="success" @click="save_prototype()">保存原型</el-button>
         <el-button type="primary" @click="download_screenshot_prompt()">下载原型为图片</el-button>
+      </div>
+      <div style="text-align: left">
+        <el-button circle class="el-icon-zoom-in" @click="zoom_in()" style="font-size: 20px"></el-button>
+        <el-button circle class="el-icon-zoom-out" @click="zoom_out()" style="font-size: 20px"></el-button>
       </div>
       <div>
         页面大小：
@@ -182,7 +194,8 @@
         canvas_width: 500,
         canvas_height: 600,
         canvas_key: 0, // 为了刷新 canvas 设置的 key
-        canvas_scale: 1,
+        canvas_scale_list: [0.3, 0.5, 0.8, 1.0, 1.2, 1.5],
+        canvas_scale_index: 3,
 
         save_image_dialog_visible: false,
         save_image_ext: 'png',
@@ -253,6 +266,20 @@
 
       update_canvas_size() {
         this.canvas_key++;
+      },
+
+      zoom_in() {
+        if (this.canvas_scale_index < this.canvas_scale_list.length - 1) {
+          this.canvas_scale_index++;
+          this.update_canvas_size();
+        }
+      },
+
+      zoom_out() {
+        if (this.canvas_scale_index > 0) {
+          this.canvas_scale_index--;
+          this.update_canvas_size();
+        }
       },
 
       save_prototype() {

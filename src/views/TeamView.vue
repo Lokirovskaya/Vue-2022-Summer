@@ -6,38 +6,51 @@
       <el-tab-pane label="团队信息">
         <el-divider>团队项目</el-divider>
 
-  <div class="sort_and_search">
-  <div style="display:flex;">
-  <el-dropdown trigger="click">
-  <span class="el-dropdown-link">
-    选择排序方式<i class="el-icon-arrow-down el-icon--right"></i>
-  </span>
-  <el-dropdown-menu slot="dropdown">
-    <el-dropdown-item><div @click="sort_proj('创建时间从早到晚')">创建时间从早到晚</div></el-dropdown-item>
-    <el-dropdown-item><div @click="sort_proj('创建时间从晚到早')">创建时间从晚到早</div></el-dropdown-item>
-    <el-dropdown-item><div @click="sort_proj('名称字典序正序')">名称字典序正序</div></el-dropdown-item>
-    <el-dropdown-item><div @click="sort_proj('名称字典序倒序')">名称字典序倒序</div></el-dropdown-item>
-    <el-dropdown-item><div @click="sort_proj('开始时间从早到晚')">开始时间从早到晚</div></el-dropdown-item>
-    <el-dropdown-item><div @click="sort_proj('开始时间从晚到早')">开始时间从晚到早</div></el-dropdown-item>
-  </el-dropdown-menu>
-</el-dropdown>
-  </div>
+        <div class="sort_and_search">
+          <div style="display: flex">
+            <el-dropdown trigger="click">
+              <span class="el-dropdown-link">
+                选择排序方式<i class="el-icon-arrow-down el-icon--right"></i>
+              </span>
+              <el-dropdown-menu slot="dropdown">
+                <el-dropdown-item
+                  ><div @click="sort_proj('创建时间从早到晚')">创建时间从早到晚</div></el-dropdown-item
+                >
+                <el-dropdown-item
+                  ><div @click="sort_proj('创建时间从晚到早')">创建时间从晚到早</div></el-dropdown-item
+                >
+                <el-dropdown-item
+                  ><div @click="sort_proj('名称字典序正序')">名称字典序正序</div></el-dropdown-item
+                >
+                <el-dropdown-item
+                  ><div @click="sort_proj('名称字典序倒序')">名称字典序倒序</div></el-dropdown-item
+                >
+                <el-dropdown-item
+                  ><div @click="sort_proj('开始时间从早到晚')">开始时间从早到晚</div></el-dropdown-item
+                >
+                <el-dropdown-item
+                  ><div @click="sort_proj('开始时间从晚到早')">开始时间从晚到早</div></el-dropdown-item
+                >
+              </el-dropdown-menu>
+            </el-dropdown>
+          </div>
 
-
-      <div class="all_input">
-        <div class="search">
-            <input v-model="keyword_input" class="search-input" type="text" placeholder="输入项目名称" >
-            <el-button class="search_button" @click="click_search()">搜索</el-button>先实现功能，之后再美化吧（
+          <div class="all_input">
+            <div class="search">
+              <input v-model="keyword_input" class="search-input" type="text" placeholder="输入项目名称" />
+              <el-button class="search_button" @click="click_search()">搜索</el-button
+              >先实现功能，之后再美化吧（
+            </div>
+            <div v-if="this.keyword_input != ''">
+              <ul class="item-ul">
+                <li class="search-item" v-for="item of list" :key="item.projId">
+                  <div @click="complete_input(item.projName)">{{ item.projName }}</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <br />
         </div>
-        <div v-if="this.keyword_input != ''">
-            <ul class="item-ul">
-                <li class="search-item" v-for="item of list" :key="item.projId" ><div @click="complete_input(item.projName)">{{ item.projName }}</div></li>
-            </ul>
-        </div>
-    </div>
-    <br>
-
-  </div>
 
         <div id="projs">
           <div v-for="(proj, i) in proj_data" :key="i" class="one-proj">
@@ -48,7 +61,7 @@
               </router-link>
             </div>
 
-           <div v-else style="height: 60%">
+            <div v-else style="height: 60%">
               <router-link :to="{ path: '/project', query: { id: proj.projId } }">
                 <img style="width: 100%; height: 100%; border-radius: 20px" src="@/assets/logo.png" />
               </router-link>
@@ -60,7 +73,7 @@
               </router-link>
             </div>
             <div v-else style="height: 30%; margin-left: 10px">
-                  <router-link :to="{ path: '/project', query: { id: proj.projId } }">
+              <router-link :to="{ path: '/project', query: { id: proj.projId } }">
                 <el-link class="proj-title">{{ proj.projName }}</el-link>
               </router-link>
             </div>
@@ -79,7 +92,9 @@
                       <div @click="edit_proj_prompt(proj)">修改信息</div>
                     </el-dropdown-item>
                     <el-dropdown-item style="color: red">
-                      <div v-if="is_searchORorder === 0" @click="delete_proj_prompt(proj.proj_id)">删除项目</div>
+                      <div v-if="is_searchORorder === 0" @click="delete_proj_prompt(proj.proj_id)">
+                        删除项目
+                      </div>
                       <div v-else @click="delete_proj_prompt(proj.projId)">删除项目</div>
                     </el-dropdown-item>
                   </el-dropdown-menu>
@@ -130,36 +145,45 @@
         </div>
       </el-tab-pane>
 
-      <el-tab-pane label="成员管理">
-        
-      </el-tab-pane>
+      <el-tab-pane label="成员管理"> </el-tab-pane>
 
-      <el-tab-pane label="项目回收站">
-        
-      </el-tab-pane>
+      <el-tab-pane label="项目回收站"> </el-tab-pane>
 
       <el-tab-pane label="文档中心">
         <router-link :to="{ path: '/doccenter', query: { id: team_id } }">
-            <el-button type="primary">文档中心</el-button>
-          </router-link>
+          <el-button type="primary">文档中心</el-button>
+        </router-link>
       </el-tab-pane>
-
     </el-tabs>
 
     <!-- new proj prompt dialog -->
     <el-dialog title="新建项目" :visible.sync="new_proj_dialog_visible" width="40%">
-      <el-form :model="new_proj_dialog_data">
-        <el-form-item label="项目名称" :label-width="dialog_label_width" required>
+      <el-form :model="new_proj_dialog_data" :rules="proj_dialog_form_rule">
+        <el-form-item label="项目名称" :label-width="dialog_label_width" prop="proj_name">
           <el-input v-model="new_proj_dialog_data.proj_name"></el-input>
         </el-form-item>
         <el-form-item label="项目简介" :label-width="dialog_label_width">
           <el-input v-model="new_proj_dialog_data.proj_info"></el-input>
         </el-form-item>
-        <el-form-item label="项目开始时间" :label-width="dialog_label_width">
-          <el-input v-model="new_proj_dialog_data.start_time"></el-input>
+        <el-form-item label="项目开始时间" :label-width="dialog_label_width" prop="start_time">
+          <el-date-picker
+            v-model="new_proj_dialog_data.start_time"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm"
+            format="yyyy-MM-dd HH:mm"
+            style="width: 100%; position: relative; bottom: -5px"
+          >
+          </el-date-picker>
         </el-form-item>
-        <el-form-item label="项目结束时间" :label-width="dialog_label_width">
-          <el-input v-model="new_proj_dialog_data.end_time"></el-input>
+        <el-form-item label="项目结束时间" :label-width="dialog_label_width" prop="end_time">
+          <el-date-picker
+            v-model="new_proj_dialog_data.end_time"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm"
+            format="yyyy-MM-dd HH:mm"
+            style="width: 100%; position: relative; bottom: -5px"
+          >
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -169,19 +193,33 @@
     </el-dialog>
 
     <!-- edit proj prompt dialog -->
-    <el-dialog title="编辑项目" :visible.sync="edit_proj_dialog_visible" width="40%">
-      <el-form :model="edit_proj_dialog_data">
-        <el-form-item label="项目名称" :label-width="dialog_label_width" required>
+    <el-dialog title="新建项目" :visible.sync="edit_proj_dialog_visible" width="40%">
+      <el-form :model="edit_proj_dialog_data" :rules="proj_dialog_form_rule">
+        <el-form-item label="项目名称" :label-width="dialog_label_width" prop="proj_name">
           <el-input v-model="edit_proj_dialog_data.proj_name"></el-input>
         </el-form-item>
         <el-form-item label="项目简介" :label-width="dialog_label_width">
           <el-input v-model="edit_proj_dialog_data.proj_info"></el-input>
         </el-form-item>
-        <el-form-item label="项目开始时间" :label-width="dialog_label_width">
-          <el-input v-model="edit_proj_dialog_data.start_time"></el-input>
+        <el-form-item label="项目开始时间" :label-width="dialog_label_width" prop="start_time">
+          <el-date-picker
+            v-model="edit_proj_dialog_data.start_time"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm"
+            format="yyyy-MM-dd HH:mm"
+            style="width: 100%; position: relative; bottom: -5px"
+          >
+          </el-date-picker>
         </el-form-item>
-        <el-form-item label="项目结束时间" :label-width="dialog_label_width">
-          <el-input v-model="edit_proj_dialog_data.end_time"></el-input>
+        <el-form-item label="项目结束时间" :label-width="dialog_label_width" prop="end_time">
+          <el-date-picker
+            v-model="edit_proj_dialog_data.end_time"
+            type="datetime"
+            value-format="yyyy-MM-dd HH:mm"
+            format="yyyy-MM-dd HH:mm"
+            style="width: 100%; position: relative; bottom: -5px"
+          >
+          </el-date-picker>
         </el-form-item>
       </el-form>
       <div slot="footer">
@@ -223,14 +261,20 @@
         },
         editing_proj_id: 0,
 
+        proj_dialog_form_rule: {
+          proj_name: [{ required: true, message: '名称不能为空', trigger: 'blur' }],
+          start_time: [{ type: 'date', required: true, message: '日期不能为空', trigger: 'blur' }],
+          end_time: [{ type: 'date', required: true, message: '日期不能为空', trigger: 'blur' }],
+        },
+
         proj_data: [], // proj_id, proj_name, proj_photo
         member_data: [], // member_id, member_name, member_photo
 
-        list:[],
+        list: [],
         timer: '',
-        keyword_input:'',
+        keyword_input: '',
 
-        is_searchORorder:0,
+        is_searchORorder: 0,
       };
     },
 
@@ -433,127 +477,125 @@
 
       copy_proj(proj_id) {
         let copy_ifo = {
-          proj_id:proj_id,
-          copy_time:this.get_now_time(),
-        }
-        console.log('id:'+copy_ifo.proj_id+'\ntime:'+copy_ifo.copy_time);
+          proj_id: proj_id,
+          copy_time: this.get_now_time(),
+        };
+        console.log('id:' + copy_ifo.proj_id + '\ntime:' + copy_ifo.copy_time);
         this.$axios
-  .post('/project/copy_project', qs.stringify(copy_ifo), {
-    headers: {
-      userid: this.$store.state.userid,
-      token: this.$store.state.token,
-    },
-  })
-  .then((res) => {
-    if (res.data.errno === 0) {
-      this.$router.go(0);
-      this.$message.success(res.data.msg);
-    } else {
-      this.$message.error(res.data.msg);
-    }
-    
-  })
-  .catch((err) => {
-    this.$message.error(err);
-  });
-    },
+          .post('/project/copy_project', qs.stringify(copy_ifo), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$router.go(0);
+              this.$message.success(res.data.msg);
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
 
-    refresh() {
-      this.$router.go(0);
-    },
+      refresh() {
+        this.$router.go(0);
+      },
 
-    sort_proj(sort_type) {
-      let sort_ifo = {
-        teamid:this.$route.query.id,
-        according:sort_type,
-      }
-        this.$axios.post('/project/project_order', qs.stringify(sort_ifo), {
-    headers: {
-      userid: this.$store.state.userid,
-      token: this.$store.state.token,
-    },
-  })
-  .then((res) => {
-    if (res.data.errno === 0) {
-      // this.$message.success('...');
-      this.proj_data = res.data.data;
-      this.is_searchORorder = 1;
-    } else {
-      this.$message.error(res.data.msg);
-    }
-  })
-  .catch((err) => {
-    this.$message.error(err);
-  });
-    },
+      sort_proj(sort_type) {
+        let sort_ifo = {
+          teamid: this.$route.query.id,
+          according: sort_type,
+        };
+        this.$axios
+          .post('/project/project_order', qs.stringify(sort_ifo), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              // this.$message.success('...');
+              this.proj_data = res.data.data;
+              this.is_searchORorder = 1;
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
 
-    complete_input(value) {
+      complete_input(value) {
         console.log(value);
         this.keyword_input = value;
-    },
+      },
 
-    monitor_input() {
-      // if (this.keyword_input === '') console.log('nothing');
+      monitor_input() {
+        // if (this.keyword_input === '') console.log('nothing');
 
         // console.log(this.keyword_input);
         let search_ifo = {
-          projName:this.keyword_input,
-          teamid:this.team_id,
-        }
+          projName: this.keyword_input,
+          teamid: this.team_id,
+        };
         // console.log('name:'+search_ifo.projName+'teamid:'+search_ifo.teamid);
         this.$axios
-  .post('project/search_team_project', qs.stringify(search_ifo), {
-    headers: {
-      userid: this.$store.state.userid,
-      token: this.$store.state.token,
-    },
-  })
-  .then((res) => {
-    if (res.data.errno === 0) {
-      // this.$message.success('...');
-      this.list = res.data.data;
-      // console.log(res.data.data);
-      // console.log(this.list);
-    } else {
-      this.$message.error(res.data.msg);
-    }
-  })
-  .catch((err) => {
-    this.$message.error(err);
-  });
-    },
+          .post('project/search_team_project', qs.stringify(search_ifo), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              // this.$message.success('...');
+              this.list = res.data.data;
+              // console.log(res.data.data);
+              // console.log(this.list);
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
 
-    click_search(){
+      click_search() {
         console.log('search');
         let search_ifo = {
-          projName:this.keyword_input,
-          teamid:this.team_id,
-        }
-        console.log('name:'+search_ifo.projName+'teamid:'+search_ifo.teamid);
+          projName: this.keyword_input,
+          teamid: this.team_id,
+        };
+        console.log('name:' + search_ifo.projName + 'teamid:' + search_ifo.teamid);
         this.$axios
-  .post('project/search_team_project', qs.stringify(search_ifo), {
-    headers: {
-      userid: this.$store.state.userid,
-      token: this.$store.state.token,
-    },
-  })
-  .then((res) => {
-    if (res.data.errno === 0) {
-      // this.$message.success('...');
-      this.proj_data = res.data.data;
-      this.is_searchORorder = 1;
-      console.log(res.data.data);
-      // console.log(this.list);
-    } else {
-      this.$message.error(res.data.msg);
-    }
-  })
-
-    },
-
+          .post('project/search_team_project', qs.stringify(search_ifo), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              // this.$message.success('...');
+              this.proj_data = res.data.data;
+              this.is_searchORorder = 1;
+              console.log(res.data.data);
+              // console.log(this.list);
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          });
+      },
     },
     mounted() {
-        this.timer = setInterval(this.monitor_input, 1000);
+      this.timer = setInterval(this.monitor_input, 1000);
     },
     beforeDestroy() {
       clearInterval(this.timer);
@@ -572,7 +614,6 @@
         }
       },
     },
-
   };
 </script>
 
@@ -682,75 +723,74 @@
   .el-dropdown-link {
     display: flex;
     cursor: pointer;
-    color: #409EFF;
+    color: #409eff;
     margin: 10px;
   }
   .el-icon-arrow-down {
     font-size: 12px;
   }
 
-        .search-input {
-          display: flex;
-            width: 100px;
-            height: 30px;
-            color: #666;
-            margin: 10px;
-           /* margin-bottom: 10px; */
-           /* margin-top: -25px; */
-           /* margin-left: 140px; */
-        }
-    .search-content {
-        z-index: 1;
-        overflow: hidden;
-        position: absolute;
-        top: 1.58rem;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background: #eee;
-    }
-      .item-ul {
-        float: top;
-        display: flex;
-        flex-direction:column;
-        padding-left: 1px;
-        margin-left: 10px;
-        margin-top: -14px;
-        border: 1px solid black;
-        width: 100px;
-        /* left: ; */
-      }
-        .search-item {
-          /* 
+  .search-input {
+    display: flex;
+    width: 100px;
+    height: 30px;
+    color: #666;
+    margin: 10px;
+    /* margin-bottom: 10px; */
+    /* margin-top: -25px; */
+    /* margin-left: 140px; */
+  }
+  .search-content {
+    z-index: 1;
+    overflow: hidden;
+    position: absolute;
+    top: 1.58rem;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #eee;
+  }
+  .item-ul {
+    float: top;
+    display: flex;
+    flex-direction: column;
+    padding-left: 1px;
+    margin-left: 10px;
+    margin-top: -14px;
+    border: 1px solid black;
+    width: 100px;
+    /* left: ; */
+  }
+  .search-item {
+    /* 
             background: #fff;
             color: #666;
             list-style: none;
             border: 1px solid #f4f4f4; */
-            display: flex;
-            list-style: none;
-            width: 100px;
-            height: 30px;
-            color: #666;
-           
-           /* margin: ; */
-           /* border: 1px solid #f4f4f4; */
-        }
+    display: flex;
+    list-style: none;
+    width: 100px;
+    height: 30px;
+    color: #666;
 
-        .search {
-          display: flex;
-          flex-direction: row;
-          flex-wrap: wrap;
-          /* margin: 10px; */
-           /* border: 1px solid #f4f4f4; */
-        }
+    /* margin: ; */
+    /* border: 1px solid #f4f4f4; */
+  }
 
-        .search_button{
-          display: flex;
-          margin: 10px;
+  .search {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /* margin: 10px; */
+    /* border: 1px solid #f4f4f4; */
+  }
 
-        }
+  .search_button {
+    display: flex;
+    margin: 10px;
+  }
 
-        .sort_and_search {
-          display: flex;
-        }
+  .sort_and_search {
+    display: flex;
+  }
 </style>
