@@ -2,8 +2,8 @@
   <div id="main">
     <div id="title">{{ team_name }}</div>
 
-    <el-tabs>
-      <el-tab-pane label="团队信息">
+    <el-tabs v-model="current_tab" @tab-click="tab_change()">
+      <el-tab-pane label="团队信息" name="info" >
         <el-divider>团队项目</el-divider>
 
         <div class="sort_and_search">
@@ -140,7 +140,7 @@
         </div>
       </el-tab-pane>
 
-      <el-tab-pane label="团队管理">
+      <el-tab-pane label="团队管理" name="management">
         <div style="width: 95%; text-align: left">
           <div style="font-size: 25px; margin-bottom: 10px"><b>团队操作</b></div>
           <div>
@@ -161,12 +161,12 @@
         </div>
       </el-tab-pane>
 
-      <el-tab-pane label="文档中心">
+      <el-tab-pane label="文档中心" name="file">
         <!-- <router-link :to="{ path: '/doccenter', query: { id: team_id } }"> -->
-          <!-- <el-button type="primary">文档中心</el-button> -->
-          <DocCenter></DocCenter>
-          <!-- <EditView :file_id = "this.$store.state.file_id_toshow" :file_name = "his.$store.state.file_name_toshow"></EditView> -->
-          <EditView></EditView>
+        <!-- <el-button type="primary">文档中心</el-button> -->
+        <DocCenter></DocCenter>
+        <!-- <EditView :file_id = "this.$store.state.file_id_toshow" :file_name = "his.$store.state.file_name_toshow"></EditView> -->
+        <EditView></EditView>
         <!-- </router-link> -->
       </el-tab-pane>
     </el-tabs>
@@ -286,10 +286,12 @@
   import EditView from '@/views/FileEditView.vue';
   export default {
     name: 'TeamView',
-    components: { TeamManagement, TrashBin, DocCenter, EditView},
+    components: { TeamManagement, TrashBin, DocCenter, EditView },
 
     data() {
       return {
+        current_tab: 'info',
+
         team_id: 0,
         team_name: '',
 
@@ -336,6 +338,10 @@
     },
 
     methods: {
+      tab_change() {
+        this.$router.push({ query: { ...this.$route.query, tab: this.current_tab } });
+      },
+
       create_proj_prompt() {
         this.new_proj_dialog_visible = true;
       },
@@ -674,22 +680,16 @@
         this.list_new = JSON.parse(JSON.stringify(this.list).replace(/projName/g, 'value'));
       },
       querySearch(queryString, cb) {
-
-      var list = this.list;
-      var results = queryString
-        ? list.filter(this.createFilter(queryString))
-        : list;
-      // 调用 callback 返回建议列表的数据
-      cb(results);
-    },
-    createFilter(queryString) {
-      return list => {
-        return (
-          list.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
-          0
-        );
-      };
-    },
+        var list = this.list;
+        var results = queryString ? list.filter(this.createFilter(queryString)) : list;
+        // 调用 callback 返回建议列表的数据
+        cb(results);
+      },
+      createFilter(queryString) {
+        return (list) => {
+          return list.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0;
+        };
+      },
 
       delete_team_prompt() {
         this.$confirm('是否解散团队？团队中的所有项目将会永久被删除。', '解散团队', {
@@ -724,16 +724,15 @@
           });
       },
     },
-    mounted() {
-      // this.timer = setInterval(this.monitor_input, 1000);
-    },
-    beforeDestroy() {
-      // clearInterval(this.timer);
-    },
 
     created() {
       this.get_team_info();
       // console.log(this.get_now_time());
+      if ('tab' in this.$route.query) {
+        this.current_tab = this.$route.query.tab;
+      } else {
+        this.current_tab = 'info';
+      }
     },
 
     watch: {
