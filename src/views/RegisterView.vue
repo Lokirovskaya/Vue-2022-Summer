@@ -12,14 +12,14 @@
 </el-steps>
 
     </div>
-    <div>
+    <div class="inputs">
     <p><el-input placeholder="输入用户名" v-model="username" clearable style="width:300px"></el-input></p>
     <!-- <br> -->
     <p><el-input placeholder="输入邮箱" v-model="email" clearable style="width:300px"></el-input></p>
     
     <p><el-input placeholder="输入真实姓名" v-model="truename" clearable style="width:300px"></el-input></p>
     
-    <p><el-input placeholder="输入密码" v-model="password_1" v-on:input="show_pwd_strength" clearable class="input_ifo" show-password></el-input></p>
+    <el-input placeholder="输入密码" v-model="password_1" v-on:input="show_pwd_strength" clearable class="input_ifo" show-password></el-input>
     
 
       <div class="show_pwds">
@@ -244,6 +244,10 @@ import qs from "qs";
 </script>
 
 <style scoped>
+  .inputs {
+
+  }
+  
   .register {
     display: flex;
     justify-content: center;
@@ -335,6 +339,10 @@ import qs from "qs";
 
   .show_pwd1 {
     /* display: flex;
+    align-items: center;
+    text-align: center;
+    padding-bottom: 10px; */
+    /* display: flex;
     align-content: center;
     align-items: center;
     text-align: center; */
@@ -360,6 +368,12 @@ import qs from "qs";
     align-items: center;
     text-align: center; */
     /* height: px; */
+    display: flex;
+    align-content: center;
+    align-items: center;
+    padding-bottom: 9px;
+    padding-top: 9px;
+    padding-left: 158px;
   }
 
 </style>
