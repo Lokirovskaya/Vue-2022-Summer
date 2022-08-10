@@ -1,7 +1,8 @@
 <template>
-  
+  <div id="background">
   <div v-if="register_state===0" class="register">
-     <img src="../assets/back_icon.png" id="back_icon" @click="backto_homeview">
+    <!-- <i class="fa-solid fa-arrow-left"  ></i> -->
+     <!-- <img src="../assets/back_icon.png" id="back_icon" @click="backto_homeview"> -->
     <!-- <h1>欢迎注册</h1> -->
     <!-- <div class="steps"> -->
       <div>
@@ -11,44 +12,48 @@
 </el-steps>
 
     </div>
+    <div>
+    <p><el-input placeholder="输入用户名" v-model="username" clearable style="width:300px"></el-input></p>
+    <!-- <br> -->
+    <p><el-input placeholder="输入邮箱" v-model="email" clearable style="width:300px"></el-input></p>
     
-    <el-input placeholder="输入用户名" v-model="username" clearable style="width:300px"></el-input>
-    <p>
-    <el-input placeholder="输入邮箱" v-model="email" clearable style="width:300px"></el-input>
-    <p>
-    <el-input placeholder="输入真实姓名" v-model="truename" clearable style="width:300px"></el-input>
-    <p>
-    <el-input placeholder="输入密码" v-model="password_1" v-on:input="show_pwd_strength" clearable class="input_ifo" show-password></el-input>
-    <p>
+    <p><el-input placeholder="输入真实姓名" v-model="truename" clearable style="width:300px"></el-input></p>
+    
+    <p><el-input placeholder="输入密码" v-model="password_1" v-on:input="show_pwd_strength" clearable class="input_ifo" show-password></el-input></p>
+    
+
       <div class="show_pwds">
     <span v-if="show_pwd_strength_flag === 1" class="show_pwd1">{{this.pwd_strength}}</span>
     <span v-else-if="show_pwd_strength_flag === 2" class="show_pwd2">{{this.pwd_strength}}</span>
     <span v-else-if="show_pwd_strength_flag === 3" class="show_pwd3">{{this.pwd_strength}}</span>
       </div>
-    <p>
+    <!-- <p> -->
     <el-input placeholder="确认密码" v-model="password_2" clearable style="width:300px" show-password></el-input>
-    
+    </div>
     
     <div>
-      <el-button @click="send_verifycode" round>下一步</el-button>
+      
+      <p><el-button @click="send_verifycode" round>下一步</el-button></p>
+      
       <!-- <router-link to="/login" style="margin: 5px;">
         <el-button round>去登录</el-button>
       </router-link> -->
     </div>
   </div>
-  <div v-else-if="register_state===1">
+  <div v-else-if="register_state===1" class="input_verifycode">
     <br><br>
     <div>
     <el-steps :space="150" align-center=true :active="active" finish-status="success" class="steps">
   <el-step title="填写信息" class="one_step"></el-step>
   <el-step title="邮箱验证" class="one_step"></el-step>
 </el-steps>
-    </div>
 
-      <el-input placeholder="输入验证码" v-model="verifycode_input" clearable style="width:300px"></el-input>
+    </div>
+      <br>
+      <p><el-input placeholder="输入验证码" v-model="verifycode_input" clearable style="width:200px"></el-input></p>
       <!-- <el-button @click="check_verifycode" round style="margin: 5px;">重发</el-button> -->
       <div>
-        <br>
+        <br><br><br><br><br><br><br><br><br>
       <el-button @click="check_verifycode" round style="margin: 5px;">确定</el-button>
       <!-- <el-button @click="check_verifycode" round style="margin: 5px;">重发</el-button> -->
     </div>
@@ -67,6 +72,7 @@
     <router-link to="/login" style="margin: 5px;">
         <el-button round>去登录</el-button>
       </router-link>
+  </div>
   </div>
 </template>
 
@@ -167,6 +173,7 @@ import qs from "qs";
                 this.uid_toshow = res.data.userid;
                 this.register_state = 2;
                 this.active = 2;
+                this.$router.push({path:'/login'});
               }
               else {
                 this.$message.error(res.data.msg);
@@ -237,6 +244,46 @@ import qs from "qs";
 </script>
 
 <style scoped>
+  .register {
+    display: flex;
+    justify-content: center;
+    flex-direction:column;
+
+    background-color: white;
+    width: 400px;
+    height: 500px;
+    color: black; 
+  border: 1px #d7edff solid; 
+  border-radius: 5px; 
+  margin: 0px 0px 7px 0px;
+  box-shadow:5px 5px 10px rgb(179, 184, 194);
+  background: linear-gradient(to top,#f1e6e9, #e2e8f7);
+  }
+
+  .input_verifycode {
+    background-color: white;
+    width: 400px;
+    height: 500px;
+    color: black; 
+  border: 1px #d7edff solid; 
+  border-radius: 5px; 
+  margin: 0px 0px 7px 0px;
+  box-shadow:5px 5px 10px rgb(179, 184, 194);
+  background: linear-gradient(to top,#f1e6e9, #e2e8f7);
+  }
+
+#background {
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    background:url("../assets/bk.jpg");
+  width:100%;
+  height:100%;
+  /* position:fixed; */
+  background-size:100% 100%;
+  opacity :0.9
+  }
+
 #back_icon {
     width: 50px;
     height: 50px;

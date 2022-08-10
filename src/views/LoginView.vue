@@ -1,24 +1,25 @@
 <template>
-<!-- <div id="background"> -->
+<div id="background">
+  
   <div class="login">
     <!-- <font-awesome-icon icon="fa-solid fa-arrow-left" /> -->
     <!-- <i class="fa-solid fa-arrow-left"  ></i> -->
-    <img src="../assets/back_icon.png" id="back_icon" @click="backto_homeview">
+    <!-- <img src="../assets/back_icon.png" id="back_icon" @click="backto_homeview"> -->
 
-    <div v-if="this.$store.state.login_state == 0">
+    <div v-if="this.$store.state.login_state == 0" class="login_content" >
 
 
     <h1>请登录</h1>
 
-    <el-input placeholder="输入邮箱" v-model="userid" clearable style="width:300px"></el-input>
+    <el-input placeholder="输入邮箱" v-model="userid" clearable style="width:300px;"></el-input>
     <p>
       <el-input placeholder="输入密码" v-model="password" clearable style="width:300px" show-password></el-input>
     <p>
 
     <div>
-      <el-button @click="login" round>登录</el-button>
+      <el-button @click="login" round plain>登录</el-button> &nbsp;
       <router-link to="/register" style="margin: 5px;">
-        <el-button round>去注册</el-button>
+        <el-button round plain>去注册</el-button>
       </router-link>
     </div>
     </div>
@@ -26,7 +27,7 @@
       {{this.$store.state.username}}已登录
     </div>
     </div>
-<!-- </div> -->
+</div>
 
 </template>
 
@@ -81,6 +82,32 @@ import qs from "qs";
 </script>
 
 <style scoped>
+  .login {
+    display: flex;
+    /* background-color: white; */
+    justify-content: center;
+    width: 400px;
+    height: 320px;
+
+    /* background: #86c7ff;  */
+    background:white;
+  /* width: 100%;  */
+  /* font-size: 18px;  */
+  color: black; 
+  border: 1px #d7edff solid; 
+  border-radius: 5px; 
+  margin: 0px 0px 7px 0px;
+  box-shadow:5px 5px 10px rgb(179, 184, 194);
+  background: linear-gradient(to right,#f1e6e9, #e3e9f0);
+  }
+
+  .login_content {
+    display: flex;
+    /* align-items:center; */
+    justify-content: center;
+    flex-direction:column;
+  }
+
   #back_icon {
     width: 50px;
     height: 50px;
@@ -101,7 +128,10 @@ import qs from "qs";
         opacity: 0.8;
   }
   #background {
-    background:url("../assets/homeview_bk.jpg");
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    background:url("../assets/bk.jpg");
   width:100%;
   height:100%;
   /* position:fixed; */
