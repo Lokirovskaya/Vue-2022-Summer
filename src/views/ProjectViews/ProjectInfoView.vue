@@ -14,6 +14,15 @@
           input_proj_end = proj_end;
           ">修改信息</el-button>
         </div>
+
+        <!-- <img :src="'http://stcmp.shlprn.cn'+proj_photo" class="avatar1"> -->
+        <el-upload class="avatar-uploader" action="" :http-request="upload_file" :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"  :auto-upload="true" :showFileList="false">
+              <img :src="'http://stcmp.shlprn.cn'+this.proj_photo" class="avatar1">
+            </el-upload>
+            <div class="word_under_photo">点击图片可进行修改</div>
+            <br>
+
         <el-descriptions class="margin-top" :column="2" border>
           <el-descriptions-item>
             <template slot="label">
@@ -82,6 +91,13 @@
           input_proj_start = '';
           ">返回</el-button>
         </div>
+
+        <!-- <el-upload class="avatar-uploader" action="" :http-request="upload_file" :on-success="handleAvatarSuccess"
+              :before-upload="beforeAvatarUpload"  :auto-upload="true" :showFileList="false">
+              <img :src="'http://stcmp.shlprn.cn'+this.proj_photo" class="avatar1">
+            </el-upload>
+            <div>点击上方修改项目图片</div> -->
+
         <div style="margin-left: 30%; margin-right: 30%">
           <span>
             <b>项目名</b><br />
@@ -168,6 +184,53 @@ export default {
     };
   },
   methods: {
+    upload_file(e) {
+        let formData = new FormData();
+        formData.append('in_file', e.file);
+        let my_axios = this.$axios.create({
+          withCredentials: true,
+          headers: {
+            userid: this.$store.state.userid,
+                token: this.$store.state.token,
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        my_axios.post('project/modifyProjPhoto', { proj_id:this.$route.query.id, photo: e.file })
+          .then(res => {
+            if (res.data.errno === 0) {
+              this.$message.success('项目图片修改成功！');
+              console.log('new:'+res.data.photo);
+              // this.$store.commit('set_userphoto', res.data.photo); 
+              this.proj_photo = res.data.photo;
+            }
+            else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch(err => {
+            this.$message.error(err);
+          });
+      },
+      handleAvatarSuccess(res, file) {
+        console.log('success');
+        // alert('imageurl:' + this.imageUrl);
+        this.imageUrl = URL.createObjectURL(file.raw);
+      },
+      beforeAvatarUpload(file) {
+        console.log('before');
+        const isJPG = file.type === 'image/jpeg';
+        const isLt2M = file.size / 1024 / 1024 < 2;
+        if (!isJPG) {
+          this.$message.error('上传头像图片只能是 JPG 格式!');
+        }
+        if (!isLt2M) {
+          this.$message.error('上传头像图片大小不能超过 2MB!');
+        }
+        return isJPG && isLt2M;
+      },
+
+
+
     EditProjInfo() {
       //改版函数
       if (
@@ -271,6 +334,11 @@ export default {
 </script>
 
 <style scoped>
+.word_under_photo {
+  font-size: 8px;
+  color: grey;
+}
+
 #main {
   width: 100%;
   height: 100%;
@@ -305,4 +373,20 @@ export default {
   border-width: 1px;
   border-color: rgb(230, 230, 250);
 }
+
+.avatar1 {
+      display: flex;
+    width: 180px;
+    height: 180px;
+    border-radius: 20px;
+    border-style: solid;
+    border-width: 2px;
+    border-color:#D3D3D3;
+  }
+  .avatar1:hover{
+    display: flex;
+    background-color:rgb(252, 252, 252);
+        filter:alpha(opacity=100); 
+        opacity: 0.8;
+  }
 </style>
