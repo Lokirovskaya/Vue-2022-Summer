@@ -79,7 +79,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 #homepage {
   background: #d0e5fb none repeat scroll center top;
   background-size: auto;

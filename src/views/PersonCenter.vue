@@ -244,7 +244,7 @@ import qs from "qs";
   };
 </script>
 
-<style>
+<style scoped>
     .avatar {
       display: flex;
     width: 180px;
