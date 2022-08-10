@@ -7,6 +7,7 @@
           v-if="data.file_flag === 0"
           @click="into_file(data.file_id, data.file_name, data.type_flag)"
           class="files_label el-icon-document"
+          style="width: 155px; overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"
           >&nbsp;{{ node.label }}&nbsp;&nbsp;
         </span>
         <span v-else class="folders_label el-icon-folder">&nbsp;{{ node.label }}&nbsp;&nbsp;</span>

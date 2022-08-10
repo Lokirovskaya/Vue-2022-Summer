@@ -5,7 +5,7 @@
     <div class="editor" v-if="editor">
       <!-- <DocCenter></DocCenter> -->
       <div class="editor__header">
-        <b>{{ this.file_name }}</b>
+        <span v-show="this.file_name !== 0"><b>{{ this.file_name }}</b></span>
         <div class="divider"></div>
         <!--粗体-->
         <el-tooltip class="item" effect="dark" content="粗体" placement="bottom">
@@ -807,6 +807,9 @@ props:{
   border-left-color: rgb(13, 13, 13);
   border-left-style: solid;
   border-left-width: 3px;
+  border-right-color: rgb(13, 13, 13);
+  border-right-style: solid;
+  border-right-width: 3px;
   border-image-source: initial;
   border-image-slice: initial;
   border-image-width: initial;
@@ -981,8 +984,7 @@ props:{
   padding-top: 2rem;
   padding-bottom: 2rem;
   margin-left: 3rem;
-  margin-right: 5rem;
-  margin-top: 3rem;
+  margin-right: 2rem;
   margin-bottom: 3rem;
   min-height: 30rem;
 }
