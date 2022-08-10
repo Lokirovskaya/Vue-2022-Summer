@@ -396,11 +396,11 @@
       invite_member_prompt() {
         let invite_key;
 
-        this.$prompt('请输入对方 UID 或邮箱', '邀请成员', {
+        this.$prompt('请输入对方邮箱', '邀请成员', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /.+/,
-          inputErrorMessage: 'UID 或邮箱不能为空',
+          inputErrorMessage: '邮箱不能为空',
         })
           .then(({ value }) => {
             if (value === '') return;

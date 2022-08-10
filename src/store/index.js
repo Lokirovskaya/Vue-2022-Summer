@@ -15,6 +15,7 @@ export default new Vuex.Store({
     user_truename: '',
     token: '',
     recent_proj: [],
+    collapse_left_menu: false,
   },
   getters: {},
   mutations: {
@@ -41,6 +42,9 @@ export default new Vuex.Store({
     },
     set_token(state, token) {
       state.token = token;
+    },
+    set_collapse_left_menu(state, value) {
+      state.set_collapse_left_menu = value;
     },
     // 'info' should be {proj_id, proj_name, team_name}
     push_recent_proj(state, info) {

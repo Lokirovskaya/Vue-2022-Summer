@@ -14,6 +14,7 @@
       </el-button>
     </div>
 
+  <el-button @click="test_collapse">aa</el-button>
     <div id="work-area" @click="update_canvas_size()">
       <div :style="'width:' + canvas_width + 'px;'" :key="canvas_key">
         <div
@@ -204,6 +205,9 @@
     },
 
     methods: {
+      test_collapse() {
+        this.$store.commit('set_collapse_left_menu', true);
+      },
       add_element(item) {
         let element = {
           id: this.id,
@@ -401,7 +405,7 @@
     },
 
     created() {
-      this.get_prototype();
+      this.get_prototype();   
     },
   };
 </script>
