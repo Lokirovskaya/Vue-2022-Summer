@@ -627,7 +627,7 @@ export default {
 
     get_file_info(){
         let init_ifo = {
-            teamid:this.teamid,
+            teamid:this.team_id,
         }
         this.$axios
   .post('team/file_center', qs.stringify(init_ifo), {
