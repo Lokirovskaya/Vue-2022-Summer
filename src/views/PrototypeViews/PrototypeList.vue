@@ -61,7 +61,7 @@
     </div>
 
     <!-- new proj prompt dialog -->
-    <el-dialog title="新建页面" :visible.sync="new_prototype_dialog_visible" width="45%">
+    <el-dialog title="新建页面" :visible.sync="new_prototype_dialog_visible" width="60%">
       <div class="title">新页面名称</div>
       <br />
 
@@ -85,38 +85,44 @@
             class="template-prototypes"
             @change="set_template('phone', $event)"
           >
+            <el-radio :label="-1">
+              <div class="one-template-prototype" style="width: 120px; height: 180px"></div>
+              <div style="font-size: 18px">不使用模板</div>
+            </el-radio>
             <el-radio v-for="(template, i) in prototype_template_phone.templates" :key="i" :label="i">
-              <div class="one-template-prototype">
-                {{ template.name }}
+              <div>
+                <img
+                  class="one-template-prototype"
+                  :src="template.image"
+                  style="width: 120px; height: 180px"
+                />
               </div>
+              <div style="font-size: 18px">{{ template.name }}</div>
             </el-radio>
           </el-radio-group>
         </el-tab-pane>
 
-        <el-tab-pane label="平板">
-          还没做
-          <div class="template-prototypes">
-            <div
-              class="one-template-prototype"
-              v-for="(template, i) in prototype_template_phone.templates"
-              :key="i"
-            >
-              {{ template.name }}
-            </div>
-          </div>
-        </el-tab-pane>
-
         <el-tab-pane label="电脑">
-          还没做
-          <div class="template-prototypes">
-            <div
-              class="one-template-prototype"
-              v-for="(template, i) in prototype_template_phone.templates"
-              :key="i"
-            >
-              {{ template.name }}
-            </div>
-          </div>
+          <el-radio-group
+            v-model="template_radio_model"
+            class="template-prototypes"
+            @change="set_template('pc', $event)"
+          >
+            <el-radio :label="-1">
+              <div class="one-template-prototype" style="width: 315px; height: 180px"></div>
+              <div style="font-size: 18px">不使用模板</div>
+            </el-radio>
+            <el-radio v-for="(template, i) in prototype_template_pc.templates" :key="i" :label="i">
+              <div>
+                <img
+                  class="one-template-prototype"
+                  :src="template.image"
+                  style="width: 315px; height: 180px"
+                />
+              </div>
+              <div style="font-size: 18px">{{ template.name }}</div>
+            </el-radio>
+          </el-radio-group>
         </el-tab-pane>
       </el-tabs>
 
@@ -145,7 +151,6 @@
 
   import {
     prototype_template_phone,
-    prototype_template_pad,
     prototype_template_pc,
   } from '@/views/PrototypeViews/PrototypeTemplate.js';
 
@@ -164,7 +169,6 @@
 
         // imported from js
         prototype_template_phone,
-        prototype_template_pad,
         prototype_template_pc,
 
         current_template: {
@@ -172,7 +176,7 @@
           canvas_height: 500,
           content: '[]',
         },
-        template_radio_model: null,
+        template_radio_model: -1,
       };
     },
     methods: {
@@ -185,15 +189,18 @@
         let template_type;
         if (type === 'phone') {
           template_type = prototype_template_phone;
-        } else if (type === 'pad') {
-          template_type = prototype_template_pad;
         } else if (type === 'pc') {
           template_type = prototype_template_pc;
         }
 
         this.current_template.canvas_width = template_type.canvas_width;
         this.current_template.canvas_height = template_type.canvas_height;
-        this.current_template.content = template_type.templates[index].content;
+        if (index >= 0) {
+          this.current_template.content = template_type.templates[index].content;
+        } else {
+          // no template, index=-1
+          this.current_template.content = '[]';
+        }
       },
 
       rename_prototype() {
@@ -303,7 +310,6 @@
                 this.prototype_list.push(item);
                 this.new_prototype_dialog_visible = false;
                 this.new_prototype_name = ''; //争取把源数据(原型名)也修改了
-                this.$router.go(0);
               } else {
                 this.$message.error(res.data.msg);
               }
@@ -464,9 +470,7 @@
   }
 
   .one-template-prototype {
-    width: 200px;
-    height: 120px;
-    margin: 10px;
+    margin: 6px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04);
     border-radius: 20px;
     text-align: left;
