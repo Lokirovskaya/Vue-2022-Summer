@@ -850,7 +850,7 @@ props:{
   padding-right: 1rem;
   padding-bottom: 1.25rem;
   padding-left: 1rem;
-  max-height: 29.4rem;
+  max-height: 26rem; /*千万不能动了*/
   text-align: left;
   width: 100%;
   flex: 1 1 auto;
@@ -1076,7 +1076,6 @@ tr {
 
 .ProseMirror table {
   border-collapse: collapse;
-  table-layout: fixed;
   width: 100%;
   margin: 0;
   margin-top: 0px;
@@ -1089,7 +1088,7 @@ tr {
 }
 
 .ProseMirror img {
-  max-width: 100%;
+  width: fill;
   height: auto;
 }
 
