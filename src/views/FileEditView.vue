@@ -4,7 +4,7 @@
       <div class="editor__header">
         <!--返回上级界面-->
         <el-tooltip class="item" effect="dark" content="返回" placement="bottom">
-          <el-button class="menu-item" @click="goBack"
+          <el-button class="menu-item" type="info" @click="goBack"
             :class="{ 'is-active': editor.isActive('bold') }">
             <i class="iconfont">&#xe755;</i>
           </el-button>
@@ -13,35 +13,35 @@
         <div class="divider"></div>
         <!--粗体-->
         <el-tooltip class="item" effect="dark" content="粗体" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleBold().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleBold().run()"
             :class="{ 'is-active': editor.isActive('bold') }">
             <i class="iconfont">&#xe7f7;</i>
           </el-button>
         </el-tooltip>
         <!--斜体-->
         <el-tooltip class="item" effect="dark" content="斜体" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleItalic().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleItalic().run()"
             :class="{ 'is-active': editor.isActive('italic') }">
             <i class="iconfont">&#xe7fb;</i>
           </el-button>
         </el-tooltip>
         <!--Strike-->
         <el-tooltip class="item" effect="dark" content="划掉" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleStrike().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleStrike().run()"
             :class="{ 'is-active': editor.isActive('strike') }">
             <i class="iconfont">&#xe7f9;</i>
           </el-button>
         </el-tooltip>
         <!--code-->
         <el-tooltip class="item" effect="dark" content="代码" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleCode().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleCode().run()"
             :class="{ 'is-active': editor.isActive('code') }">
             <i class="iconfont">&#xe638;</i>
           </el-button>
         </el-tooltip>
         <!--Highlight-->
         <el-tooltip class="item" effect="dark" content="高亮" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleHighlight().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleHighlight().run()"
             :class="{ 'is-active': editor.isActive('highlight') }">
             <i class="iconfont">&#xe68c;</i>
           </el-button>
@@ -49,28 +49,28 @@
         <div class="divider"></div>
         <!--H1-->
         <el-tooltip class="item" effect="dark" content="标题1" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
             :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
             <i class="iconfont">&#xe61a;</i>
           </el-button>
         </el-tooltip>
         <!--H2-->
         <el-tooltip class="item" effect="dark" content="标题2" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
             :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
             <i class="iconfont">&#xe61d;</i>
           </el-button>
         </el-tooltip>
         <!--Bulletlist-->
         <el-tooltip class="item" effect="dark" content="无序列表" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleBulletList().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleBulletList().run()"
             :class="{ 'is-active': editor.isActive('bulletList') }">
             <i class="iconfont">&#xe62a;</i>
           </el-button>
         </el-tooltip>
         <!--OrderdList-->
         <el-tooltip class="item" effect="dark" content="有序列表" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleOrderedList().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleOrderedList().run()"
             :class="{ 'is-active': editor.isActive('orderedList') }">
             <i class="iconfont">&#xebcd;</i>
           </el-button>
@@ -78,7 +78,7 @@
         <!--TaskList-->
         <!--codeblock-->
         <el-tooltip class="item" effect="dark" content="代码块" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleCodeBlock().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleCodeBlock().run()"
             :class="{ 'is-active': editor.isActive('codeBlock') }">
             <i class="iconfont">&#xe636;</i>
           </el-button>
@@ -86,20 +86,20 @@
         <div class="divider"></div>
         <!--blockquote-->
         <el-tooltip class="item" effect="dark" content="引用" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().toggleBlockquote().run()"
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().toggleBlockquote().run()"
             :class="{ 'is-active': editor.isActive('blockquote') }">
             <i class="iconfont">&#xe608;</i>
           </el-button>
         </el-tooltip>
         <!--HorizontalRule-->
         <el-tooltip class="item" effect="dark" content="分割线" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().setHorizontalRule().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().setHorizontalRule().run()">
             <i class="iconfont">&#xe61b;</i>
           </el-button>
         </el-tooltip>
         <!--Link-->
         <el-tooltip class="item" effect="dark" content="添加链接" placement="bottom">
-          <el-button class="menu-item" @click="setLink" :class="{ 'is-active': editor.isActive('link') }">
+          <el-button class="menu-item" type="info" @click="setLink" :class="{ 'is-active': editor.isActive('link') }">
             <i class="iconfont">&#xe756;</i>
           </el-button>
         </el-tooltip>
@@ -114,63 +114,63 @@
         <div class="divider"></div>
         <!--CreateTable-->
         <el-tooltip class="item" effect="dark" content="插入表格" placement="bottom">
-          <el-button class="menu-item"
+          <el-button class="menu-item" type="info"
             @click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()">
             <i class="iconfont">&#xe83c;</i>
           </el-button>
         </el-tooltip>
         <!--Deletetable-->
         <el-tooltip class="item" effect="dark" content="删除表格" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().deleteTable().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().deleteTable().run()">
             <i class="iconfont">&#xe600;</i>
           </el-button>
         </el-tooltip>
         <!--InsertColumn-->
         <el-tooltip class="item" effect="dark" content="插入列" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().addColumnAfter().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().addColumnAfter().run()">
             <i class="iconfont">&#xe938;</i>
           </el-button>
         </el-tooltip>
         <!--DeleteColumn-->
         <el-tooltip class="item" effect="dark" content="删除列" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().deleteColumn().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().deleteColumn().run()">
             <i class="iconfont">&#xe6f2;</i>
           </el-button>
         </el-tooltip>
         <!--InsertRow-->
         <el-tooltip class="item" effect="dark" content="插入行" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().addRowAfter().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().addRowAfter().run()">
             <i class="iconfont">&#xe940;</i>
           </el-button>
         </el-tooltip>
         <!--DeleteRow-->
         <el-tooltip class="item" effect="dark" content="删除行" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().deleteRow().run()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().deleteRow().run()">
             <i class="iconfont">&#xe770;</i>
           </el-button>
         </el-tooltip>
         <div class="divider"></div>
         <!--undo-->
         <el-tooltip class="item" effect="dark" content="撤销" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().undo().run()" :disabled="!editor.can().undo()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().undo().run()" :disabled="!editor.can().undo()">
             <i class="iconfont">&#xe739;</i>
           </el-button>
         </el-tooltip>
         <!--redo-->
         <el-tooltip class="item" effect="dark" content="重做" placement="bottom">
-          <el-button class="menu-item" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().redo()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().redo()">
             <i class="iconfont">&#xe652;</i>
           </el-button>
         </el-tooltip>
         <!--save-->
         <el-tooltip class="item" effect="dark" content="保存" placement="bottom">
-          <el-button class="menu-item" @click="Save">
+          <el-button class="menu-item" type="info" @click="Save">
             <i class="iconfont">&#xe7d9;</i>
           </el-button>
         </el-tooltip>
         <!--download-->
         <el-tooltip class="item" effect="dark" content="下载" placement="bottom">
-          <el-button class="menu-item" @click="download_menu_visible = true">
+          <el-button class="menu-item" type="info" @click="download_menu_visible = true">
             <i class="iconfont">&#xe7da;</i>
           </el-button>
         </el-tooltip>
