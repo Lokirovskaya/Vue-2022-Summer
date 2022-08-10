@@ -1,18 +1,11 @@
 <template>
 
   <div id="FileEdit">
-    
+
     <div class="editor" v-if="editor">
       <!-- <DocCenter></DocCenter> -->
       <div class="editor__header">
-        <!--返回上级界面-->
-        <el-tooltip class="item" effect="dark" content="返回" placement="bottom">
-          <el-button class="menu-item" type="info" @click="goBack"
-            :class="{ 'is-active': editor.isActive('bold') }">
-            <i class="iconfont">&#xe755;</i>
-          </el-button>
-        </el-tooltip>
-        <b>{{ this.$route.query.name }}</b>
+        <b>{{ this.file_name }}</b>
         <div class="divider"></div>
         <!--粗体-->
         <el-tooltip class="item" effect="dark" content="粗体" placement="bottom">
@@ -155,13 +148,15 @@
         <div class="divider"></div>
         <!--undo-->
         <el-tooltip class="item" effect="dark" content="撤销" placement="bottom">
-          <el-button class="menu-item" type="info" @click="editor.chain().focus().undo().run()" :disabled="!editor.can().undo()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().undo().run()"
+            :disabled="!editor.can().undo()">
             <i class="iconfont">&#xe739;</i>
           </el-button>
         </el-tooltip>
         <!--redo-->
         <el-tooltip class="item" effect="dark" content="重做" placement="bottom">
-          <el-button class="menu-item" type="info" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().redo()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().redo().run()"
+            :disabled="!editor.can().redo()">
             <i class="iconfont">&#xe652;</i>
           </el-button>
         </el-tooltip>
@@ -269,13 +264,16 @@ export default {
       }],
     };
   },
-
+  props: {
+    file_id: { type: Number, default: 0 },
+    file_name: { type: String, required: true },
+  },
   methods: {
     init() {
       //初始化协同编辑和编辑器的相关参数
       const ydoc = new Y.Doc();
       // this.provider = new WebrtcProvider('tiptap-collaboration-cursor-extension', ydoc)
-      this.provider = new WebsocketProvider('wss://demos.yjs.dev', this.$route.query.id, ydoc);
+      this.provider = new WebsocketProvider('wss://demos.yjs.dev', this.file_id, ydoc);
       //this.provider = new HocuspocusProvider({ url: 'ws://127.0.0.1:1234', name: this.$route.query.id, ydoc})
       this.editor = new Editor({
         extensions: [
@@ -318,7 +316,7 @@ export default {
         ],
       });
       //使用edit_file判断当前文档的状态:1为新文档,2为copy的新文档，0为旧文档
-      this.$axios.post('/project/edit_file', qs.stringify({ fileid: this.$route.query.id }), {
+      this.$axios.post('/project/edit_file', qs.stringify({ fileid: this.file_id }), {
         headers: {
           userid: this.$store.state.userid,
           token: this.$store.state.token,
@@ -342,13 +340,6 @@ export default {
         .catch(err => {
           this.$message.error(err);
         });
-    },
-    goBack() {
-      if(this.$route.query.isTeamFile == 0){//项目文档
-        this.$router.push({ path: '/project', query: {id: this.$route.query.projid, tab: 'file', teamid: this.$route.query.teamid}});
-      }else{
-        this.$router.push({ path: '/team', query: {id: this.$route.query.teamid}});
-      }
     },
     setColor() {
       var i = Math.floor(Math.random() * 10);
@@ -381,7 +372,7 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       });
-      my_axios.post('/project/upload_file_image', { file_id: this.$route.query.id, image: e.file })
+      my_axios.post('/project/upload_file_image', { file_id: this.file_id, image: e.file })
         .then(res => {
           if (res.data.errno === 0) {
             this.$message.success('上传图片成功成功！');
@@ -448,7 +439,7 @@ export default {
       minute = minute < 10 ? '0' + minute : minute;
       second = second < 10 ? '0' + second : second;
       var time_str = year + '-' + month + '-' + day + ' ' + hour + ':' + minute + ':' + second;
-      this.$axios.post('/project/modifyFile', qs.stringify({ file_id: this.$route.query.id, content: this.editor.getHTML(), modify_time: time_str }), {
+      this.$axios.post('/project/modifyFile', qs.stringify({ file_id: this.file_id, content: this.editor.getHTML(), modify_time: time_str }), {
         headers: {
           userid: this.$store.state.userid,
           token: this.$store.state.token,
@@ -601,7 +592,7 @@ export default {
           }
         })
         //console.log(this.editor.getHTML());
-        const file_name = this.$route.query.name + '.md';
+        const file_name = this.file_name + '.md';
         //console.log(this.editor.getHTML()); // todo
         const data = turndown.turndown(this.editor.getHTML());
         const blob = new Blob([data], { type: "text/plain" });
@@ -631,7 +622,7 @@ export default {
       }
     },
     exportWord() {
-      const name = this.$route.query.name + '.doc'
+      const name = this.file_name + '.doc'
       const data = '<html>\n' +
         '    <head>\n' +
         '    <meta charset="utf-8">\n' +
@@ -657,7 +648,7 @@ export default {
       console.log('下载成功！')
     },
     exportPDF() {
-      const name = this.$route.query.name + '.pdf';
+      const name = this.file_name + '.pdf';
       var date = new Date();
       var year = date.getFullYear();
       var month = date.getMonth() + 1;
@@ -670,8 +661,8 @@ export default {
       hour = hour < 10 ? '0' + hour : hour;
       minute = minute < 10 ? '0' + minute : minute;
       second = second < 10 ? '0' + second : second;
-      this.db_file_name = year + '_' + month + '_' + day + '_' + hour + '_' + minute + '_' + second + '_' + this.$store.state.userid + '_' + this.$route.query.id + '.pdf';
-      this.$axios.post('/project/get_pdf', qs.stringify({ file_id: this.$route.query.id, file_name: this.db_file_name }), { responseType: 'blob' })
+      this.db_file_name = year + '_' + month + '_' + day + '_' + hour + '_' + minute + '_' + second + '_' + this.$store.state.userid + '_' + this.file_id + '.pdf';
+      this.$axios.post('/project/get_pdf', qs.stringify({ file_id: this.file_id, file_name: this.db_file_name }), { responseType: 'blob' })
         .then((res) => {
           //正常导出流程
           console.log(res);//测试一下
@@ -691,7 +682,7 @@ export default {
         });
     },
     exportHTML() {
-      const name = this.$route.query.name + '.html'
+      const name = this.file_name + '.html'
       const data = '<html>\n' +
         '    <head>\n' +
         '    <meta charset="utf-8">\n' +
@@ -736,7 +727,7 @@ export default {
         });
     },
     getContentFromContent() {
-      this.$axios.post('/project/getFileContent', qs.stringify({ file_id: this.$route.query.id }), {
+      this.$axios.post('/project/getFileContent', qs.stringify({ file_id: this.file_id }), {
         headers: {
           userid: this.$store.state.userid,
           token: this.$store.state.token,
@@ -796,7 +787,7 @@ export default {
 }
 
 .editor {
-  
+
   display: flex;
   flex-direction: column;
   /* max-height: 45.2rem;*/
@@ -978,7 +969,8 @@ export default {
   margin-left: 0.5rem;
   margin-right: 0.75rem;
 }
-.ProseMirror{
+
+.ProseMirror {
   background-color: white;
   padding-left: 3rem;
   padding-right: 3rem;
@@ -990,6 +982,7 @@ export default {
   margin-bottom: 3rem;
   min-height: 30rem;
 }
+
 .ProseMirror code {
   font-size: .9rem;
   padding: 0.25em;

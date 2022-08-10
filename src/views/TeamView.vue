@@ -283,7 +283,7 @@
   import TeamManagement from '@/views/TeamManagement.vue';
   import TrashBin from '@/views/ProjectTrashBin.vue';
   import DocCenter from '@/views/DocCenterView.vue';
-  import EditView from '@/views/FileEditView.vue';
+  import EditView from '@/components/FileEdit.vue';
   export default {
     name: 'TeamView',
     components: { TeamManagement, TrashBin, DocCenter, EditView },
@@ -337,6 +337,7 @@
       };
     },
 
+    
     methods: {
       tab_change() {
         this.$router.push({ query: { ...this.$route.query, tab: this.current_tab } });
