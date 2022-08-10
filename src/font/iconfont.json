@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "11488063",
+      "name": "left arrow",
+      "font_class": "leftarrow",
+      "unicode": "e755",
+      "unicode_decimal": 59221
+    },
+    {
       "icon_id": "11488067",
       "name": "link",
       "font_class": "link",

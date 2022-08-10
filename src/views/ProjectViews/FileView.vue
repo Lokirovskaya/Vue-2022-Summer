@@ -107,7 +107,7 @@ export default {
   methods: {
     edit_file(file_id, file_name) {
       console.log(file_id);
-      this.$router.push({ path: '/fileedit', query: { id: file_id, name: file_name } }); //跳转到该文档的编辑界面
+      this.$router.push({ path: '/fileedit', query: { id: file_id, name: file_name, teamid: this.$route.query.teamid, projid: this.$route.query.id, isTeamFile: 0 } }); //跳转到该文档的编辑界面
     },
     rename_file() {
       console.log(this.file_rename_id);
