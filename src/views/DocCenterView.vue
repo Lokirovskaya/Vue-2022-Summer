@@ -632,11 +632,11 @@
             if (res.data.errno === 0) {
               //   this.$message.success('...');
               //   console.log(res.data)
-              //   this.doc_data[0].file_list = res.data.team_data;
-              //   this.doc_data_of_projs_fromserver = res.data.project_data;
-              //   this.handle_doc_data_of_projs(this.doc_data_of_projs_fromserver);
-              this.doc_data = res.data.team_data;
-              console.log('doc', this.doc_data);
+                this.doc_data[0].file_list = res.data.team_data;
+                this.doc_data_of_projs_fromserver = res.data.project_data;
+                this.handle_doc_data_of_projs(this.doc_data_of_projs_fromserver);
+            //   this.doc_data = res.data.team_data;
+            //   console.log('doc', this.doc_data);
             } else {
               this.$message.error(res.data.msg);
             }
