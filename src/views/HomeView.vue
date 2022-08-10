@@ -16,8 +16,9 @@
         </span>
       </div>
     </div>
+    
+    <div id="funcIntroduce" v-show="this.$store.state.login_state === 0">
     <br><br>
-    <div id="funcIntroduce">
       <p style="font-size:30px;"><b><span style="color: #4F87EA">功&nbsp;能</span>&nbsp;介&nbsp;绍</b></p>
       <p style="color: #4F87EA;position: relative; bottom: 35px;"><b>____ _ ___</b></p>
       <div class="cardBox">
@@ -89,6 +90,7 @@ export default {
   overflow-x: hidden;
   overflow-y: hidden;
   width: 100%;
+  height: 100%;
 }
 
 
