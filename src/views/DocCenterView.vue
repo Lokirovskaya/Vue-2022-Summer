@@ -8,12 +8,23 @@
           @click="into_file(data.file_id, data.file_name, data.type_flag)"
           class="files_label el-icon-document"
           >&nbsp;{{ node.label }}&nbsp;&nbsp;
+
         </span>
         <span v-else class="folders_label el-icon-folder">&nbsp;{{ node.label }}&nbsp;&nbsp;</span>
-        <i v-if="data.file_id !== 0 && data.file_flag === 0" class="el-icon-edit" @click="start_rename(data)"></i>&nbsp;
-        <i v-if="data.file_id !== 0 && data.file_flag === 0" class="el-icon-delete" @click="start_delete(data)"></i>&nbsp;
-        <i v-if="data.file_id !== 0 && data.file_flag === 0" class="el-icon-copy-document" @click="start_copy(data)"></i>&nbsp;
+        <!-- <span v-else class="folders_label el-icon-folder">{{ node.label }}&nbsp;&nbsp;</span> -->
+        <i v-if="data.file_id !== 0 && data.type_flag !== 0" class="el-icon-edit" @click="start_rename(data)"></i>&nbsp;
+        <i v-if="data.file_id !== 0 && data.type_flag !== 0" class="el-icon-delete" @click="start_delete(data)"></i>&nbsp;
+        <i v-if="data.file_id !== 0 && data.type_flag !== 0" class="el-icon-copy-document" @click="start_copy(data)"></i>&nbsp;
         <i v-if="(data.type_flag === 1 && data.file_flag === 1) || (data.file_id !== 0 && data.file_flag === 1)" class="el-icon-folder-add" @click="start_create(data)"></i>
+
+        <!-- <i v-if="data.file_flag === 0" class="el-icon-edit" @click="start_rename(data)"></i>&nbsp;
+        <i v-if="data.file_flag === 0" class="el-icon-delete" @click="start_delete(data)"></i>&nbsp;
+        <i v-if="data.file_flag === 0" class="el-icon-copy-document" @click="start_copy(data)"></i>&nbsp;
+        <i
+          v-if="!(data.file_flag === 0) && data.file_id != 0"
+          class="el-icon-folder-add"
+          @click="start_create(data)"
+        ></i> -->
       </span>
     </el-tree>
     </div>
