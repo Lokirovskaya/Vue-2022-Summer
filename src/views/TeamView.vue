@@ -52,8 +52,33 @@
               </el-dropdown-menu>
             </el-dropdown>
           </div>
+<<<<<<< HEAD
          
           
+=======
+
+          <div class="all_input">
+            <div class="search">
+              <input
+                v-model="keyword_input"
+                v-on:input="monitor_input"
+                class="search-input"
+                type="text"
+                placeholder="输入项目名称"
+              />
+              <el-button class="search_button" @click="click_search()">搜索</el-button
+              >先实现功能，之后再美化吧（
+            </div>
+            <div v-if="this.keyword_input != ''">
+              <ul class="item-ul">
+                <li class="search-item" v-for="item of list" :key="item.projId">
+                  <div @click="complete_input(item.projName)">{{ item.projName }}</div>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <br />
+>>>>>>> a3ff2161cd4df6d694b630d3e12f21984263692e
         </div>
         
 
@@ -138,21 +163,25 @@
       </el-tab-pane>
 
       <el-tab-pane label="团队管理">
-        <div class="button">
-          <router-link :to="{ path: '/trashbin', query: { id: this.team_id } }">
-            <el-button icon="el-icon-delete">回收站</el-button>
-          </router-link>
-        </div>
-        <div class="button">
-          <router-link :to="{ path: '/teammanagement', query: { id: team_id } }">
-            <el-button type="primary">成员管理</el-button>
-          </router-link>
+        <div style="width: 95%; text-align: left">
+          <div style="font-size: 25px; margin-bottom: 10px"><b>团队操作</b></div>
+          <div>
+            <el-button type="danger" @click="delete_team_prompt()">解散团队</el-button>
+          </div>
+          <br />
+          <br />
+          <div style="font-size: 25px; margin-bottom: 10px"><b>项目回收站</b></div>
+          <div>
+            <TrashBin :teamid="team_id"></TrashBin>
+          </div>
+          <br />
+          <br />
+          <div style="font-size: 25px; margin-bottom: 10px"><b>成员管理</b></div>
+          <div>
+            <TeamManagement :teamid="team_id"></TeamManagement>
+          </div>
         </div>
       </el-tab-pane>
-
-      <el-tab-pane label="成员管理"> </el-tab-pane>
-
-      <el-tab-pane label="项目回收站"> </el-tab-pane>
 
       <el-tab-pane label="文档中心">
         <router-link :to="{ path: '/doccenter', query: { id: team_id } }">
@@ -263,8 +292,11 @@
 
 <script>
   import qs from 'qs';
+  import TeamManagement from '@/views/TeamManagement.vue';
+  import TrashBin from '@/views/ProjectTrashBin.vue';
   export default {
     name: 'TeamView',
+    components: { TeamManagement, TrashBin },
 
     data() {
       return {
@@ -431,11 +463,11 @@
       invite_member_prompt() {
         let invite_key;
 
-        this.$prompt('请输入对方 UID 或邮箱', '邀请成员', {
+        this.$prompt('请输入对方邮箱', '邀请成员', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /.+/,
-          inputErrorMessage: 'UID 或邮箱不能为空',
+          inputErrorMessage: '邮箱不能为空',
         })
           .then(({ value }) => {
             if (value === '') return;
@@ -631,6 +663,7 @@
             }
           });
       },
+<<<<<<< HEAD
       start_search() {
         this.search_dialogVisible = true;
       },
@@ -666,6 +699,41 @@
         );
       };
     },
+=======
+
+      delete_team_prompt() {
+        this.$confirm('是否解散团队？团队中的所有项目将会永久被删除。', '解散团队', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(() => {
+          this.delete_team();
+        });
+      },
+
+      delete_team() {
+        this.$axios
+          .post('/team/delete_team', qs.stringify({ teamid: this.team_id }), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$message.success('解散团队成功！');
+              setTimeout(() => {
+                this.$router.push('personcenter');
+              }, 1000);
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
+>>>>>>> a3ff2161cd4df6d694b630d3e12f21984263692e
     },
     mounted() {
       // this.timer = setInterval(this.monitor_input, 1000);

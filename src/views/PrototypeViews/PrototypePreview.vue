@@ -1,6 +1,10 @@
 <template>
   <div id="main">
-    <el-tabs type="border-card" style="width: 100%">
+    <div v-if="error" style="width: 100%; text-align: center">
+      <el-result icon="error" title="预览错误" subTitle="预览不存在或已关闭"> </el-result>
+    </div>
+
+    <el-tabs v-else v-model="current_proto_id" type="border-card" style="width: 100%">
       <el-tab-pane v-for="(proto, i) in all_proto_content" :key="i" :name="proto.proto_id + ''">
         <span slot="label"> <span class="el-icon-document"></span> {{ proto.proto_name }} </span>
 
@@ -14,7 +18,6 @@
               <VueDragResize
                 v-for="element in proto.protos_content"
                 :key="element.id"
-
                 :preventActiveBehavior="true"
                 :x="element.x"
                 :y="element.y"
@@ -35,7 +38,12 @@
                     :is="element.tag"
                     v-bind="element.props"
                     v-model="element.self_model"
-                    :style="'width: 100%; height: 100%; font-size:' + element.font_size + 'px;' + element.advanced_style"
+                    :style="
+                      'width: 100%; height: 100%; font-size:' +
+                      element.font_size +
+                      'px;' +
+                      element.advanced_style
+                    "
                   >
                     <component
                       v-for="(child_prop, j) in element.child_props"
@@ -67,6 +75,8 @@
       return {
         // [{proto_id, proto_name, canvas_width, canvas_height, protos_content}, ...]
         all_proto_content: [],
+        current_proto_id: '', // stringified id
+        error: false,
       };
     },
 
@@ -89,8 +99,11 @@
                   this.all_proto_content[i].protos_content
                 );
               }
+              this.current_proto_id = this.all_proto_content[0].proto_id + '';
+              this.error = false;
             } else {
-              this.$message.error(res.data.msg);
+              // this.$message.error(res.data.msg);
+              this.error = true;
             }
           })
           .catch((err) => {
@@ -119,7 +132,7 @@
     width: 100%;
     min-height: 100%;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
   }
 
   #preview-area {

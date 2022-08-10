@@ -9,11 +9,11 @@ const routes = [
     name: 'home',
     component: () => import('../views/HomeView.vue'),
   },
-  {
-    path: '/teammanagement',
-    name: 'teammanagement',
-    component: () => import('../views/TeamManagement.vue'),
-  },
+  // {
+  //   path: '/teammanagement',
+  //   name: 'teammanagement',
+  //   component: () => import('../views/TeamManagement.vue'),
+  // },
   {
     path: '/team',
     name: 'team',
