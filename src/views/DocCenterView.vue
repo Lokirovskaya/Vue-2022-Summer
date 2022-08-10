@@ -45,7 +45,7 @@
 <el-dialog title="重命名" :visible.sync="rename_dialogVisible" width="40%">
       <div>
           <!-- <el-form-item label="项目名称" :label-width="500" required> -->
-          <el-input placeholder="输入文档名（不超过15个字）" v-model="input_file_name_rename" class="rename_input" maxlength="15"></el-input>
+          <el-input placeholder="输入文档名（不超过15个字）" v-model="input_file_name_rename" class="rename_input" maxlength="15" show-word-limit></el-input>
         <!-- </el-form-item> -->
 
         <el-button @click="rename_dialogVisible = false">取消</el-button>
@@ -96,7 +96,7 @@
             </div>
 
           <!-- <el-form-item label="项目名称" :label-width="500" required> -->
-          <el-input placeholder="输入文档名（不超过15个字）" v-model="input_file_name_create" class="create_input" maxlength="15"></el-input>
+          <el-input placeholder="输入文档名（不超过15个字）" v-model="input_file_name_create" class="create_input" maxlength="15" show-word-limit></el-input>
         <!-- </el-form-item> -->
 
         <el-button @click="create_dialogVisible = false">取消</el-button>
