@@ -228,6 +228,7 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import Link from '@tiptap/extension-link'
 import TurndownService from 'turndown'
+// import DocCenter from '@/views/DocCenterView.vue';
 
 
 import * as Y from 'yjs'

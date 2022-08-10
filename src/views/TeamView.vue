@@ -165,6 +165,8 @@
         <!-- <router-link :to="{ path: '/doccenter', query: { id: team_id } }"> -->
           <!-- <el-button type="primary">文档中心</el-button> -->
           <DocCenter></DocCenter>
+          <!-- <EditView :file_id = "this.$store.state.file_id_toshow" :file_name = "his.$store.state.file_name_toshow"></EditView> -->
+          <EditView></EditView>
         <!-- </router-link> -->
       </el-tab-pane>
     </el-tabs>
@@ -281,10 +283,10 @@
   import TeamManagement from '@/views/TeamManagement.vue';
   import TrashBin from '@/views/ProjectTrashBin.vue';
   import DocCenter from '@/views/DocCenterView.vue';
-  // import EditView from '@/views/FileEditView.vue';
+  import EditView from '@/views/FileEditView.vue';
   export default {
     name: 'TeamView',
-    components: { TeamManagement, TrashBin, DocCenter},
+    components: { TeamManagement, TrashBin, DocCenter, EditView},
 
     data() {
       return {

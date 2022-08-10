@@ -16,6 +16,9 @@ export default new Vuex.Store({
     token: '',
     recent_proj: [],
     collapse_left_menu: false,
+    // file_id_toshow:undefined,
+    // file_name_toshow:'',
+    team_id_now:undefined,
   },
   getters: {},
   mutations: {

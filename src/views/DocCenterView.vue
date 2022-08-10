@@ -112,6 +112,7 @@
 import qs from 'qs';
 export default {
   name: 'HomeView',
+  props: ['teamid'],
 
   data() {
     return {
@@ -626,7 +627,7 @@ export default {
 
     get_file_info(){
         let init_ifo = {
-            teamid:this.team_id,
+            teamid:this.teamid,
         }
         this.$axios
   .post('team/file_center', qs.stringify(init_ifo), {
@@ -662,8 +663,15 @@ export default {
        console.log(this.doc_data_of_projs);
     },
 
+    // into_file(file_id, file_name) {
+    //   console.log(file_id);
+    //   this.$store.state.file_id_toshow = file_id;
+    //   this.$store.state.file_name_toshow = file_name
+    // },
+
      into_file(file_id, file_name, is_team_file) {
       console.log(file_id);
+      this.$store.state.file_id_toshow = file_id;
       this.$router.push({ path: '/fileedit', query: { id: file_id, name: file_name, teamid:this.team_id, isTeamFile:is_team_file}});
     },
 
@@ -718,7 +726,7 @@ export default {
 }
 
 .folders_label {
-    color:rgb(26, 156, 0);
+    color:rgb(10, 10, 10);
 }
 
 .tree {
@@ -727,6 +735,7 @@ export default {
     border-width: 1px;
     border-style: solid;
     border-radius: 3px;
+    background-color: rgb(236, 245, 255);
 }
 
 

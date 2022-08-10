@@ -128,6 +128,7 @@
           </template>
 
           <el-menu-item-group>
+            <!-- <DocCenter></DocCenter> -->
             <div slot="title">项目文档</div>
             <el-menu-item v-for="(doc, i) in doc_ifo" :key="doc.doc_name" :index="'doc' + i">
               <el-link :underline="false">
@@ -169,6 +170,10 @@
             </el-menu-item>
           </el-menu-item-group>
         </el-submenu>
+
+        <DocCenter></DocCenter>
+
+        
       </el-menu>
       <div id="collapse-button">
         <el-button
@@ -195,8 +200,10 @@
 
 <script>
   import qs from 'qs';
+  import DocCenter from '@/views/DocCenterView.vue';
   export default {
     name: 'HomeView',
+    components: {DocCenter},
 
     data() {
       return {
