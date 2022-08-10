@@ -7,11 +7,11 @@
           <!-- <img :src="'http://stcmp.shlprn.cn'+this.$store.state.user_photo" class="avatar"> -->
         </template>
       </el-table-column>
-      <el-table-column prop="member_id" label="ID" min-width="15%"></el-table-column>
+      <el-table-column prop="member_id" label="ID" min-width="10%"></el-table-column>
       <el-table-column prop="member_name" label="昵称" min-width="20%"></el-table-column>
-      <el-table-column prop="member_truename" label="真实姓名" min-width="20%"></el-table-column>
-      <el-table-column prop="member_email" label="邮箱" min-width="30%"></el-table-column>
-      <el-table-column label="权限" min-width="20%">
+      <el-table-column prop="member_truename" label="真实姓名" min-width="15%"></el-table-column>
+      <el-table-column prop="member_email" label="邮箱" min-width="25%"></el-table-column>
+      <el-table-column label="权限" min-width="10%">
         <template scope="scope">
           {{ ['成员', '管理员', '创建者'][scope.row.member_permission] }}
         </template>
@@ -59,6 +59,7 @@
   import qs from 'qs';
   export default {
     name: 'TeamManagement',
+    props: ['teamid'],
 
     data() {
       return {
@@ -70,7 +71,7 @@
     methods: {
       set_admin(userid) {
         let post_data = {
-          teamid: this.$route.query.id,
+          teamid: this.teamid,
           userid: userid,
         };
 
@@ -101,7 +102,7 @@
 
       remove_user(userid) {
         let post_data = {
-          teamid: this.$route.query.id,
+          teamid: this.teamid,
           userid: userid,
         };
 
@@ -127,7 +128,7 @@
 
       get_member_data() {
         this.$axios
-          .post('/team/team_manage', qs.stringify({ teamid: this.$route.query.id }), {
+          .post('/team/team_manage', qs.stringify({ teamid: this.teamid }), {
             headers: {
               userid: this.$store.state.userid,
               token: this.$store.state.token,
