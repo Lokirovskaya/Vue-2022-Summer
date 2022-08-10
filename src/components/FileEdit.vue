@@ -263,15 +263,22 @@ export default {
     };
   },
 props:{
-      file_id: {},
+      file_id: {type: Number, default: 0},
       file_name: { type: String, required: true },
+      team_id:{},
     },
   methods: {
     init() {
       //初始化协同编辑和编辑器的相关参数
       const ydoc = new Y.Doc();
       // this.provider = new WebrtcProvider('tiptap-collaboration-cursor-extension', ydoc)
-      this.provider = new WebsocketProvider('wss://demos.yjs.dev', this.file_id, ydoc);
+      if (this.file_id == 0){
+        var str = 'Team_' + this.team_id;
+        this.provider = new WebsocketProvider('wss://demos.yjs.dev', str, ydoc);
+      } else{
+        this.provider = new WebsocketProvider('wss://demos.yjs.dev', this.file_id, ydoc);
+      }
+      
       //this.provider = new HocuspocusProvider({ url: 'ws://127.0.0.1:1234', name: this.$route.query.id, ydoc})
       this.editor = new Editor({
         extensions: [
