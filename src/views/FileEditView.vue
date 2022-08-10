@@ -746,7 +746,7 @@ export default {
         .then(res => {
           if (res.data.errno === 0) {
             console.log(res.data);//to do
-            this.editor.setContent(res.data.content);
+            this.editor.commands.setContent(res.data.content);
           } else {
             this.$message.error(res.data.msg);
           }
