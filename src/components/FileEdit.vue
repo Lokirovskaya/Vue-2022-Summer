@@ -812,6 +812,7 @@ props:{
   border-image-width: initial;
   border-image-outset: initial;
   border-image-repeat: initial;
+  width: 100%;
 }
 
 .editor__header {
@@ -833,10 +834,11 @@ props:{
   border-bottom: 3px solid #0D0D0D;
   border-bottom-width: 3px;
   border-bottom-style: solid;
-  border-right: 3px solid #0D0D0D;
-  border-right-width: 3px;
-  border-right-color: rgb(13, 13, 13);
+  border-top: 3px solid #0D0D0D;
+  border-top-width: 3px;
+  border-top-style: solid;
   background-color: #F5F5F5;
+  width: 102%;
 }
 
 .editor__content {
@@ -845,7 +847,7 @@ props:{
   padding-right: 1rem;
   padding-bottom: 1.25rem;
   padding-left: 1rem;
-  max-height: 30rem;
+  max-height: 29.4rem;
   text-align: left;
   width: 100%;
   flex: 1 1 auto;
