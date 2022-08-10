@@ -663,6 +663,7 @@
 
       start_search() {
         this.search_dialogVisible = true;
+        this.keyword_input = '';
       },
       get_data(cb) {
         this.handle_data();
@@ -941,7 +942,7 @@
   }
 
   .one_search_result {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 800;
   }
 

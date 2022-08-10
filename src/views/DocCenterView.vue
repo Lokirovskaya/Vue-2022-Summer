@@ -1,6 +1,6 @@
 <template>
-  <div style="display: flex;">
-    <div>
+  <div style="display: flex; height: 550px;">
+    <div style="overflow-y: auto; height: 100%; overflow-x: hidden;">
     <el-tree :data="doc_data.concat(doc_data_of_projs)" node-key="id" :props="props1" @node-click="handleclick" class="tree">
       <span slot-scope="{ node, data }">
         <span
@@ -13,7 +13,7 @@
         <i v-if="data.file_id !== 0 && data.file_flag === 0" class="el-icon-edit" @click="start_rename(data)"></i>&nbsp;
         <i v-if="data.file_id !== 0 && data.file_flag === 0" class="el-icon-delete" @click="start_delete(data)"></i>&nbsp;
         <i v-if="data.file_id !== 0 && data.file_flag === 0" class="el-icon-copy-document" @click="start_copy(data)"></i>&nbsp;
-        <i v-if="data.type_flag === 1 || (data.file_id !== 0 && data.file_flag === 1)" class="el-icon-folder-add" @click="start_create(data)"></i>
+        <i v-if="(data.type_flag === 1 && data.file_flag === 1) || (data.file_id !== 0 && data.file_flag === 1)" class="el-icon-folder-add" @click="start_create(data)"></i>
       </span>
     </el-tree>
     </div>
@@ -727,9 +727,6 @@
     /* padding: 10px; */
   }
 
-  .files_label {
-    /* color: green; */
-  }
 
   .folders_label {
     color: rgb(10, 10, 10);
