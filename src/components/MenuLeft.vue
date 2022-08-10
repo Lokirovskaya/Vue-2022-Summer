@@ -1,7 +1,13 @@
 <template>
   <div id="main">
     <div id="left">
-      <el-menu id="menu" :collapse="collapse" background-color="#ECF5FF" text-color="#000" active-text-color="#7AC29A">
+      <el-menu
+        id="menu"
+        :collapse="collapse"
+        background-color="#ECF5FF"
+        text-color="#000"
+        active-text-color="#7AC29A"
+      >
         <div style="width: 100%; height: 60px; text-align: left; margin-left: 10px">
           <img :src="'http://stcmp.shlprn.cn' + this.$store.state.user_photo" class="avatar" />
         </div>
@@ -124,7 +130,6 @@
           <el-menu-item-group>
             <div slot="title">项目文档</div>
             <el-menu-item v-for="(doc, i) in doc_ifo" :key="doc.doc_name" :index="'doc' + i">
-              <!-- <router-link :to="{ path: '/project', query: { id: proj.proj_id } }"> -->
               <el-link :underline="false">
                 <el v-for="(doc, i) in doc_ifo" :key="doc.doc_name" :index="'doc' + i">
                   <li></li>
@@ -138,6 +143,18 @@
                 <span style="font-weight: bold">{{ doc.doc_name }}</span>
               </el-link>
               <!-- </router-link> -->
+              <el-link :underline="false">
+                <el v-for="(doc, i) in doc_ifo" :key="doc.doc_name" :index="'doc' + i">
+                  <li></li>
+                </el>
+
+                <span class="el-icon-tickets"></span>
+                <span>{{ doc.belong_proj }}</span>
+                <span style="font-weight: bold"> / </span>
+
+                <span class="el-icon-folder-opened"></span>
+                <span style="font-weight: bold">{{ doc.doc_name }}</span>
+              </el-link>
             </el-menu-item>
           </el-menu-item-group>
 

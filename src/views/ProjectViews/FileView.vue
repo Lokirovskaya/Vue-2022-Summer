@@ -1,16 +1,33 @@
 <template>
   <div id="file">
     <div id="title">文档编辑</div>
+    
+    <div id="title">
+      <div>
+        <b>文档区</b><span style="position: relative;left: 68%;">
+          <el-tooltip class="item" effect="dark" content="新建文档" placement="bottom">
+            <el-button class="menu-item" type="info" @click="new_file_dialog_visible = true">
+              <i class="iconfont">&#xe7f7;</i>
+            </el-button>
+          </el-tooltip>
+        </span>
+      </div>
+    </div>
 
     <div id="files">
       <el-card class="one-file box-card" shadow="hover" v-for="item in file_list" :key="item.file_id">
-        <div style="text-align: right">
-          <el-dropdown>
+        <div class="box-card-content" @click="edit_file(item.file_id, item.file_name)">
+          <el-tooltip class="item" effect="dark" :content="'更新于' + item.last_modify_time" placement="left-end">
+          <div class="cardImg">
+            <img src="../../assets/file1.png">
+          </div>
+          </el-tooltip>
+        </div>
+        <div style="text-align: left">
+        <div style="position: relative; bottom: 5px; right: 10px;width: 100px;	overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ item.file_name }}</div>
+          <el-dropdown style="position: relative; bottom: 22px;left: 93%;">
             <i class="el-icon-more" style="font-size: 18px"></i>
             <el-dropdown-menu slot="dropdown">
-              <el-dropdown-item>
-                <div @click="edit_file(item.file_id, item.file_name)">编辑文档</div>
-              </el-dropdown-item>
               <el-dropdown-item>
                 <div @click="file_rename_dialog_visible = true; file_rename_id = item.file_id;">重命名
                 </div>
@@ -21,25 +38,13 @@
             </el-dropdown-menu>
           </el-dropdown>
         </div>
-
-        <div>文档名:{{ item.file_name }}<br>
-          文档ID:{{ item.file_id }}<br>
-          文档创建者:{{ item.file_creator }}<br>
-          文档创建时间:{{ item.create_time }}<br>
-        </div>
-      </el-card>
-
-      <el-card class="new-file box-card" shadow="hover">
-        <div @click="new_file_dialog_visible = true">
-          <i class="el-icon-plus" style="font-size: 50px"></i>
-          <div style="font-size: 18px; color: gray">新建文档</div>
-        </div>
       </el-card>
 
       <!-- new proj prompt dialog -->
       <el-dialog title="新建文档" :visible.sync="new_file_dialog_visible" width="40%">
         <div style="margin-left:10%;margin-right:10%;">
-          <el-input placeholder="请输入新建文档名" prefix-icon="el-icon-notebook-2" v-model="new_file_name">
+          <el-input placeholder="请输入新建文档名(限15字)" prefix-icon="el-icon-notebook-2" v-model="new_file_name"
+            maxlength="15">
           </el-input>
           <el-select v-model="value" clearable placeholder="请选择模板(非必选)" style="position: relative;top:10px;">
             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -55,7 +60,7 @@
       <!--rename file prompt dialog -->
       <el-dialog title="重命名文档" :visible.sync="file_rename_dialog_visible" width="40%">
         <div style="margin-left:10%;margin-right:10%;">
-          <el-input placeholder="请输入新名字" prefix-icon="el-icon-notebook-2" v-model="file_rename">
+          <el-input placeholder="请输入新名字(限15字)" prefix-icon="el-icon-notebook-2" v-model="file_rename" maxlength="15">
           </el-input>
         </div>
         <div slot="footer">
@@ -69,7 +74,9 @@
 
 <script>
 import qs from "qs";
+// import DocCenter from '@/components/DocCenter.vue';
 export default {
+  // components: { DocCenter},
   name: 'FileView',
   data() {
     return {
@@ -79,6 +86,7 @@ export default {
       file_rename_id: 0, //重命名文档的id
       file_rename: '',
       file_list: [], //文档列表
+      Img: '../../assets/file1.png',
       value: '',
       options: [{
         value: 1,
@@ -105,6 +113,10 @@ export default {
     }
   },
   methods: {
+    setImg(){
+      //var i = Math.floor(Math.random() * 10) % 5;
+      return '../../assets/file1.png';
+    },
     edit_file(file_id, file_name) {
       console.log(file_id);
       this.$router.push({ path: '/fileedit', query: { id: file_id, name: file_name, teamid: this.$route.query.teamid, projid: this.$route.query.id, isTeamFile: 0 } }); //跳转到该文档的编辑界面
@@ -183,7 +195,7 @@ export default {
       } else {
         let time = this.get_now_time();
         let create_file_ifo = {
-            file_name: this.new_file_name, create_time: time, proj_id: this.$route.query.id, teamid: this.$route.query.teamid, judge: 0, model: this.value === ''?0:this.value, folder_id: 114514
+          file_name: this.new_file_name, create_time: time, proj_id: this.$route.query.id, teamid: this.$route.query.teamid, judge: 0, model: this.value === '' ? 0 : this.value, folder_id: 114514
         }
         console.log(create_file_ifo);
         // console.log(this.$route.query.id,);
@@ -259,19 +271,91 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
+@font-face {
+  font-family: "iconfont";
+  /* Project id 3570869 */
+  src: url('../../font/iconfont.woff2') format('woff2'),
+    url('../../font/iconfont.woff') format('woff'),
+    url('../../font/iconfont.ttf') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 20px;
+  fill: currentColor;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.menu-item {
+  width: 1.75rem;
+  height: 1.75rem;
+  color: #0d0d0d;
+  border: none;
+  border-top-color: initial;
+  border-top-style: none;
+  border-top-width: initial;
+  border-right-color: initial;
+  border-right-style: none;
+  border-right-width: initial;
+  border-bottom-color: initial;
+  border-bottom-style: none;
+  border-bottom-width: initial;
+  border-left-color: initial;
+  border-left-style: none;
+  border-left-width: initial;
+  border-image-source: initial;
+  border-image-slice: initial;
+  border-image-width: initial;
+  border-image-outset: initial;
+  border-image-repeat: initial;
+  background-color: transparent;
+  border-radius: 0.4rem;
+  border-top-left-radius: 0.4rem;
+  border-top-right-radius: 0.4rem;
+  border-bottom-right-radius: 0.4rem;
+  border-bottom-left-radius: 0.4rem;
+  padding: 0.25rem;
+  padding-top: 0.25rem;
+  padding-right: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.25rem;
+  margin-right: 0.25rem;
+}
+.cardImg {
+  width: 180px;
+  height: 70px;
+  position: relative;
+  right: 10px;
+  bottom: 10px;
+  border-radius: 0.5rem;
+}
+.menu-item svg {
+  width: 100%;
+  height: 100%;
+  fill: currentColor;
+}
+
 #file {
   width: 100%;
   min-height: 100%;
   display: flex;
   flex-direction: column;
+  border-radius: 0.5rem;
 }
+
 
 #title {
   width: 100%;
   padding-top: 10px;
   text-align: left;
-  font-size: 30px;
+  font-size: 20px;
+  padding-left: 30px;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 #files {
@@ -280,22 +364,14 @@ export default {
   flex-wrap: wrap;
   padding: 15px;
   min-height: 200px;
+  margin-left: 10%;
+  margin-right: 10%;
 }
 
 .one-file {
   width: 200px;
-  height: 200px;
-  padding: 20px;
+  height: 115px;
   margin: 10px;
-}
 
-.new-file {
-  width: 40px;
-  height: 200px;
-  padding: 20px;
-  margin: 10px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 </style>

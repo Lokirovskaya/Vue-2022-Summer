@@ -37,7 +37,7 @@
 
           <div class="all_input">
             <div class="search">
-              <input v-model="keyword_input" class="search-input" type="text" placeholder="输入项目名称" />
+              <input v-model="keyword_input" v-on:input="monitor_input" class="search-input" type="text" placeholder="输入项目名称" />
               <el-button class="search_button" @click="click_search()">搜索</el-button
               >先实现功能，之后再美化吧（
             </div>
@@ -595,10 +595,10 @@
       },
     },
     mounted() {
-      this.timer = setInterval(this.monitor_input, 1000);
+      // this.timer = setInterval(this.monitor_input, 1000);
     },
     beforeDestroy() {
-      clearInterval(this.timer);
+      // clearInterval(this.timer);
     },
 
     created() {

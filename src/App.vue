@@ -4,13 +4,15 @@
       <router-view />
     </MenuLeft>
     <router-view v-else />
+    <!-- <DocCenter></DocCenter> -->
   </div>
 </template>
 
 <script>
   import MenuLeft from '@/components/MenuLeft.vue';
+  // import DocCenter from '@/components/DocCenter.vue';
   export default {
-    components: { MenuLeft },
+    components: { MenuLeft},
   };
 </script>
 <style>

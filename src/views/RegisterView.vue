@@ -216,7 +216,7 @@ import qs from "qs";
         if (type_cnt === 4 && all_cnt >= 15)
         {
           this.show_pwd_strength_flag = 3;
-          return '*密码强度较强';
+          return '*密码安全';
         }
         else if (all_cnt >= 10)
         {
@@ -226,7 +226,7 @@ import qs from "qs";
         else
         {
           this.show_pwd_strength_flag = 1;
-          return '*密码强度过弱';
+          return '*密码强度较低';
         }
         
       }
@@ -294,6 +294,7 @@ import qs from "qs";
     /* left: 300px; */
     font-size: 12px;
     color: red;
+    opacity: 0.7;
   }
 
   .show_pwd2 {
