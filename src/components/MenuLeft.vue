@@ -116,7 +116,7 @@
           </el-menu-item-group>
         </el-submenu>
 
-        <el-submenu index="4">
+        <!-- <el-submenu index="4">
           <template slot="title">
             <div v-if="collapse" class="el-icon-folder-opened" style="width: 200px; text-align: left">
               <br />
@@ -128,7 +128,6 @@
           </template>
 
           <el-menu-item-group>
-            <!-- <DocCenter></DocCenter> -->
             <div slot="title">项目文档</div>
             <el-menu-item v-for="(doc, i) in doc_ifo" :key="doc.doc_name" :index="'doc' + i">
               <el-link :underline="false">
@@ -143,7 +142,6 @@
                 <span class="el-icon-folder-opened"></span>
                 <span style="font-weight: bold">{{ doc.doc_name }}</span>
               </el-link>
-              <!-- </router-link> -->
               <el-link :underline="false">
                 <el v-for="(doc, i) in doc_ifo" :key="doc.doc_name" :index="'doc' + i">
                   <li></li>
@@ -169,7 +167,7 @@
               </template>
             </el-menu-item>
           </el-menu-item-group>
-        </el-submenu>
+        </el-submenu> -->
 
         <!-- <DocCenter :teamid="teamid_now"></DocCenter> -->
 

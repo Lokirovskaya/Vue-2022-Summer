@@ -124,8 +124,6 @@
           :ActiveElement="drag_elements[activated_index]"
         ></component>
       </div>
-
-      {{ drag_elements }}
     </div>
 
     <!-- debug -->
