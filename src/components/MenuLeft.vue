@@ -58,7 +58,7 @@
             <div slot="title">我加入的团队</div>
             <el-menu-item v-for="(team, i) in teamdata" :key="team.teamid" :index="'team' + i">
               <router-link :to="{ path: '/team', query: { id: team.teamid } }">
-                <el-link :underline="false">
+                <el-link :underline="false" >
                   <span class="el-icon-user"></span>
                   <span>{{ team.teamname }}</span>
                 </el-link>
@@ -128,6 +128,7 @@
           </template>
 
           <el-menu-item-group>
+            <!-- <DocCenter></DocCenter> -->
             <div slot="title">项目文档</div>
             <el-menu-item v-for="(doc, i) in doc_ifo" :key="doc.doc_name" :index="'doc' + i">
               <el-link :underline="false">
@@ -169,6 +170,10 @@
             </el-menu-item>
           </el-menu-item-group>
         </el-submenu>
+
+        <!-- <DocCenter :teamid="teamid_now"></DocCenter> -->
+
+        
       </el-menu>
       <div id="collapse-button">
         <el-button
@@ -195,11 +200,14 @@
 
 <script>
   import qs from 'qs';
+  // import DocCenter from '@/views/DocCenterView.vue';
   export default {
     name: 'HomeView',
+    // components: {DocCenter},
 
     data() {
       return {
+        teamid_now:undefined,
         collapse: true,
         // collapse_routers: []
         // 结构见文档 /team/userspace
@@ -224,6 +232,10 @@
     },
 
     methods: {
+      store_teamid(team) {
+        this.teamid_now = team.teamid;
+      },
+
       change_menu_collapse() {
         this.collapse = !this.collapse;
         let left_menu = document.getElementById('left');
