@@ -1,7 +1,7 @@
 <template>
   <div id="file">
     <div id="title">文档编辑</div>
-
+    
     <div id="files">
       <el-card class="one-file box-card" shadow="hover" v-for="item in file_list" :key="item.file_id">
         <div style="text-align: right">
@@ -69,7 +69,9 @@
 
 <script>
 import qs from "qs";
+// import DocCenter from '@/components/DocCenter.vue';
 export default {
+  // components: { DocCenter},
   name: 'FileView',
   data() {
     return {

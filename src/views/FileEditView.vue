@@ -1,6 +1,9 @@
 <template>
+
   <div id="FileEdit">
+    
     <div class="editor" v-if="editor">
+      <!-- <DocCenter></DocCenter> -->
       <div class="editor__header">
         <b>{{ this.$route.query.name }}</b>
         <div class="divider"></div>
@@ -221,16 +224,19 @@ import TurndownService from 'turndown'
 import JsPDF from "jspdf"//PDF
 import * as html2canvas from 'html2canvas'//PDF
 
+
 import * as Y from 'yjs'
 import { WebsocketProvider } from "y-websocket";
 //import { HocuspocusProvider } from '@hocuspocus/provider'
 
 import qs from "qs"
+// import DocCenter from '@/components/DocCenter.vue';
 
 export default {
   name: "FileEditView",
   components: {
     EditorContent,
+    // DocCenter
   },
   data() {
     return {
