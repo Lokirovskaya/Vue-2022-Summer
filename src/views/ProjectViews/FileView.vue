@@ -1,17 +1,16 @@
 <template>
   <div id="file">
     <div id="title">
-      <div>
-        <b>文档区</b><span style="position: relative;left: 68%;">
-          <el-tooltip class="item" effect="dark" content="新建文档" placement="bottom">
-            <el-button class="menu-item" type="info" @click="new_file_dialog_visible = true">
-              <i class="iconfont">&#xe7f7;</i>
-            </el-button>
-          </el-tooltip>
-        </span>
-      </div>
     </div>
-
+    <div class="title1">
+      <span style="text-align: left;"><b>文档区</b></span><span style="position: relative;left: 33%;top:2px;">
+        <el-tooltip class="item" effect="dark" content="新建文档" placement="bottom">
+          <el-button type="primary" @click="new_file_dialog_visible = true" circle size="mini">
+            <i class="el-icon-circle-plus-outline"></i>
+          </el-button>
+        </el-tooltip>
+      </span>
+    </div>
     <div id="files">
       <el-card class="one-file box-card" shadow="hover" v-for="item in file_list" :key="item.file_id">
         <div class="box-card-content" @click="edit_file(item.file_id, item.file_name)">
@@ -115,15 +114,15 @@ export default {
   methods: {
     setImg(file_id) {
       var i = file_id % 5;
-      if( i === 0){
+      if (i === 0) {
         return require('../../assets/file1.png');
-      }else if (i === 1){
+      } else if (i === 1) {
         return require('../../assets/file2.png');
-      }else if (i === 2){
+      } else if (i === 2) {
         return require('../../assets/file3.png');
-      }else if (i === 3){
+      } else if (i === 3) {
         return require('../../assets/file4.png');
-      }else if (i === 4){
+      } else if (i === 4) {
         return require('../../assets/file5.png');
       }
     },
@@ -300,7 +299,7 @@ export default {
   -moz-osx-font-smoothing: grayscale;
 }
 
-.menu-item {
+.menu-item111 {
   width: 1.75rem;
   height: 1.75rem;
   color: #0d0d0d;
@@ -345,7 +344,7 @@ export default {
   border-radius: 0.5rem;
 }
 
-.menu-item svg {
+.menu-item111 svg {
   width: 100%;
   height: 100%;
   fill: currentColor;
@@ -377,6 +376,7 @@ export default {
   margin-left: 10%;
   margin-right: 10%;
 }
+
 #files {
   display: flex;
   flex-direction: row;
