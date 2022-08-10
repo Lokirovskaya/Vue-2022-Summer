@@ -230,7 +230,13 @@
 
       rename_file() {
         this.rename_dialogVisible = false;
-
+        if (this.input_file_name_rename === '')
+        {
+          this.$message.error('名称不能为空');
+          return;
+        }
+        
+ 
         if (this.file_now.file_flag === 0) {
           //重命名文件
           console.log('重命名团队文件');
@@ -515,6 +521,11 @@
 
       create_file() {
         this.create_dialogVisible = false;
+        if (this.input_file_name_create === '')
+        {
+          this.$message.error('名称不能为空');
+          return;
+        }
         console.log(this.input_file_name_create);
         // var is_root = this.file_now.file_id = 0 ? 1 : 2;
         var is_root;
