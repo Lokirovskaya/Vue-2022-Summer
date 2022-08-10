@@ -9,11 +9,11 @@ const routes = [
     name: 'home',
     component: () => import('../views/HomeView.vue'),
   },
-  {
-    path: '/teammanagement',
-    name: 'teammanagement',
-    component: () => import('../views/TeamManagement.vue'),
-  },
+  // {
+  //   path: '/teammanagement',
+  //   name: 'teammanagement',
+  //   component: () => import('../views/TeamManagement.vue'),
+  // },
   {
     path: '/team',
     name: 'team',
@@ -59,6 +59,19 @@ const routes = [
     name: 'doccenter',
     component: () => import('../views/DocCenterView.vue'),
   },
+  // {
+  //   path: "/routerView_doccenter",
+  //   name: "routerView_doccenter",
+  //   component: () => import("@/views/routerView/index.vue"),
+  //   redirect: '/doccenter',//页面默认加载的路由
+  //   children: [
+  //     {
+  //       path: "/fileedit",
+  //       name: "fileedit",
+  //       component: () => import("../views/FileEditView.vue")
+  //     },
+  //   ]
+  // },
   // 它们被做成组件了，丧失路由权了呜呜呜
   // {
   //   path: '/prototypelist',

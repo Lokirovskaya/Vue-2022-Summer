@@ -22,7 +22,7 @@
             <div id="username_pc">{{username}}</div>
 
             <el-descriptions border style="margin: 15px;">
-              <el-descriptions-item label="uid"><div class="ifo">{{uid}}</div></el-descriptions-item>
+              <!-- <el-descriptions-item label="uid"><div class="ifo">{{uid}}</div></el-descriptions-item> -->
               <el-descriptions-item label="姓名"><div class="ifo">{{truename}}</div></el-descriptions-item>
               <el-descriptions-item label="邮箱"><div class="ifo">{{email}}</div></el-descriptions-item>
             </el-descriptions>
@@ -244,7 +244,7 @@ import qs from "qs";
   };
 </script>
 
-<style>
+<style scoped>
     .avatar {
       display: flex;
     width: 180px;

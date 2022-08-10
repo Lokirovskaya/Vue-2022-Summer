@@ -1,6 +1,9 @@
 <template>
+
   <div id="FileEdit">
+    
     <div class="editor" v-if="editor">
+      <!-- <DocCenter></DocCenter> -->
       <div class="editor__header">
         <!--返回上级界面-->
         <el-tooltip class="item" effect="dark" content="返回" placement="bottom">
@@ -226,16 +229,19 @@ import TableRow from '@tiptap/extension-table-row'
 import Link from '@tiptap/extension-link'
 import TurndownService from 'turndown'
 
+
 import * as Y from 'yjs'
 import { WebsocketProvider } from "y-websocket";
 //import { HocuspocusProvider } from '@hocuspocus/provider'
 
 import qs from "qs"
+// import DocCenter from '@/components/DocCenter.vue';
 
 export default {
   name: "FileEditView",
   components: {
     EditorContent,
+    // DocCenter
   },
   data() {
     return {
@@ -769,7 +775,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 @font-face {
   font-family: "iconfont";
   /* Project id 3570869 */
@@ -789,6 +795,7 @@ export default {
 }
 
 .editor {
+  
   display: flex;
   flex-direction: column;
   /* max-height: 45.2rem;*/

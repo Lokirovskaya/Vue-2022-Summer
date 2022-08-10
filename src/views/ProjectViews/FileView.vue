@@ -1,14 +1,17 @@
 <template>
   <div id="file">
-    <div id="title1">
-      <b>文档区</b><span style="position: relative;left: 68%;">
-        <el-tooltip class="item" effect="dark" content="新建文档" placement="bottom">
-          <el-button class="menu-item" type="info" @click="new_file_dialog_visible = true">
-            <i class="iconfont">&#xe742;</i>
-          </el-button>
-        </el-tooltip>
-      </span>
+    <div id="title">
+      <div>
+        <b>文档区</b><span style="position: relative;left: 68%;">
+          <el-tooltip class="item" effect="dark" content="新建文档" placement="bottom">
+            <el-button class="menu-item" type="info" @click="new_file_dialog_visible = true">
+              <i class="iconfont">&#xe7f7;</i>
+            </el-button>
+          </el-tooltip>
+        </span>
+      </div>
     </div>
+
     <div id="files">
       <el-card class="one-file box-card" shadow="hover" v-for="item in file_list" :key="item.file_id">
         <div class="box-card-content" @click="edit_file(item.file_id, item.file_name)">
@@ -71,7 +74,9 @@
 
 <script>
 import qs from "qs";
+// import DocCenter from '@/components/DocCenter.vue';
 export default {
+  // components: { DocCenter},
   name: 'FileView',
   data() {
     return {

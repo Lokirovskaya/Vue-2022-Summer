@@ -7,11 +7,34 @@
         <el-divider>团队项目</el-divider>
 
         <div class="sort_and_search">
-          <div style="display: flex">
-            <el-dropdown trigger="click">
-              <span class="el-dropdown-link">
-                选择排序方式<i class="el-icon-arrow-down el-icon--right"></i>
-              </span>
+          <!-- <div class="all_input">
+            <div class="search">
+              <input v-model="keyword_input" v-on:input="monitor_input" class="search-input" type="text" placeholder="搜索项目" />
+              <el-button class="search_button" @click="click_search()" size="small">搜索</el-button
+              >
+            </div>
+            <div v-if="this.keyword_input != ''">
+              <ul v-if="this.keyword_input != ''" class="item-ul">
+                <li class="search-item" v-for="item of list" :key="item.projId">
+                  <span @click="complete_input(item.projName)" class="one_search_result">{{ item.projName }}</span>
+                </li>
+              </ul>
+            </div>
+          </div> -->
+
+          <div style="display: flex; align-items: center">
+            <el-button
+              icon="el-icon-search"
+              @click="start_search"
+              class="single_search_bottom"
+              size="small"
+            ></el-button>
+            <el-dropdown trigger="click" size="small">
+              <!-- <span class="el-dropdown-link"> -->
+              <el-button size="small" plain>
+                {{ this.sort_type }}<i class="el-icon-arrow-down el-icon--right"></i>
+              </el-button>
+              <!-- </span> -->
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item
                   ><div @click="sort_proj('创建时间从早到晚')">创建时间从早到晚</div></el-dropdown-item
@@ -33,21 +56,6 @@
                 >
               </el-dropdown-menu>
             </el-dropdown>
-          </div>
-
-          <div class="all_input">
-            <div class="search">
-              <input v-model="keyword_input" class="search-input" type="text" placeholder="输入项目名称" />
-              <el-button class="search_button" @click="click_search()">搜索</el-button
-              >先实现功能，之后再美化吧（
-            </div>
-            <div v-if="this.keyword_input != ''">
-              <ul class="item-ul">
-                <li class="search-item" v-for="item of list" :key="item.projId">
-                  <div @click="complete_input(item.projName)">{{ item.projName }}</div>
-                </li>
-              </ul>
-            </div>
           </div>
           <br />
         </div>
@@ -79,7 +87,7 @@
             </div>
 
             <div style="height: 30%; margin-left: 10px">
-              <span v-if="is_searchORorder === 0">{{ proj.proj_info }}</span>
+              <!-- <span v-if="is_searchORorder === 0">{{ proj.proj_info }}</span> -->
               <span style="text-align: right; float: right; margin-right: 10px">
                 <el-dropdown>
                   <i class="el-icon-more" style="font-size: 18px"></i>
@@ -133,21 +141,25 @@
       </el-tab-pane>
 
       <el-tab-pane label="团队管理">
-        <div class="button">
-          <router-link :to="{ path: '/trashbin', query: { id: this.team_id } }">
-            <el-button icon="el-icon-delete">回收站</el-button>
-          </router-link>
-        </div>
-        <div class="button">
-          <router-link :to="{ path: '/teammanagement', query: { id: team_id } }">
-            <el-button type="primary">成员管理</el-button>
-          </router-link>
+        <div style="width: 95%; text-align: left">
+          <div style="font-size: 25px; margin-bottom: 10px"><b>团队操作</b></div>
+          <div>
+            <el-button type="danger" @click="delete_team_prompt()">解散团队</el-button>
+          </div>
+          <br />
+          <br />
+          <div style="font-size: 25px; margin-bottom: 10px"><b>项目回收站</b></div>
+          <div>
+            <TrashBin :teamid="team_id"></TrashBin>
+          </div>
+          <br />
+          <br />
+          <div style="font-size: 25px; margin-bottom: 10px"><b>成员管理</b></div>
+          <div>
+            <TeamManagement :teamid="team_id"></TeamManagement>
+          </div>
         </div>
       </el-tab-pane>
-
-      <el-tab-pane label="成员管理"> </el-tab-pane>
-
-      <el-tab-pane label="项目回收站"> </el-tab-pane>
 
       <el-tab-pane label="文档中心">
         <router-link :to="{ path: '/doccenter', query: { id: team_id } }">
@@ -227,13 +239,49 @@
         <el-button type="primary" @click="edit_proj()">确定</el-button>
       </div>
     </el-dialog>
+
+    <el-dialog title="搜索项目" :visible.sync="search_dialogVisible" width="25%">
+      <div class="search_dialog">
+        <!-- <el-form-item label="项目名称" :label-width="500" required> -->
+        <!-- <el-input placeholder="输入项目名" v-model="keyword_input" class="search_proj_input" maxlength="15"></el-input> -->
+        <div class="col1">
+          <el-col :span="12" class="col">
+            <input
+              v-model="keyword_input"
+              v-on:input="monitor_input"
+              class="search-input"
+              type="text"
+              placeholder="输入项目名称"
+            />
+            <div v-if="this.keyword_input != ''">
+              <ul v-if="this.keyword_input != ''" class="item-ul">
+                <li class="search-item" v-for="item of list" :key="item.projId">
+                  <!-- <div @click="complete_input(item.projName)">{{ item.projName }}</div> -->
+                  <span @click="complete_input(item.projName)" class="one_search_result">{{
+                    item.projName
+                  }}</span>
+                </li>
+              </ul>
+            </div>
+          </el-col>
+        </div>
+        <!-- </el-form-item> -->
+
+        <el-button @click="search_dialogVisible = false" size="small">取消</el-button>
+        <el-button type="primary" @click="click_search()" size="small">搜索</el-button>
+        <!-- <el-button icon="el-icon-search" circle class="bottom2"></el-button> -->
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
   import qs from 'qs';
+  import TeamManagement from '@/views/TeamManagement.vue';
+  import TrashBin from '@/views/ProjectTrashBin.vue';
   export default {
     name: 'TeamView',
+    components: { TeamManagement, TrashBin },
 
     data() {
       return {
@@ -271,10 +319,14 @@
         member_data: [], // member_id, member_name, member_photo
 
         list: [],
+        list_new: [],
         timer: '',
         keyword_input: '',
 
         is_searchORorder: 0,
+        search_dialogVisible: false,
+
+        sort_type: '排序方式',
       };
     },
 
@@ -396,11 +448,11 @@
       invite_member_prompt() {
         let invite_key;
 
-        this.$prompt('请输入对方 UID 或邮箱', '邀请成员', {
+        this.$prompt('请输入对方邮箱', '邀请成员', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           inputPattern: /.+/,
-          inputErrorMessage: 'UID 或邮箱不能为空',
+          inputErrorMessage: '邮箱不能为空',
         })
           .then(({ value }) => {
             if (value === '') return;
@@ -506,6 +558,7 @@
       },
 
       sort_proj(sort_type) {
+        this.sort_type = sort_type;
         let sort_ifo = {
           teamid: this.$route.query.id,
           according: sort_type,
@@ -534,6 +587,7 @@
       complete_input(value) {
         console.log(value);
         this.keyword_input = value;
+        this.monitor_input();
       },
 
       monitor_input() {
@@ -568,6 +622,7 @@
       },
 
       click_search() {
+        this.search_dialogVisible = false;
         console.log('search');
         let search_ifo = {
           projName: this.keyword_input,
@@ -593,12 +648,82 @@
             }
           });
       },
+
+      start_search() {
+        this.search_dialogVisible = true;
+      },
+      get_data(cb) {
+        this.handle_data();
+        // return this.list
+        // this.monitor_input();
+        console.log(this.list_new);
+        cb(this.list_new);
+      },
+      handle_data() {
+        // this.list_new= this.list.map((terminal) => {
+        //         return {
+        //           value: projName,
+        //           name: projId,
+        //         };
+        //       });
+        this.list_new = JSON.parse(JSON.stringify(this.list).replace(/projName/g, 'value'));
+      },
+      querySearch(queryString, cb) {
+
+      var list = this.list;
+      var results = queryString
+        ? list.filter(this.createFilter(queryString))
+        : list;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return list => {
+        return (
+          list.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          0
+        );
+      };
+    },
+
+      delete_team_prompt() {
+        this.$confirm('是否解散团队？团队中的所有项目将会永久被删除。', '解散团队', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning',
+        }).then(() => {
+          this.delete_team();
+        });
+      },
+
+      delete_team() {
+        this.$axios
+          .post('/team/delete_team', qs.stringify({ teamid: this.team_id }), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              this.$message.success('解散团队成功！');
+              setTimeout(() => {
+                this.$router.push('personcenter');
+              }, 1000);
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
+      },
     },
     mounted() {
-      this.timer = setInterval(this.monitor_input, 1000);
+      // this.timer = setInterval(this.monitor_input, 1000);
     },
     beforeDestroy() {
-      clearInterval(this.timer);
+      // clearInterval(this.timer);
     },
 
     created() {
@@ -709,10 +834,18 @@
     font-size: 30px;
   }
 
-  .button {
+  .buttom {
+    display: flex;
     margin-top: 20px;
     padding-left: 40px;
     text-align: left;
+    /* bottom: 100px; */
+  }
+
+  .bottom2 {
+    /* top:100px; */
+    /* margin-bottom: 100px; */
+    /* padding-bottom: 20px; */
   }
 
   a,
@@ -732,13 +865,14 @@
 
   .search-input {
     display: flex;
-    width: 100px;
+    width: 130px;
     height: 30px;
     color: #666;
-    margin: 10px;
-    /* margin-bottom: 10px; */
-    /* margin-top: -25px; */
-    /* margin-left: 140px; */
+    /* margin: 10px; */
+    margin-top: 0px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 10px;
   }
   .search-content {
     z-index: 1;
@@ -754,11 +888,13 @@
     float: top;
     display: flex;
     flex-direction: column;
-    padding-left: 1px;
-    margin-left: 10px;
-    margin-top: -14px;
+    padding: 1px;
+    text-align: center;
+    margin-left: 11px;
+    margin-top: -12px;
     border: 1px solid black;
-    width: 100px;
+    width: 132px;
+    background-color: whitesmoke;
     /* left: ; */
   }
   .search-item {
@@ -786,11 +922,51 @@
   }
 
   .search_button {
-    display: flex;
+    /* display: flex; */
     margin: 10px;
   }
 
   .sort_and_search {
     display: flex;
+  }
+
+  .all_input {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .one_search_result {
+    font-size: 18px;
+    font-weight: 800;
+  }
+
+  .search_proj_input {
+    display: flex;
+    margin-bottom: 20px;
+    /* flex-direction:column;
+    justify-content: center;
+    align-items: center; */
+    /* width: 500px; */
+  }
+
+  .col1 {
+    /* display: flex; */
+    /* margin-bottom: -100px; */
+  }
+
+  .search_dialog {
+    /* display: flex; */
+    flex-direction: row;
+    /* align-content: center; */
+    align-items: center;
+  }
+
+  .bottom {
+    /* size: 10px; */
+  }
+
+  .single_search_bottom {
+    display: flex;
+    margin: 10px;
   }
 </style>

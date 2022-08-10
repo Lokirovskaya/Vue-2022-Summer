@@ -59,6 +59,7 @@ import qs from "qs";
               this.$store.commit('set_userphoto', res.data.data.photo); 
               this.$store.commit('set_email', res.data.data.email); 
               this.$store.commit('set_truename', res.data.data.truename); 
+              this.$store.commit('clear_recent_proj'); 
               this.$router.push({path:'/personcenter'});
               // alert('username:'+res.data.data.username+'\nemail:'+res.data.data.email+'\ntruename:'+res.data.data.truename+'\ntoken:'+res.data.data.authorization);
             }
