@@ -91,7 +91,6 @@ export default {
   width: 100%;
 }
 
-.header {}
 
 .box-card {
   width: 332px;
