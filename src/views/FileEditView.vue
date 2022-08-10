@@ -1,14 +1,13 @@
 <template>
 
   <div id="FileEdit">
-    
+
     <div class="editor" v-if="editor">
       <!-- <DocCenter></DocCenter> -->
       <div class="editor__header">
         <!--返回上级界面-->
         <el-tooltip class="item" effect="dark" content="返回" placement="bottom">
-          <el-button class="menu-item" type="info" @click="goBack"
-            :class="{ 'is-active': editor.isActive('bold') }">
+          <el-button class="menu-item" type="info" @click="goBack">
             <i class="iconfont">&#xe755;</i>
           </el-button>
         </el-tooltip>
@@ -155,13 +154,15 @@
         <div class="divider"></div>
         <!--undo-->
         <el-tooltip class="item" effect="dark" content="撤销" placement="bottom">
-          <el-button class="menu-item" type="info" @click="editor.chain().focus().undo().run()" :disabled="!editor.can().undo()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().undo().run()"
+            :disabled="!editor.can().undo()">
             <i class="iconfont">&#xe739;</i>
           </el-button>
         </el-tooltip>
         <!--redo-->
         <el-tooltip class="item" effect="dark" content="重做" placement="bottom">
-          <el-button class="menu-item" type="info" @click="editor.chain().focus().redo().run()" :disabled="!editor.can().redo()">
+          <el-button class="menu-item" type="info" @click="editor.chain().focus().redo().run()"
+            :disabled="!editor.can().redo()">
             <i class="iconfont">&#xe652;</i>
           </el-button>
         </el-tooltip>
@@ -327,10 +328,10 @@ export default {
         .then(res => {
           if (res.data.errno === 0) {
             console.log(res.data);//测试一下
-            if (res.data.new === 1 && res.data.model_id !== 0) {//为新文档,应该从模板中加载内容
+            if (res.data.new == 1 && res.data.model_id !== 0) {//为新文档,应该从模板中加载内容
               console.log('为新文档,应该从模板中加载内容');//to do
               this.editor.commands.setContent(res.data.model);
-            } else if (res.data.new === 2) {//copy的新文档,从数据库加载内容
+            } else if (res.data.new == 2) {//copy的新文档,从数据库加载内容
               console.log('copy的新文档,从数据库加载内容');
               this.getContentFromContent();
             }
@@ -344,10 +345,10 @@ export default {
         });
     },
     goBack() {
-      if(this.$route.query.isTeamFile == 0){//项目文档
-        this.$router.push({ path: '/project', query: {id: this.$route.query.projid, tab: 'file', teamid: this.$route.query.teamid}});
-      }else{
-        this.$router.push({ path: '/team', query: {id: this.$route.query.teamid}});
+      if (this.$route.query.isTeamFile == 0) {//项目文档
+        this.$router.push({ path: '/project', query: { id: this.$route.query.projid, tab: 'file', teamid: this.$route.query.teamid } });
+      } else {
+        this.$router.push({ path: '/team', query: { id: this.$route.query.teamid } });
       }
     },
     setColor() {
@@ -796,7 +797,7 @@ export default {
 }
 
 .editor {
-  
+
   display: flex;
   flex-direction: column;
   /* max-height: 45.2rem;*/
@@ -978,7 +979,8 @@ export default {
   margin-left: 0.5rem;
   margin-right: 0.75rem;
 }
-.ProseMirror{
+
+.ProseMirror {
   background-color: white;
   padding-left: 3rem;
   padding-right: 3rem;
@@ -990,6 +992,7 @@ export default {
   margin-bottom: 3rem;
   min-height: 30rem;
 }
+
 .ProseMirror code {
   font-size: .9rem;
   padding: 0.25em;
