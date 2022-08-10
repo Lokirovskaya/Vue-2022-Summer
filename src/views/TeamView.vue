@@ -561,7 +561,7 @@
 
     created() {
       this.get_team_info();
-      console.log(this.get_now_time());
+      // console.log(this.get_now_time());
     },
 
     watch: {

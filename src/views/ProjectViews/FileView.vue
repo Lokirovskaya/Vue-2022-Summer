@@ -182,8 +182,12 @@ export default {
         this.$message.error('文档名不能为空');
       } else {
         let time = this.get_now_time();
-        console.log(this.value);
-        this.$axios.post('/project/createFile', qs.stringify({ file_name: this.new_file_name, create_time: time, proj_id: this.$route.query.id, teamid: this.$route.query.teamid, judge: 0, model: this.value === ''?0:this.value, folder_id: 114514 }), {// to change teamid
+        let create_file_ifo = {
+            file_name: this.new_file_name, create_time: time, proj_id: this.$route.query.id, teamid: this.$route.query.teamid, judge: 0, model: this.value === ''?0:this.value, folder_id: 114514
+        }
+        console.log(create_file_ifo);
+        // console.log(this.$route.query.id,);
+        this.$axios.post('/project/createFile', qs.stringify(create_file_ifo), {// to change teamid
           headers: {
             userid: this.$store.state.userid,
             token: this.$store.state.token,

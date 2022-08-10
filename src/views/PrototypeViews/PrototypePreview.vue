@@ -31,6 +31,7 @@
                     {{ element.text }}
                   </div>
                   <component
+                    :class="element.advanced_class"
                     :is="element.tag"
                     v-bind="element.props"
                     v-model="element.self_model"
