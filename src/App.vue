@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <MenuLeft v-if="this.$store.state.login_state !== 0">
+    <MenuLeft v-if="this.$store.state.login_state !== 0 && this.$route.name !== 'protopreview'">
       <router-view />
     </MenuLeft>
     <router-view v-else />

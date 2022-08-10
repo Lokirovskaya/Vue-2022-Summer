@@ -43,19 +43,31 @@
 
       <div id="preview">
         <div v-if="preview_status === 0">
-          当前项目无原型预览
+          无原型预览
           <el-button type="primary" @click="open_preview_status()">创建预览</el-button>
         </div>
         <div v-else-if="preview_status === 1">
-          当前项目原型预览已关闭，点击重新开放
-          <el-button type="success" @click="open_preview_status()">开放预览</el-button>
+          原型预览已关闭，点击重新开放：
+          <span>
+            <el-input v-model="preview_link" readonly="true" disabled style="width: 400px; font-size: 15px">
+            </el-input>
+          </span>
+          <span style="margin-left: 15px">
+            <el-button type="success" @click="open_preview_status()">开放预览</el-button>
+          </span>
         </div>
         <div v-else-if="preview_status === 2">
-          当前项目原型预览已开放：
-          <router-link :to="{ path: '/protopreview', query: { id: projid } }">
-            <el-link>点击此处跳转到预览</el-link>
-          </router-link>
-          <el-button type="warning" @click="close_preview_status()">关闭预览</el-button>
+          原型预览已开放，预览链接：
+          <span>
+            <el-input v-model="preview_link" readonly="true" style="width: 400px; font-size: 15px">
+              <el-button slot="append" icon="el-icon-copy-document" @click="copy_preview_link()"
+                >复制</el-button
+              >
+            </el-input>
+          </span>
+          <span style="margin-left: 15px">
+            <el-button type="danger" @click="close_preview_status()">关闭预览</el-button>
+          </span>
         </div>
       </div>
     </div>
@@ -165,7 +177,9 @@
         prototype_rename_id: 0, //重命名原型图的id
         prototype_rename: '',
         prototype_list: [], //原型图列表
+
         preview_status: -1, // 0 无, 1 关闭, 2 打开
+        preview_link: '',
 
         // imported from js
         prototype_template_phone,
@@ -364,11 +378,15 @@
       },
 
       open_preview_status() {
+        this.preview_status = 2;
         this.change_preview_status(true);
+        this.$message.success('预览已开启');
       },
 
       close_preview_status() {
+        this.preview_status = 1;
         this.change_preview_status(false);
+        this.$message.success('预览已关闭');
       },
 
       change_preview_status(open) {
@@ -382,7 +400,8 @@
           })
           .then((res) => {
             if (res.data.errno === 0) {
-              this.preview_status = res.data.preview_status;
+              // this.preview_status = res.data.preview_status;
+              // this.$router.go(0);
             } else {
               this.$message.error(res.data.msg);
             }
@@ -391,11 +410,18 @@
             this.$message.error(err);
           });
       },
+
+      copy_preview_link() {
+        navigator.clipboard.writeText(this.preview_link).then(() => {
+          this.$message.success('复制成功');
+        });
+      },
     },
 
     created() {
       this.get_prototype_list();
       this.get_preview_status();
+      this.preview_link = location.origin + '/#/protopreview?id=' + this.projid;
     },
   };
 </script>
