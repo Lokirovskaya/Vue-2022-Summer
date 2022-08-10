@@ -52,33 +52,9 @@
               </el-dropdown-menu>
             </el-dropdown>
           </div>
-<<<<<<< HEAD
          
           
-=======
-
-          <div class="all_input">
-            <div class="search">
-              <input
-                v-model="keyword_input"
-                v-on:input="monitor_input"
-                class="search-input"
-                type="text"
-                placeholder="输入项目名称"
-              />
-              <el-button class="search_button" @click="click_search()">搜索</el-button
-              >先实现功能，之后再美化吧（
-            </div>
-            <div v-if="this.keyword_input != ''">
-              <ul class="item-ul">
-                <li class="search-item" v-for="item of list" :key="item.projId">
-                  <div @click="complete_input(item.projName)">{{ item.projName }}</div>
-                </li>
-              </ul>
-            </div>
-          </div>
           <br />
->>>>>>> a3ff2161cd4df6d694b630d3e12f21984263692e
         </div>
         
 
@@ -663,7 +639,6 @@
             }
           });
       },
-<<<<<<< HEAD
       start_search() {
         this.search_dialogVisible = true;
       },
@@ -699,7 +674,6 @@
         );
       };
     },
-=======
 
       delete_team_prompt() {
         this.$confirm('是否解散团队？团队中的所有项目将会永久被删除。', '解散团队', {
@@ -733,7 +707,6 @@
             this.$message.error(err);
           });
       },
->>>>>>> a3ff2161cd4df6d694b630d3e12f21984263692e
     },
     mounted() {
       // this.timer = setInterval(this.monitor_input, 1000);
