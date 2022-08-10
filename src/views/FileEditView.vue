@@ -795,6 +795,7 @@ export default {
 }
 
 .editor {
+  
   display: flex;
   flex-direction: column;
   /* max-height: 45.2rem;*/

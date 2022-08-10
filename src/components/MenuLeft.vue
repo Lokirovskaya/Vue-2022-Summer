@@ -114,7 +114,7 @@
           </el-menu-item-group>
         </el-submenu>
 
-        <el-submenu index="4">
+        <!-- <el-submenu index="4">
           <template slot="title">
             <div class="el-icon-folder-opened">
               <br />
@@ -125,7 +125,6 @@
           <el-menu-item-group>
             <div slot="title">项目文档</div>
             <el-menu-item v-for="(doc, i) in doc_ifo" :key="doc.doc_name" :index="'doc' + i">
-              <!-- <router-link :to="{ path: '/project', query: { id: proj.proj_id } }"> -->
                 <el-link :underline="false">
                   <el v-for="(doc, i) in doc_ifo" :key="doc.doc_name" :index="'doc' + i">
                       <li></li>
@@ -138,7 +137,6 @@
                   <span class="el-icon-folder-opened"></span>
                   <span style="font-weight: bold">{{ doc.doc_name }}</span>
                 </el-link>
-              <!-- </router-link> -->
             </el-menu-item>
           </el-menu-item-group>
 
@@ -152,7 +150,7 @@
               </template>
             </el-menu-item>
           </el-menu-item-group>
-        </el-submenu>
+        </el-submenu> -->
 
       </el-menu>
     </div>
