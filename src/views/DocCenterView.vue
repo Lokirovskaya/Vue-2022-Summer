@@ -1,22 +1,24 @@
 <template>
-  <div>
-    <el-tree :data="doc_data" node-key="id" :props="props1" @node-click="handleclick" class="tree">
+  <div style="display: flex;">
+    <div>
+    <el-tree :data="doc_data.concat(doc_data_of_projs)" node-key="id" :props="props1" @node-click="handleclick" class="tree">
       <span slot-scope="{ node, data }">
         <span
           v-if="data.file_flag === 0"
           @click="into_file(data.file_id, data.file_name, data.type_flag)"
-          class="files_label"
-          >{{ node.label }}
+          class="files_label el-icon-document"
+          >&nbsp;{{ node.label }}&nbsp;&nbsp;
         </span>
-        <span v-else class="folders_label">{{ node.label }} </span>
-        <i v-if="data.file_id != 0" class="el-icon-edit" @click="start_rename(data)"></i>&nbsp;
-        <i v-if="data.file_id != 0" class="el-icon-delete" @click="start_delete(data)"></i>&nbsp;
-        <i v-if="data.file_id != 0" class="el-icon-copy-document" @click="start_copy(data)"></i>&nbsp;
-        <i v-if="data.file_flag === 1" class="el-icon-folder-add" @click="start_create(data)"></i>
+        <span v-else class="folders_label el-icon-folder">&nbsp;{{ node.label }}&nbsp;&nbsp;</span>
+        <i v-if="data.file_id !== 0 && data.file_flag === 0" class="el-icon-edit" @click="start_rename(data)"></i>&nbsp;
+        <i v-if="data.file_id !== 0 && data.file_flag === 0" class="el-icon-delete" @click="start_delete(data)"></i>&nbsp;
+        <i v-if="data.file_id !== 0 && data.file_flag === 0" class="el-icon-copy-document" @click="start_copy(data)"></i>&nbsp;
+        <i v-if="data.type_flag === 1 || (data.file_id !== 0 && data.file_flag === 1)" class="el-icon-folder-add" @click="start_create(data)"></i>
       </span>
     </el-tree>
+    </div>
 
-    <el-tree :data="doc_data_of_projs" node-key="id" :props="props2" @node-click="handleclick" class="tree">
+    <!-- <el-tree :data="doc_data_of_projs" node-key="id" :props="props2" @node-click="handleclick" class="tree">
       <span slot-scope="{ node, data }">
         <span
           v-if="data.file_flag === 0"
@@ -34,13 +36,10 @@
           @click="start_create(data)"
         ></i>
       </span>
-    </el-tree>
-
-    <EditView
-      :file_id="file_id_toshow"
-      :file_name="file_name_toshow"
-      :key="file_id_toshow"
-    ></EditView>
+    </el-tree> -->
+    <div style="display: inline-block">
+     <EditView :file_id="file_id_toshow" :file_name="file_name_toshow" :key="file_id_toshow"></EditView>
+    </div>
 
     <el-dialog title="重命名" :visible.sync="rename_dialogVisible" width="40%">
       <div>
@@ -632,11 +631,11 @@
             if (res.data.errno === 0) {
               //   this.$message.success('...');
               //   console.log(res.data)
-                this.doc_data[0].file_list = res.data.team_data;
-                this.doc_data_of_projs_fromserver = res.data.project_data;
-                this.handle_doc_data_of_projs(this.doc_data_of_projs_fromserver);
-            //   this.doc_data = res.data.team_data;
-            //   console.log('doc', this.doc_data);
+              this.doc_data[0].file_list = res.data.team_data;
+              this.doc_data_of_projs_fromserver = res.data.project_data;
+              this.handle_doc_data_of_projs(this.doc_data_of_projs_fromserver);
+              //   this.doc_data = res.data.team_data;
+              //   console.log('doc', this.doc_data);
             } else {
               this.$message.error(res.data.msg);
             }
@@ -670,8 +669,8 @@
         //   path: '/fileedit',
         //   query: { id: file_id, name: file_name, teamid: this.team_id, isTeamFile: is_team_file },
         // });
-        this.file_id_toshow = file_id
-        this.file_name_toshow = file_name
+        this.file_id_toshow = file_id;
+        this.file_name_toshow = file_name;
       },
 
       refresh() {
@@ -686,7 +685,7 @@
   };
 </script>
 
-<style scoped>
+<style>
   .create_input {
     display: flex;
     margin: 20px;
@@ -727,14 +726,16 @@
 
   .tree {
     width: 300px;
-    border: grey;
-    border-width: 1px;
-    border-style: solid;
     border-radius: 3px;
-    background-color: rgb(236, 245, 255);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.18), 0 0 12px rgba(0, 0, 0, 0.08);
   }
 
   .el-tree-node__content {
-    height: 100px !important;
+    height: 45px !important;
+    font-size: 20px;
+  }
+
+  .el-tree-node.is-current > .el-tree-node__content {
+    background-color: #D4D4D4;
   }
 </style>
