@@ -57,27 +57,6 @@
               </el-dropdown-menu>
             </el-dropdown>
           </div>
-
-          <div class="all_input">
-            <div class="search">
-              <input
-                v-model="keyword_input"
-                v-on:input="monitor_input"
-                class="search-input"
-                type="text"
-                placeholder="输入项目名称"
-              />
-              <el-button class="search_button" @click="click_search()">搜索</el-button
-              >先实现功能，之后再美化吧（
-            </div>
-            <div v-if="this.keyword_input != ''">
-              <ul class="item-ul">
-                <li class="search-item" v-for="item of list" :key="item.projId">
-                  <div @click="complete_input(item.projName)">{{ item.projName }}</div>
-                </li>
-              </ul>
-            </div>
-          </div>
           <br />
         </div>
 
@@ -690,16 +669,23 @@
         this.list_new = JSON.parse(JSON.stringify(this.list).replace(/projName/g, 'value'));
       },
       querySearch(queryString, cb) {
-        var list = this.list;
-        var results = queryString ? list.filter(this.createFilter(queryString)) : list;
-        // 调用 callback 返回建议列表的数据
-        cb(results);
-      },
-      createFilter(queryString) {
-        return (list) => {
-          return list.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0;
-        };
-      },
+
+      var list = this.list;
+      var results = queryString
+        ? list.filter(this.createFilter(queryString))
+        : list;
+      // 调用 callback 返回建议列表的数据
+      cb(results);
+    },
+    createFilter(queryString) {
+      return list => {
+        return (
+          list.value.toLowerCase().indexOf(queryString.toLowerCase()) ===
+          0
+        );
+      };
+    },
+
       delete_team_prompt() {
         this.$confirm('是否解散团队？团队中的所有项目将会永久被删除。', '解散团队', {
           confirmButtonText: '确定',
