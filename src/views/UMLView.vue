@@ -45,6 +45,6 @@ export default {
 }
 </script>
 
-<style>
-#UMLView {}
+<style scoped>
+
 </style>

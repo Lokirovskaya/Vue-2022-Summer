@@ -1,28 +1,27 @@
 <template>
   <div id="file">
-    <div id="title">
-      <div>
-        <b>文档区</b><span style="position: relative;left: 68%;">
-          <el-tooltip class="item" effect="dark" content="新建文档" placement="bottom">
-            <el-button class="menu-item" type="info" @click="new_file_dialog_visible = true">
-              <i class="iconfont">&#xe7f7;</i>
-            </el-button>
-          </el-tooltip>
-        </span>
-      </div>
+    <div id="title1">
+      <b>文档区</b><span style="position: relative;left: 68%;">
+        <el-tooltip class="item" effect="dark" content="新建文档" placement="bottom">
+          <el-button class="menu-item" type="info" @click="new_file_dialog_visible = true">
+            <i class="iconfont">&#xe742;</i>
+          </el-button>
+        </el-tooltip>
+      </span>
     </div>
-
     <div id="files">
       <el-card class="one-file box-card" shadow="hover" v-for="item in file_list" :key="item.file_id">
         <div class="box-card-content" @click="edit_file(item.file_id, item.file_name)">
           <el-tooltip class="item" effect="dark" :content="'更新于' + item.last_modify_time" placement="left-end">
-          <div class="cardImg">
-            <img src="../../assets/file1.png">
-          </div>
+            <div class="cardImg">
+              <img :src="setImg(item.file_id)">
+            </div>
           </el-tooltip>
         </div>
         <div style="text-align: left">
-        <div style="position: relative; bottom: 5px; right: 10px;width: 100px;	overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">{{ item.file_name }}</div>
+          <div
+            style="position: relative; bottom: 5px; right: 10px;width: 100px;	overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+            {{ item.file_name }}</div>
           <el-dropdown style="position: relative; bottom: 22px;left: 93%;">
             <i class="el-icon-more" style="font-size: 18px"></i>
             <el-dropdown-menu slot="dropdown">
@@ -109,9 +108,19 @@ export default {
     }
   },
   methods: {
-    setImg(){
-      //var i = Math.floor(Math.random() * 10) % 5;
-      return '../../assets/file1.png';
+    setImg(file_id) {
+      var i = file_id % 5;
+      if( i === 0){
+        return require('../../assets/file1.png');
+      }else if (i === 1){
+        return require('../../assets/file2.png');
+      }else if (i === 2){
+        return require('../../assets/file3.png');
+      }else if (i === 3){
+        return require('../../assets/file4.png');
+      }else if (i === 4){
+        return require('../../assets/file5.png');
+      }
     },
     edit_file(file_id, file_name) {
       console.log(file_id);
@@ -267,7 +276,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 @font-face {
   font-family: "iconfont";
   /* Project id 3570869 */
@@ -321,6 +330,7 @@ export default {
   padding-left: 0.25rem;
   margin-right: 0.25rem;
 }
+
 .cardImg {
   width: 180px;
   height: 70px;
@@ -329,6 +339,7 @@ export default {
   bottom: 10px;
   border-radius: 0.5rem;
 }
+
 .menu-item svg {
   width: 100%;
   height: 100%;
@@ -350,10 +361,17 @@ export default {
   text-align: left;
   font-size: 20px;
   padding-left: 30px;
+}
+
+#title1 {
+  width: 100%;
+  padding-top: 10px;
+  text-align: left;
+  font-size: 20px;
+  padding-left: 30px;
   margin-left: 10%;
   margin-right: 10%;
 }
-
 #files {
   display: flex;
   flex-direction: row;
