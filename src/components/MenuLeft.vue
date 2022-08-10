@@ -306,7 +306,6 @@ export default {
 
 #right {
   width: 100%;
-  height: 100%;
   text-align: center;
   background-color: #FFF;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12), 0 0 6px rgba(0, 0, 0, 0.04);
