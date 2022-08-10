@@ -339,11 +339,11 @@ props:{
             }
             //其他情况不用做事
           } else {
-            this.$message.error(res.data.msg);
+            //this.$message.error(res.data.msg);
           }
         })
         .catch(err => {
-          this.$message.error(err);
+          console.log(err);
         });
     },
     setColor() {
