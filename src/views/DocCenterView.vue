@@ -38,7 +38,7 @@
       </span>
     </el-tree> -->
     <div style="display: inline-block">
-     <EditView :file_id="file_id_toshow" :file_name="file_name_toshow" :key="file_id_toshow"></EditView>
+     <EditView :file_id="file_id_toshow" :file_name="file_name_toshow" :team_id="team_id" :key="file_id_toshow"></EditView>
     </div>
 
     <el-dialog title="重命名" :visible.sync="rename_dialogVisible" width="40%">
