@@ -310,6 +310,7 @@
                 this.prototype_list.push(item);
                 this.new_prototype_dialog_visible = false;
                 this.new_prototype_name = ''; //争取把源数据(原型名)也修改了
+                this.$router.go(0);
               } else {
                 this.$message.error(res.data.msg);
               }
