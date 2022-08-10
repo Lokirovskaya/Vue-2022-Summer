@@ -1,7 +1,6 @@
 <template>
   <div class="UMLView">
-    <iframe src="http://tu.github5.com/" id="mobsf"
-      ></iframe>
+    <iframe src="http://tu.github5.com/" id="mobsf"></iframe>
   </div>
 </template>
 
@@ -12,6 +11,17 @@ export default {
   data() {
     return {
 
+    }
+  },
+  watch: {
+    $route(to, from) {
+      if (to.query.tab !== from.query.tab) {
+        if (to.query.tab == 'uml') {
+          const el = document.getElementById('mobsf')
+          const tmpUrl = el.src
+          el.src = tmpUrl
+        }
+      }
     }
   },
   mounted() {

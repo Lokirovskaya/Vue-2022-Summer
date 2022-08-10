@@ -40,7 +40,7 @@
     methods: {
       tab_change() {
         this.$router.push({ query: { ...this.$route.query, tab: this.current_tab_name, teamid: this.proj_team_id } });
-        window.location.reload();
+        //window.location.reload();
       },
 
       get_proj_info() {

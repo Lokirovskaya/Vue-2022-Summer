@@ -2,6 +2,13 @@
   <div id="FileEdit">
     <div class="editor" v-if="editor">
       <div class="editor__header">
+        <!--返回上级界面-->
+        <el-tooltip class="item" effect="dark" content="返回" placement="bottom">
+          <el-button class="menu-item" @click="goBack"
+            :class="{ 'is-active': editor.isActive('bold') }">
+            <i class="iconfont">&#xe755;</i>
+          </el-button>
+        </el-tooltip>
         <b>{{ this.$route.query.name }}</b>
         <div class="divider"></div>
         <!--粗体-->
@@ -218,8 +225,6 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import Link from '@tiptap/extension-link'
 import TurndownService from 'turndown'
-import JsPDF from "jspdf"//PDF
-import * as html2canvas from 'html2canvas'//PDF
 
 import * as Y from 'yjs'
 import { WebsocketProvider } from "y-websocket";
@@ -259,10 +264,6 @@ export default {
   },
 
   methods: {
-    test() {
-      console.log(this.editor.getText());
-      console.log(this.editor.getHTML());
-    },
     init() {
       //初始化协同编辑和编辑器的相关参数
       const ydoc = new Y.Doc();
@@ -334,6 +335,13 @@ export default {
         .catch(err => {
           this.$message.error(err);
         });
+    },
+    goBack() {
+      if(this.$route.query.isTeamFile == 0){//项目文档
+        this.$router.push({ path: '/project', query: {id: this.$route.query.projid, tab: 'file', teamid: this.$route.query.teamid}});
+      }else{
+        this.$router.push({ path: '/team', query: {id: this.$route.query.teamid}});
+      }
     },
     setColor() {
       var i = Math.floor(Math.random() * 10);
@@ -587,7 +595,7 @@ export default {
         })
         //console.log(this.editor.getHTML());
         const file_name = this.$route.query.name + '.md';
-        console.log(this.editor.getHTML()); // todo
+        //console.log(this.editor.getHTML()); // todo
         const data = turndown.turndown(this.editor.getHTML());
         const blob = new Blob([data], { type: "text/plain" });
         const a = document.createElement("a");
@@ -598,68 +606,22 @@ export default {
         a.remove();
         this.download_menu_visible = false;
       } else if (this.value === '1') {//PDF
-        console.log('download success!' + this.value);
+        //console.log('download success!' + this.value);
         //this.html = this.editor.getHTML()
         //this.$nextTick(this.gerarPdfDoComponente)
+        this.Save();
         this.exportPDF();
         //this.testDownload();
         this.download_menu_visible = false;
       } else if (this.value === '3') {
-        console.log('download success!' + this.value);
-        console.log('.docx start');
+        //console.log('download success!' + this.value);
+        //console.log('.docx start');
         this.exportWord();
         //this.exportHTML();
         this.download_menu_visible = false;
       } else if (this.value == '4') {
         this.exportHTML();
       }
-    },
-    gerarPdfDoComponente() {
-      //var content = document.querySelector('#pdfDom');
-      /*
-      var pdfDom = document.querySelector('#pdfDom')
-      var width = pdfDom.offsetWidth; //dom宽
-      var height = pdfDom.offsetHeight; //dom高
-      var scale = 2; //放大倍数
-      var opts = {
-        dpi: window.devicePixelRatio * 2,
-        scale: scale,//添加的scale参数
-        width: width,
-        height: height,
-        useCORS: true, // 如果截图的内容里有图片,可能会有跨域的情况,加上这个参数,解决文件跨域问题
-        allowTaint: true
-      };
-      var canvas = document.createElement("canvas")//创建一个canvas节点
-      canvas.width = width * 2;
-      canvas.height = height * 2;
-      canvas.style.width = width + 'px';
-      canvas.style.height = height + 'px';
-      var context = canvas.getContext("2d")
-      context.scale(2, 2) // 增强图片清晰度*/
-      html2canvas(document.querySelector('#pdfDom')).then(canvas => {
-        let contentWidth = canvas.width
-        let contentHeight = canvas.height
-        let pageHeight = contentWidth / 592.28 * 841.89
-        let leftHeight = contentHeight
-        let position = 0
-        let imgWidth = 595.28
-        let imgHeight = 592.28 / contentWidth * contentHeight
-        let pageData = canvas.toDataURL('image/jpeg', 1.0)
-        let PDF = new JsPDF('', 'pt', 'a4');
-        if (leftHeight < pageHeight) {
-          PDF.addImage(pageData, 'JPEG', 0, 0, imgWidth, imgHeight)
-        } else {
-          while (leftHeight > 0) {
-            PDF.addImage(pageData, 'JPEG', 0, position, imgWidth, imgHeight)
-            leftHeight -= pageHeight
-            position -= 841.89
-            if (leftHeight > 0) {
-              PDF.addPage()
-            }
-          }
-        }
-        PDF.save(this.$route.query.name + '.pdf')
-      })
     },
     exportWord() {
       const name = this.$route.query.name + '.doc'
@@ -785,36 +747,6 @@ export default {
           this.$message.error(err);
         });
     },
-    testDownload() {
-      this.$axios.post('/project/downloadFile', qs.stringify({ name1: '2022_08_09_10_08_26_4_38.pdf', name2: 'qianduantest.pdf' }), { responseType: 'blob' })
-        .then((res) => {
-          /*
-          console.log(res);
-          const link = document.createElement('a');
-          let blob = new Blob([res.data]);
-          link.style.display = 'none';
-          const url = window.URL || window.webkitURL || window.moxURL;
-          link.href = url.createObjectURL(blob);
-          link.setAttribute('download', this.resource);
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          url.revokeObjectURL(link.href);*/
-          console.log(res);//测试一下
-          let blob = new Blob([res.data]);
-          const url = window.URL || window.webkitURL || window.moxURL;
-          const link = document.createElement('a');
-          link.href = url.createObjectURL(blob);
-          link.download = 'qianduantest.pdf';
-          link.click();
-          url.revokeObjectURL(link.href);
-          link.remove();
-          console.log('下载PDF成功!');
-        })
-        .catch(err => {
-          this.$message.error(err);
-        });
-    }
   },
   mounted() {
     this.init();
@@ -876,8 +808,6 @@ export default {
   border-image-width: initial;
   border-image-outset: initial;
   border-image-repeat: initial;
-  border-bottom-right-radius: 0.75rem;
-  border-bottom-left-radius: 0.75rem;
 }
 
 .editor__header {
@@ -905,7 +835,7 @@ export default {
   position: fixed;
   width: fill;
   z-index: 1000;
-  background-color: white;
+  background-color: #F5F5F5;
 }
 
 .editor__content {
@@ -923,6 +853,7 @@ export default {
   overflow-x: hidden;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  background-color: #F5F5F5;
 }
 
 .editor__footer {
@@ -1039,7 +970,18 @@ export default {
   margin-left: 0.5rem;
   margin-right: 0.75rem;
 }
-
+.ProseMirror{
+  background-color: white;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  margin-left: 3rem;
+  margin-right: 5rem;
+  margin-top: 3rem;
+  margin-bottom: 3rem;
+  min-height: 80rem;
+}
 .ProseMirror code {
   font-size: .9rem;
   padding: 0.25em;
