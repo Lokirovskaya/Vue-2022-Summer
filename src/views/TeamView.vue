@@ -65,13 +65,13 @@
             <div v-if="is_searchORorder === 0" style="height: 60%">
               <!-- <div style="background-color: gray;"></div> -->
               <router-link :to="{ path: '/project', query: { id: proj.proj_id } }">
-                <img style="width: 100%; height: 100%; border-radius: 20px" src="@/assets/logo.png" />
+                <img style="width: 100%; height: 100%; border-radius: 3px; " :src="'http://stcmp.shlprn.cn'+proj.proj_photo">
               </router-link>
             </div>
 
             <div v-else style="height: 60%">
               <router-link :to="{ path: '/project', query: { id: proj.projId } }">
-                <img style="width: 100%; height: 100%; border-radius: 20px" src="@/assets/logo.png" />
+                <img style="width: 100%; height: 100%; border-radius: 3px; " :src="'http://stcmp.shlprn.cn'+proj.photo" />
               </router-link>
             </div>
 
@@ -533,6 +533,7 @@
             this.team_name = res.data.teamname;
             this.proj_data = res.data.projs;
             this.member_data = res.data.members;
+            // this.refresh();
           })
           .catch((err) => {
             this.$message.error(err);
@@ -735,6 +736,7 @@
       } else {
         this.current_tab = 'info';
       }
+      // this.refresh();
     },
 
     watch: {
@@ -780,7 +782,7 @@
   }
 
   .one-proj {
-    width: 250px;
+    width: 150px;
     height: 150px;
     margin: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 0 12px rgba(0, 0, 0, 0.04);
