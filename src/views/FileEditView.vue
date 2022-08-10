@@ -851,7 +851,7 @@ export default {
   padding-right: 1rem;
   padding-bottom: 1.25rem;
   padding-left: 1rem;
-  min-height: 40em;
+  max-height: 40em;
   text-align: left;
   flex: 1 1 auto;
   flex-grow: 1;
@@ -987,7 +987,7 @@ export default {
   margin-right: 5rem;
   margin-top: 3rem;
   margin-bottom: 3rem;
-  min-height: 80rem;
+  min-height: 30rem;
 }
 .ProseMirror code {
   font-size: .9rem;
