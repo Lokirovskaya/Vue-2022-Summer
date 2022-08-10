@@ -131,6 +131,7 @@
                   :src="template.image"
                   style="width: 315px; height: 180px"
                 />
+                
               </div>
               <div style="font-size: 18px">{{ template.name }}</div>
             </el-radio>
@@ -160,6 +161,7 @@
 
 <script>
   import qs from 'qs';
+  import html2canvas from 'html2canvas';
 
   import {
     prototype_template_phone,
@@ -333,6 +335,40 @@
               this.$message.error(err);
             });
         }
+      },
+
+      async upload_screenshot(image) {
+        const canvas = await html2canvas(image, {
+          // dpi: 192,
+          useCORS: true,
+        });
+
+        let b64 = canvas.toDataURL('image/png');
+
+        console.log(b64)
+
+        // let post_data = {
+        //   proto_id: this.protoid,
+        //   base64_photo: b64,
+        // };
+
+        // this.$axios
+        //   .post('/project/upload_proto_photo', qs.stringify(post_data), {
+        //     headers: {
+        //       userid: this.$store.state.userid,
+        //       token: this.$store.state.token,
+        //     },
+        //   })
+        //   .then((res) => {
+        //     if (res.data.errno === 0) {
+        //       this.$message.success('原型图片上传成功');
+        //     } else {
+        //       this.$message.error(res.data.msg);
+        //     }
+        //   })
+        //   .catch((err) => {
+        //     this.$message.error(err);
+        //   });
       },
 
       get_prototype_list() {
