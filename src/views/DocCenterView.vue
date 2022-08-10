@@ -19,6 +19,7 @@
 &nbsp;
 <i class="el-icon-edit" @click="start_rename(data)"></i>&nbsp;
 <i class="el-icon-delete" @click="start_delete(data)"></i>&nbsp;
+<i class="el-icon-copy-document" @click="start_copy(data)"></i>&nbsp;
 <i v-if="data.file_flag === 1" class="el-icon-folder-add" @click="start_create(data)"></i>
   </span>
 </el-tree>
@@ -64,6 +65,17 @@
 
         <el-button @click="delete_dialogVisible = false">取消</el-button>
         <el-button type="primary" @click="delete_file()">确定</el-button>
+      </div>
+    </el-dialog>
+
+    <el-dialog title="确认复制" :visible.sync="copy_dialogVisible" width="40%">
+      <div>
+          <!-- <el-form-item label="项目名称" :label-width="500" required> -->
+          <!-- <el-input v-model="input_file_name_rename" class="rename_input"></el-input> -->
+        <!-- </el-form-item> -->
+
+        <el-button @click="copy_dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="copy_file()">确定</el-button>
       </div>
     </el-dialog>
 
@@ -171,6 +183,7 @@ export default {
 
         rename_dialogVisible:false,
         delete_dialogVisible:false,
+        copy_dialogVisible:false,
         create_dialogVisible:false,
         create_atroot_dialogVisible:false,
 
@@ -359,6 +372,73 @@ export default {
   });
         }
     },
+
+    start_copy(file){
+        console.log(file.file_id);
+        this.copy_dialogVisible = true;
+        this.file_now = file;
+    },
+
+    copy_file() {
+        this.copy_dialogVisible = false;
+        if (this.file_now.file_flag === 0) //删除文件
+        {
+            console.log('复制文件');
+            let copy_file_ifo = {
+                file_id:this.file_now.file_id,
+                to_folder_id:this.file_now.parent_folder_id, //to modify
+                edit_time:this.get_now_time(),
+            }
+            console.log(copy_file_ifo);
+            this.$axios
+  .post('team/copyTeamFile', qs.stringify(copy_file_ifo), {
+    headers: {
+      userid: this.$store.state.userid,
+      token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      this.$message.success(res.data.msg);
+    } else {
+      this.$message.error(res.data.msg);
+    }
+    this.refresh();
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+        }
+        else //复制文件夹
+        {
+            console.log('复制文件夹');
+            let copy_folder_ifo = {
+                folder_id:this.file_now.file_id,
+                to_folder_id:this.file_now.parent_folder_id, //to modify
+                edit_time:this.get_now_time(),
+            }
+            console.log(copy_folder_ifo);
+            this.$axios
+  .post('team/copyFolder', qs.stringify(copy_folder_ifo), {
+    headers: {
+      userid: this.$store.state.userid,
+      token: this.$store.state.token,
+    },
+  })
+  .then((res) => {
+    if (res.data.errno === 0) {
+      this.$message.success(res.data.msg);
+    } else {
+      this.$message.error(res.data.msg);
+    }
+    this.refresh();
+  })
+  .catch((err) => {
+    this.$message.error(err);
+  });
+        }
+    },
+
 
     start_create(file){
         console.log(file.file_id);

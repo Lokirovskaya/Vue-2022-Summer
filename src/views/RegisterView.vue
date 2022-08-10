@@ -1,26 +1,50 @@
 <template>
-
+  
   <div v-if="register_state===0" class="register">
      <img src="../assets/back_icon.png" id="back_icon" @click="backto_homeview">
-    <h1>欢迎注册</h1>
+    <!-- <h1>欢迎注册</h1> -->
+    <!-- <div class="steps"> -->
+      <div>
+    <el-steps :space="150" align-center=true :active="active" finish-status="success" class="steps">
+  <el-step title="填写信息" class="one_step" ></el-step>
+  <el-step title="邮箱验证" class="one_step"></el-step>
+</el-steps>
+
+    </div>
+    
     <el-input placeholder="输入用户名" v-model="username" clearable style="width:300px"></el-input>
+    <p>
+    <el-input placeholder="输入邮箱" v-model="email" clearable style="width:300px"></el-input>
     <p>
     <el-input placeholder="输入真实姓名" v-model="truename" clearable style="width:300px"></el-input>
     <p>
-    <el-input placeholder="输入密码" v-model="password_1" clearable style="width:300px" show-password></el-input>
+    <el-input placeholder="输入密码" v-model="password_1" v-on:input="show_pwd_strength" clearable class="input_ifo" show-password></el-input>
+    <p>
+      <div class="show_pwds">
+    <span v-if="show_pwd_strength_flag === 1" class="show_pwd1">{{this.pwd_strength}}</span>
+    <span v-else-if="show_pwd_strength_flag === 2" class="show_pwd2">{{this.pwd_strength}}</span>
+    <span v-else-if="show_pwd_strength_flag === 3" class="show_pwd3">{{this.pwd_strength}}</span>
+      </div>
     <p>
     <el-input placeholder="确认密码" v-model="password_2" clearable style="width:300px" show-password></el-input>
-    <p>
-    <el-input placeholder="输入邮箱" v-model="email" clearable style="width:300px"></el-input>
+    
+    
     <div>
-      <el-button @click="send_verifycode" round>注册</el-button>
-      <router-link to="/login" style="margin: 5px;">
+      <el-button @click="send_verifycode" round>下一步</el-button>
+      <!-- <router-link to="/login" style="margin: 5px;">
         <el-button round>去登录</el-button>
-      </router-link>
+      </router-link> -->
     </div>
   </div>
   <div v-else-if="register_state===1">
     <br><br>
+    <div>
+    <el-steps :space="150" align-center=true :active="active" finish-status="success" class="steps">
+  <el-step title="填写信息" class="one_step"></el-step>
+  <el-step title="邮箱验证" class="one_step"></el-step>
+</el-steps>
+    </div>
+
       <el-input placeholder="输入验证码" v-model="verifycode_input" clearable style="width:300px"></el-input>
       <!-- <el-button @click="check_verifycode" round style="margin: 5px;">重发</el-button> -->
       <div>
@@ -32,7 +56,13 @@
   <div v-else>
     <!-- <el-divider></el-divider> -->
     <br>
-    <h3 style="color:rgb(100,100,100)">{{this.username}}注册成功</h3>
+    <div>
+    <el-steps :space="150" align-center=true :active="active" finish-status="success" class="steps">
+  <el-step title="填写信息" class="one_step"></el-step>
+  <el-step title="邮箱验证" class="one_step"></el-step>
+</el-steps>
+    </div>
+    <h2 style="color:rgb(100,100,100)">{{this.username}}注册成功</h2>
     <!-- <el-divider></el-divider> -->
     <router-link to="/login" style="margin: 5px;">
         <el-button round>去登录</el-button>
@@ -54,6 +84,10 @@ import qs from "qs";
         register_state:0, //0:输入信息界面 1:输入验证码界面 2:注册成功
         verifycode:undefined,
         verifycode_input:undefined,
+        active:0,
+        pwd_strength:'1',
+        show_pwd_strength_flag:0,
+        show_pwd_strength_color:"red",
       }
     },
     methods: {
@@ -88,6 +122,7 @@ import qs from "qs";
       this.$message.success(res.data.msg);
       this.verifycode = res.data.code;
       this.register_state = 1;
+      this.active = 1;
     } else {
       // alert(123);
       this.$message.error(res.data.msg);
@@ -131,6 +166,7 @@ import qs from "qs";
                 this.$message.success('注册成功');
                 this.uid_toshow = res.data.userid;
                 this.register_state = 2;
+                this.active = 2;
               }
               else {
                 this.$message.error(res.data.msg);
@@ -144,9 +180,59 @@ import qs from "qs";
       
       backto_homeview(){
         this.$router.push({path:'/'});
+      },
+
+  show_pwd_strength(pwd){
+    console.log('show_pwd');
+    // this.show_pwd_strength_flag = 1;
+    this.pwd_strength = this.check_pwd_strength(pwd);
+  },
+
+  check_pwd_strength(pwd) {
+    if (pwd === '')
+    {
+      this.show_pwd_strength_flag = 0;
+      return;
+    }
+        var upper_cnt = 0;
+        var lower_cnt = 0;
+        var mum_cnt = 0;
+        var mark_cnt = 0;
+        var type_cnt = 0;
+        var all_cnt = 0;
+        for (let i = 0; i < pwd.length; i++)
+        {
+          if (pwd.charCodeAt(i) >= 48 && pwd.charCodeAt(i) <= 57) mum_cnt++; //数字
+          else if (pwd.charCodeAt(i) >= 65 && pwd.charCodeAt(i) <= 90) upper_cnt++; //大写字母
+          else if (pwd.charCodeAt(i) >= 97 && pwd.charCodeAt(i) <= 122) lower_cnt++; //小写字母 
+          else mark_cnt += 4;
+        }
+        all_cnt = mum_cnt + upper_cnt + lower_cnt + mark_cnt;
+        if (upper_cnt != 0) type_cnt++;
+        if (lower_cnt != 0) type_cnt++;
+        if (mum_cnt != 0) type_cnt++;
+        if (mark_cnt != 0) type_cnt++;
+        console.log('type_cnt:'+type_cnt+' all_cnt:'+all_cnt);
+        if (type_cnt === 4 && all_cnt >= 15)
+        {
+          this.show_pwd_strength_flag = 3;
+          return '*密码强度较强';
+        }
+        else if (all_cnt >= 10)
+        {
+          this.show_pwd_strength_flag = 2;
+          return '*密码强度适中';
+        }
+        else
+        {
+          this.show_pwd_strength_flag = 1;
+          return '*密码强度过弱';
+        }
+        
       }
 
-    }
+    },
+    
   }
 </script>
 
@@ -170,4 +256,62 @@ import qs from "qs";
         filter:alpha(opacity=100); 
         opacity: 0.8;
   }
+  .steps {
+    /* left: 500px; */
+    /* left: 50%; */
+    display:flex;
+    /* justify-content: space-between; */
+    justify-content: center;
+    margin: 10px;
+    /* flex-wrap:nowrap; */
+    /* align-items: center; */
+    /* width: 1000px; */
+
+  }
+  .one_step {
+    /* display: flex;
+    margin: 50px;
+    width: 100px; */
+  }
+  .register {
+    /* display: flex; */
+    text-align: center;
+    justify-content: center;
+  }
+
+  .input_ifo {
+    /* display:flex; */
+    /* justify-content: center; */
+    /* left: 600px; */
+    width:300px
+  }
+
+  .show_pwd1 {
+    /* display: flex;
+    align-content: center;
+    align-items: center;
+    text-align: center; */
+    /* left: 300px; */
+    font-size: 12px;
+    color: red;
+  }
+
+  .show_pwd2 {
+    font-size: 12px;
+    color: rgb(255, 145, 0);
+  }
+
+  .show_pwd3 {
+    font-size: 12px;
+    color: green;
+  }
+
+  .show_pwds {
+    /* display: flex;
+    align-content: center;
+    align-items: center;
+    text-align: center; */
+    /* height: px; */
+  }
+
 </style>
