@@ -1,7 +1,7 @@
 <template>
   <div style="display: flex; height: 550px;">
     <div style="overflow-y: auto; height: 100%; overflow-x: hidden;">
-    <el-tree :data="doc_data.concat(doc_data_of_projs)" node-key="id" :props="props1" @node-click="handleclick" class="tree">
+    <el-tree :default-expand-all="true" :data="doc_data.concat(doc_data_of_projs)" node-key="id" :props="props1" @node-click="handleclick" class="tree">
       <span slot-scope="{ node, data }">
         <span
           v-if="data.file_flag === 0"
