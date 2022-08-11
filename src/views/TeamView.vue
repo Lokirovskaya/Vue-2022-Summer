@@ -489,7 +489,7 @@
           })
           .then((res) => {
             if (res.data.errno === 0) {
-              this.$message.success('成功邀请成员！');
+              this.$message.success('成功发出邀请！');
               this.$router.go(0);
             } else {
               this.$message.error(res.data.msg);

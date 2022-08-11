@@ -12,10 +12,10 @@
         </span>
         <span v-else class="folders_label el-icon-folder">&nbsp;{{ node.label }}&nbsp;&nbsp;</span>
         <!-- <span v-else class="folders_label el-icon-folder">{{ node.label }}&nbsp;&nbsp;</span> -->
-        <i v-if="data.file_id !== 0 && data.type_flag !== 0" class="el-icon-edit" @click="start_rename(data)"></i>&nbsp;
-        <i v-if="data.file_id !== 0 && data.type_flag !== 0" class="el-icon-delete" @click="start_delete(data)"></i>&nbsp;
-        <i v-if="data.file_id !== 0 && data.type_flag !== 0" class="el-icon-copy-document" @click="start_copy(data)"></i>&nbsp;
-        <i v-if="(data.type_flag === 1 && data.file_flag === 1) || (data.file_id !== 0 && data.file_flag === 1)" class="el-icon-folder-add" @click="start_create(data)"></i>
+        <i v-if="data.file_id !== 0 && data.type_flag !== 0 || data.type_flag === 0 && data.file_flag === 0" class="el-icon-edit" @click="start_rename(data)"></i>&nbsp;
+        <i v-if="data.file_id !== 0 && data.type_flag !== 0 || data.type_flag === 0 && data.file_flag === 0" class="el-icon-delete" @click="start_delete(data)"></i>&nbsp;
+        <i v-if="data.file_id !== 0 && data.type_flag !== 0 || data.type_flag === 0 && data.file_flag === 0" class="el-icon-copy-document" @click="start_copy(data)"></i>&nbsp;
+        <i v-if="(data.type_flag === 1 && data.file_flag === 1) || (data.type_flag === 0 && data.file_id !== 0 && data.file_flag === 1)" class="el-icon-folder-add" @click="start_create(data)"></i>
 
         <!-- <i v-if="data.file_flag === 0" class="el-icon-edit" @click="start_rename(data)"></i>&nbsp;
         <i v-if="data.file_flag === 0" class="el-icon-delete" @click="start_delete(data)"></i>&nbsp;
@@ -48,7 +48,7 @@
         ></i>
       </span>
     </el-tree> -->
-    <div style="display: inline-block;">
+    <div style="display: inline-block; width: 95%">
      <EditView :file_id="file_id_toshow" :file_name="file_name_toshow" :team_id="team_id" :key="file_id_toshow"></EditView>
     </div>
 
@@ -744,14 +744,14 @@
   }
 
   .tree {
-    width: 300px;
+    width: 400px;
     border-radius: 3px;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.18), 0 0 12px rgba(0, 0, 0, 0.08);
   }
 
   .el-tree-node__content {
     height: 45px !important;
-    font-size: 20px;
+    font-size: 17px;
   }
 
   .el-tree-node.is-current > .el-tree-node__content {

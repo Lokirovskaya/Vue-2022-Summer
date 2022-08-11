@@ -7,9 +7,9 @@
           <!-- <img :src="'http://stcmp.shlprn.cn'+this.$store.state.user_photo" class="avatar"> -->
         </template>
       </el-table-column>
-      <el-table-column prop="member_id" label="ID" min-width="10%"></el-table-column>
+      <!-- <el-table-column prop="member_id" label="ID" min-width="10%"></el-table-column> -->
       <el-table-column prop="member_name" label="昵称" min-width="20%"></el-table-column>
-      <el-table-column prop="member_truename" label="真实姓名" min-width="15%"></el-table-column>
+      <el-table-column prop="member_truename" label="真实姓名" min-width="20%"></el-table-column>
       <el-table-column prop="member_email" label="邮箱" min-width="25%"></el-table-column>
       <el-table-column label="权限" min-width="10%">
         <template scope="scope">
