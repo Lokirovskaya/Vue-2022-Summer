@@ -60,9 +60,9 @@
           原型预览已开放，预览链接：
           <span>
             <el-input v-model="preview_link" readonly="true" style="width: 400px; font-size: 15px">
-              <el-button slot="append" icon="el-icon-copy-document" @click="copy_preview_link()"
+              <!-- <el-button slot="append" icon="el-icon-copy-document" @click="copy_preview_link()"
                 >复制</el-button
-              >
+              > -->
             </el-input>
           </span>
           <span style="margin-left: 15px">
@@ -103,11 +103,7 @@
             </el-radio>
             <el-radio v-for="(template, i) in prototype_template_phone.templates" :key="i" :label="i">
               <div>
-                <img
-                  class="one-template-prototype"
-                  :src="template.image"
-                  style="width: 120px; height: 180px"
-                />
+                <img class="one-template-prototype" :src="template.b64" style="width: 120px; height: 180px" />
               </div>
               <div style="font-size: 18px">{{ template.name }}</div>
             </el-radio>
@@ -126,12 +122,7 @@
             </el-radio>
             <el-radio v-for="(template, i) in prototype_template_pc.templates" :key="i" :label="i">
               <div>
-                <img
-                  class="one-template-prototype"
-                  :src="template.image"
-                  style="width: 315px; height: 180px"
-                />
-                
+                <img class="one-template-prototype" :src="template.b64" style="width: 315px; height: 180px" />
               </div>
               <div style="font-size: 18px">{{ template.name }}</div>
             </el-radio>
@@ -161,7 +152,6 @@
 
 <script>
   import qs from 'qs';
-  import html2canvas from 'html2canvas';
 
   import {
     prototype_template_phone,
@@ -191,6 +181,7 @@
           canvas_width: 500,
           canvas_height: 500,
           content: '[]',
+          b64: '',
         },
         template_radio_model: -1,
       };
@@ -211,11 +202,14 @@
 
         this.current_template.canvas_width = template_type.canvas_width;
         this.current_template.canvas_height = template_type.canvas_height;
+
         if (index >= 0) {
           this.current_template.content = template_type.templates[index].content;
+          this.current_template.b64 = template_type.templates[index].b64;
         } else {
           // no template, index=-1
           this.current_template.content = '[]';
+          this.current_template.b64 = '';
         }
       },
 
@@ -326,7 +320,7 @@
                 this.prototype_list.push(item);
                 this.new_prototype_dialog_visible = false;
                 this.new_prototype_name = ''; //争取把源数据(原型名)也修改了
-                this.$router.go(0);
+                this.upload_screenshot(res.data.proto_id, this.current_template.b64);
               } else {
                 this.$message.error(res.data.msg);
               }
@@ -337,38 +331,30 @@
         }
       },
 
-      async upload_screenshot(image) {
-        const canvas = await html2canvas(image, {
-          // dpi: 192,
-          useCORS: true,
-        });
+      async upload_screenshot(proto_id, b64) {
+        let post_data = {
+          proto_id: proto_id,
+          base64_photo: b64,
+        };
 
-        let b64 = canvas.toDataURL('image/png');
-
-        console.log(b64)
-
-        // let post_data = {
-        //   proto_id: this.protoid,
-        //   base64_photo: b64,
-        // };
-
-        // this.$axios
-        //   .post('/project/upload_proto_photo', qs.stringify(post_data), {
-        //     headers: {
-        //       userid: this.$store.state.userid,
-        //       token: this.$store.state.token,
-        //     },
-        //   })
-        //   .then((res) => {
-        //     if (res.data.errno === 0) {
-        //       this.$message.success('原型图片上传成功');
-        //     } else {
-        //       this.$message.error(res.data.msg);
-        //     }
-        //   })
-        //   .catch((err) => {
-        //     this.$message.error(err);
-        //   });
+        this.$axios
+          .post('/project/upload_proto_photo', qs.stringify(post_data), {
+            headers: {
+              userid: this.$store.state.userid,
+              token: this.$store.state.token,
+            },
+          })
+          .then((res) => {
+            if (res.data.errno === 0) {
+              // this.$message.success('原型图片上传成功');
+              this.$router.go(0);
+            } else {
+              this.$message.error(res.data.msg);
+            }
+          })
+          .catch((err) => {
+            this.$message.error(err);
+          });
       },
 
       get_prototype_list() {
